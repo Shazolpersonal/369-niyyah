@@ -13,27 +13,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProgress } from '../contexts/ProgressContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { requestNotificationPermissions, scheduleAllNotifications } from '../utils/notifications';
+import { getFontFamily } from '../utils/fonts';
 
 const { width } = Dimensions.get('window');
-
-/** Returns the correct font family based on language and weight */
-const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
-    const fonts: Record<string, Record<string, string>> = {
-        en: {
-            regular: 'Inter_400Regular',
-            medium: 'Inter_500Medium',
-            semibold: 'Inter_600SemiBold',
-            bold: 'Inter_700Bold',
-        },
-        bn: {
-            regular: 'NotoSansBengali_400Regular',
-            medium: 'NotoSansBengali_500Medium',
-            semibold: 'NotoSansBengali_600SemiBold',
-            bold: 'NotoSansBengali_700Bold',
-        },
-    };
-    return fonts[language]?.[weight] || fonts['en'][weight];
-};
 
 interface Slide {
     id: string;

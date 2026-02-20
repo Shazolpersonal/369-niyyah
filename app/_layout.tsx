@@ -20,6 +20,7 @@ import { LanguageProvider } from '../contexts/LanguageContext';
 import { ProgressProvider } from '../contexts/ProgressContext';
 import { configureNotificationHandler } from '../utils/notifications';
 import AnimatedSplash from '../components/AnimatedSplash';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -47,25 +48,27 @@ export default function RootLayout() {
     }
 
     return (
-        <LanguageProvider>
-            <ProgressProvider>
-                <View style={{ flex: 1 }}>
-                    <StatusBar style="dark" />
-                    <Stack
-                        screenOptions={{
-                            headerShown: false,
-                            animation: 'slide_from_right',
-                            contentStyle: { backgroundColor: '#F8FAFC' },
-                        }}
-                    />
-                    {!splashComplete && (
-                        <AnimatedSplash
-                            isAppReady={fontsLoaded}
-                            onAnimationComplete={() => setSplashComplete(true)}
+        <ErrorBoundary>
+            <LanguageProvider>
+                <ProgressProvider>
+                    <View style={{ flex: 1 }}>
+                        <StatusBar style="dark" />
+                        <Stack
+                            screenOptions={{
+                                headerShown: false,
+                                animation: 'slide_from_right',
+                                contentStyle: { backgroundColor: '#F8FAFC' },
+                            }}
                         />
-                    )}
-                </View>
-            </ProgressProvider>
-        </LanguageProvider>
+                        {!splashComplete && (
+                            <AnimatedSplash
+                                isAppReady={fontsLoaded}
+                                onAnimationComplete={() => setSplashComplete(true)}
+                            />
+                        )}
+                    </View>
+                </ProgressProvider>
+            </LanguageProvider>
+        </ErrorBoundary>
     );
 }

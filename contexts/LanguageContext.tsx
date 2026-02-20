@@ -4,6 +4,7 @@ import React, {
     useState,
     useEffect,
     useCallback,
+    useMemo,
     ReactNode,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -65,8 +66,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
         return null;
     }
 
+    const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t]);
+
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+        <LanguageContext.Provider value={value}>
             {children}
         </LanguageContext.Provider>
     );

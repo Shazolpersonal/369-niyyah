@@ -14,9 +14,9 @@
 export const normalize = (text: string): string => {
     return text
         .toLowerCase()
-        .replace(/[.,;:!?'"()\-—–]/g, '') // Remove common punctuation
+        .replace(/[.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]/g, '') // Remove common punctuation + smart quotes
         .replace(/\s+/g, ' ')
-        .trim();
+        .replace(/^\s+/, ''); // Only trim leading whitespace, preserve trailing
 };
 
 /**
@@ -24,9 +24,9 @@ export const normalize = (text: string): string => {
  */
 export const getDisplayText = (text: string): string => {
     return text
-        .replace(/[.,;:!?'"()\-—–]/g, '')
+        .replace(/[.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]/g, '') // Include smart quotes
         .replace(/\s+/g, ' ')
-        .trim();
+        .replace(/^\s+/, ''); // Only trim leading whitespace
 };
 
 /**

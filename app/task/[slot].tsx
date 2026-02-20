@@ -20,25 +20,7 @@ import { getAffirmationByLanguage } from '../../utils/contentCycler';
 import { getDisplayText, getValidationInfo, getHighlightSegments } from '../../utils/textValidator';
 import { getSlotEmoji, getRepetitionTarget } from '../../utils/timeSlotManager';
 import { TimeSlot } from '../../types';
-
-/** Returns the correct font family based on language and weight */
-const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
-    const fonts: Record<string, Record<string, string>> = {
-        en: {
-            regular: 'Inter_400Regular',
-            medium: 'Inter_500Medium',
-            semibold: 'Inter_600SemiBold',
-            bold: 'Inter_700Bold',
-        },
-        bn: {
-            regular: 'NotoSansBengali_400Regular',
-            medium: 'NotoSansBengali_500Medium',
-            semibold: 'NotoSansBengali_600SemiBold',
-            bold: 'NotoSansBengali_700Bold',
-        },
-    };
-    return fonts[language]?.[weight] || fonts['en'][weight];
-};
+import { getFontFamily } from '../../utils/fonts';
 
 const SLOT_TITLE_KEYS: Record<TimeSlot, string> = {
     morning: 'task.morningNiyyah',

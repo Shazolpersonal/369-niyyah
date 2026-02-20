@@ -6,6 +6,7 @@ import React, {
     ReactNode,
     useCallback,
     useRef,
+    useMemo,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DailyProgress, TimeSlot } from '../types';
@@ -253,7 +254,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
         return dailyProgress[date] || null;
     }, [dailyProgress]);
 
-    const value: ProgressContextType = {
+    const value: ProgressContextType = useMemo(() => ({
         startDate,
         dailyProgress,
         completeTask,
@@ -264,7 +265,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
         isLoading,
         isFirstLaunch,
         completeOnboarding,
-    };
+    }), [startDate, dailyProgress, completeTask, getProgressForDate, totalElapsedDays, trueStreak, isTodayComplete, isLoading, isFirstLaunch, completeOnboarding]);
 
     return (
         <ProgressContext.Provider value={value}>
