@@ -14,16 +14,36 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ArrowLeft, CheckCircle } from 'lucide-react-native';
 import { useProgress } from '../../contexts/ProgressContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { RepetitionCounter } from '../../components/RepetitionCounter';
-import { getAffirmation } from '../../utils/contentCycler';
+import { getAffirmationByLanguage } from '../../utils/contentCycler';
 import { getDisplayText, getValidationInfo, getHighlightSegments } from '../../utils/textValidator';
-import { getSlotLabel, getSlotEmoji, getRepetitionTarget } from '../../utils/timeSlotManager';
+import { getSlotEmoji, getRepetitionTarget } from '../../utils/timeSlotManager';
 import { TimeSlot } from '../../types';
 
-const SLOT_TITLES: Record<TimeSlot, string> = {
-    morning: 'Morning Niyyah',
-    noon: 'Afternoon Niyyah',
-    night: 'Evening Niyyah',
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
+
+const SLOT_TITLE_KEYS: Record<TimeSlot, string> = {
+    morning: 'task.morningNiyyah',
+    noon: 'task.afternoonNiyyah',
+    night: 'task.eveningNiyyah',
 };
 
 // Minimum accuracy percentage to enable submit button
@@ -34,6 +54,8 @@ export default function TaskInputScreen() {
     const slot = slotParam as TimeSlot;
     const router = useRouter();
     const { completeTask, totalElapsedDays } = useProgress();
+    const { t, language } = useLanguage();
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
 
     const [input, setInput] = useState('');
     const [repetitionsCompleted, setRepetitionsCompleted] = useState(0);
@@ -46,7 +68,7 @@ export default function TaskInputScreen() {
     const buttonScale = useRef(new RNAnimated.Value(1)).current;
 
     const repetitionTarget = getRepetitionTarget(slot);
-    const affirmation = getAffirmation(totalElapsedDays, slot);
+    const affirmation = getAffirmationByLanguage(totalElapsedDays, slot, language);
     const displayText = useMemo(() => getDisplayText(affirmation), [affirmation]);
 
     // Real-time validation
@@ -160,13 +182,13 @@ export default function TaskInputScreen() {
                     </Pressable>
                     <Text
                         className="text-lg font-semibold text-slate-800 flex-1"
-                        style={{ fontFamily: 'Inter_600SemiBold' }}
+                        style={{ fontFamily: f('semibold') }}
                     >
-                        {getSlotEmoji(slot)} {SLOT_TITLES[slot]}
+                        {getSlotEmoji(slot)} {t(SLOT_TITLE_KEYS[slot])}
                     </Text>
                     <Text
                         className="text-sm text-slate-500"
-                        style={{ fontFamily: 'Inter_500Medium' }}
+                        style={{ fontFamily: f('medium') }}
                     >
                         {repetitionsCompleted}/{repetitionTarget}
                     </Text>
@@ -192,15 +214,15 @@ export default function TaskInputScreen() {
                             <CheckCircle size={80} color="#10B981" />
                             <Text
                                 className="text-2xl font-bold text-emerald-600 mt-6 text-center"
-                                style={{ fontFamily: 'Inter_700Bold' }}
+                                style={{ fontFamily: f('bold') }}
                             >
-                                Alhamdulillah, Complete!
+                                {t('task.alhamdulillahComplete')}
                             </Text>
                             <Text
                                 className="text-slate-500 mt-2 text-center text-base"
-                                style={{ fontFamily: 'Inter_400Regular' }}
+                                style={{ fontFamily: f('regular') }}
                             >
-                                May Allah accept your effort and bless your day.
+                                {t('task.completeDua')}
                             </Text>
                             <Pressable
                                 onPress={() => router.back()}
@@ -208,9 +230,9 @@ export default function TaskInputScreen() {
                             >
                                 <Text
                                     className="text-white font-semibold text-base"
-                                    style={{ fontFamily: 'Inter_600SemiBold' }}
+                                    style={{ fontFamily: f('semibold') }}
                                 >
-                                    Back to Dashboard
+                                    {t('task.backToDashboard')}
                                 </Text>
                             </Pressable>
                         </RNAnimated.View>
@@ -225,9 +247,9 @@ export default function TaskInputScreen() {
                             <Text className="text-4xl">✅</Text>
                             <Text
                                 className="text-emerald-600 font-semibold text-lg mt-2"
-                                style={{ fontFamily: 'Inter_600SemiBold' }}
+                                style={{ fontFamily: f('semibold') }}
                             >
-                                MashaAllah! {repetitionsCompleted}/{repetitionTarget}
+                                {t('task.mashaAllah')} {repetitionsCompleted}/{repetitionTarget}
                             </Text>
                         </RNAnimated.View>
                     )}
@@ -239,11 +261,11 @@ export default function TaskInputScreen() {
                             <View className="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-slate-100">
                                 <Text
                                     className="text-xs text-slate-400 uppercase tracking-wider mb-3"
-                                    style={{ fontFamily: 'Inter_600SemiBold' }}
+                                    style={{ fontFamily: f('semibold') }}
                                 >
-                                    Today's Niyyah
+                                    {t('task.todaysNiyyah')}
                                 </Text>
-                                <Text className="text-lg leading-7" style={{ fontFamily: 'Inter_400Regular' }}>
+                                <Text className="text-lg leading-7" style={{ fontFamily: f('regular') }}>
                                     <Text className="text-emerald-600">{highlightSegments.correct}</Text>
                                     <Text className="text-red-500">{highlightSegments.incorrect}</Text>
                                     <Text className="text-slate-400">{highlightSegments.remaining}</Text>
@@ -258,13 +280,13 @@ export default function TaskInputScreen() {
                                 <TextInput
                                     value={input}
                                     onChangeText={setInput}
-                                    placeholder="Type the affirmation here..."
+                                    placeholder={t('task.placeholder')}
                                     placeholderTextColor="#CBD5E1"
                                     multiline
                                     autoFocus
                                     className="text-base text-slate-800 min-h-[100px]"
                                     style={{
-                                        fontFamily: 'Inter_400Regular',
+                                        fontFamily: f('regular'),
                                         textAlignVertical: 'top',
                                     }}
                                 />
@@ -274,19 +296,19 @@ export default function TaskInputScreen() {
                             <View className="flex-row items-center justify-between mb-4">
                                 <Text
                                     className="text-sm text-slate-500"
-                                    style={{ fontFamily: 'Inter_500Medium' }}
+                                    style={{ fontFamily: f('medium') }}
                                 >
-                                    Accuracy: {validationInfo.percent}%
+                                    {t('task.accuracy')} {validationInfo.percent}%
                                 </Text>
                                 <Text
                                     className="text-xs text-slate-400"
-                                    style={{ fontFamily: 'Inter_400Regular' }}
+                                    style={{ fontFamily: f('regular') }}
                                 >
                                     {validationInfo.percent >= 100
-                                        ? 'Auto-submitting...'
+                                        ? t('task.autoSubmitting')
                                         : validationInfo.percent >= MIN_ACCURACY_PERCENT
-                                            ? 'Ready to submit!'
-                                            : `Need ${MIN_ACCURACY_PERCENT}% to submit`}
+                                            ? t('task.readyToSubmit')
+                                            : t('task.needPercent', { n: MIN_ACCURACY_PERCENT })}
                                 </Text>
                             </View>
 
@@ -303,9 +325,9 @@ export default function TaskInputScreen() {
                                     <Text
                                         className={`text-center text-lg font-semibold ${canSubmit ? 'text-white' : 'text-slate-400'
                                             }`}
-                                        style={{ fontFamily: 'Inter_600SemiBold' }}
+                                        style={{ fontFamily: f('semibold') }}
                                     >
-                                        Submit ({validationInfo.percent}%)
+                                        {t('task.submit')} ({validationInfo.percent}%)
                                     </Text>
                                 </Pressable>
                             </RNAnimated.View>

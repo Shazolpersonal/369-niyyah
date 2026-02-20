@@ -4,9 +4,31 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { TouchableOpacity } from 'react-native';
+import { useLanguage } from '../contexts/LanguageContext';
+
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
 
 export default function GuideScreen() {
     const router = useRouter();
+    const { t, language } = useLanguage();
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
 
     return (
         <SafeAreaView className="flex-1 bg-slate-50">
@@ -17,9 +39,9 @@ export default function GuideScreen() {
                 </TouchableOpacity>
                 <Text
                     className="text-lg font-semibold text-slate-800"
-                    style={{ fontFamily: 'Inter_600SemiBold' }}
+                    style={{ fontFamily: f('semibold') }}
                 >
-                    How It Works
+                    {t('guide.title')}
                 </Text>
             </View>
 
@@ -31,18 +53,15 @@ export default function GuideScreen() {
                 <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
                     <Text
                         className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        🕌 What is 369 Niyyah?
+                        {t('guide.whatIs.title')}
                     </Text>
                     <Text
                         className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        369 Niyyah is your daily companion for building a stronger connection
-                        with Allah through the power of written affirmations. Based on the
-                        369 manifestation method, this app helps you internalize positive
-                        Islamic beliefs by writing them repeatedly throughout the day.
+                        {t('guide.whatIs.body')}
                     </Text>
                 </View>
 
@@ -50,26 +69,26 @@ export default function GuideScreen() {
                 <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
                     <Text
                         className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        ✨ The 369 Method
+                        {t('guide.method.title')}
                     </Text>
                     <Text
                         className="text-base text-slate-600 leading-7 mb-3"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        The method is simple but powerful:
+                        {t('guide.method.intro')}
                     </Text>
 
                     <View className="gap-3">
                         <View className="flex-row items-start">
                             <Text className="text-2xl mr-3">🌅</Text>
                             <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: 'Inter_600SemiBold' }}>
-                                    Morning Niyyah (8 AM – 1 PM)
+                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
+                                    {t('guide.method.morning.title')}
                                 </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: 'Inter_400Regular' }}>
-                                    Write your affirmation 3 times to set your intention for the day.
+                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
+                                    {t('guide.method.morning.desc')}
                                 </Text>
                             </View>
                         </View>
@@ -77,11 +96,11 @@ export default function GuideScreen() {
                         <View className="flex-row items-start">
                             <Text className="text-2xl mr-3">☀️</Text>
                             <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: 'Inter_600SemiBold' }}>
-                                    Afternoon Niyyah (1 PM – 6 PM)
+                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
+                                    {t('guide.method.noon.title')}
                                 </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: 'Inter_400Regular' }}>
-                                    Write it 6 times to refocus your mind and remember Allah.
+                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
+                                    {t('guide.method.noon.desc')}
                                 </Text>
                             </View>
                         </View>
@@ -89,11 +108,11 @@ export default function GuideScreen() {
                         <View className="flex-row items-start">
                             <Text className="text-2xl mr-3">🌙</Text>
                             <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: 'Inter_600SemiBold' }}>
-                                    Evening Niyyah (6 PM – 5 AM)
+                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
+                                    {t('guide.method.night.title')}
                                 </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: 'Inter_400Regular' }}>
-                                    Write it 9 times to end the day with gratitude and peace.
+                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
+                                    {t('guide.method.night.desc')}
                                 </Text>
                             </View>
                         </View>
@@ -104,22 +123,15 @@ export default function GuideScreen() {
                 <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
                     <Text
                         className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        ✍️ How to Write
+                        {t('guide.howToWrite.title')}
                     </Text>
                     <Text
                         className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        Each session shows you an affirmation at the top of the screen. Type
-                        it exactly as shown. The text will highlight in real-time:{'\n\n'}
-                        🟢 Green = You're typing correctly{'\n'}
-                        🔴 Red = There's a mismatch{'\n'}
-                        ⚪ Gray = Not yet typed{'\n\n'}
-                        When you reach 80% accuracy, the Submit button becomes active. At
-                        100%, it auto-submits. After all repetitions are done, you'll see a
-                        beautiful "Alhamdulillah, Complete!" animation.
+                        {t('guide.howToWrite.body')}
                     </Text>
                 </View>
 
@@ -127,18 +139,15 @@ export default function GuideScreen() {
                 <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
                     <Text
                         className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        📖 Daily Themes
+                        {t('guide.themes.title')}
                     </Text>
                     <Text
                         className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        The app contains 41 days of unique affirmations covering 17 Islamic
-                        themes, including Tawakkul, Sabr, Shukr, Health, Family, Rizq,
-                        Self-Discipline, Taqwa, and more. After Day 41, the cycle repeats
-                        with fresh perspective.
+                        {t('guide.themes.body')}
                     </Text>
                 </View>
 
@@ -146,17 +155,15 @@ export default function GuideScreen() {
                 <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
                     <Text
                         className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        🔥 Streaks & Progress
+                        {t('guide.streaks.title')}
                     </Text>
                     <Text
                         className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        Complete all three sessions (Morning, Afternoon, Evening) to mark a
-                        day as complete. Build your streak by completing consecutive days.
-                        Check your progress in the calendar view to see your journey.
+                        {t('guide.streaks.body')}
                     </Text>
                 </View>
 
@@ -165,10 +172,9 @@ export default function GuideScreen() {
                     <Text className="text-3xl mb-3">🤲</Text>
                     <Text
                         className="text-base text-emerald-700 text-center leading-7"
-                        style={{ fontFamily: 'Inter_500Medium' }}
+                        style={{ fontFamily: f('medium') }}
                     >
-                        "Verily, with hardship comes ease."{'\n'}
-                        — Quran 94:6
+                        {t('guide.dua')}
                     </Text>
                 </View>
             </ScrollView>

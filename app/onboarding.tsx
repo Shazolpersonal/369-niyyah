@@ -11,46 +11,66 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProgress } from '../contexts/ProgressContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { requestNotificationPermissions, scheduleAllNotifications } from '../utils/notifications';
 
 const { width } = Dimensions.get('window');
 
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
+
 interface Slide {
     id: string;
     emoji: string;
-    title: string;
-    description: string;
+    titleKey: string;
+    descriptionKey: string;
 }
 
 const slides: Slide[] = [
     {
         id: '1',
         emoji: '🕌',
-        title: 'Bismillah',
-        description:
-            'Welcome to 369 Niyyah. Begin every day with intention and end it with gratitude. This app helps you build a stronger connection with Allah through daily written affirmations.',
+        titleKey: 'onboarding.slide1.title',
+        descriptionKey: 'onboarding.slide1.description',
     },
     {
         id: '2',
         emoji: '✨',
-        title: 'The 369 Method',
-        description:
-            'Write your affirmation 3 times every morning, 6 times at noon, and 9 times before bed. This powerful repetition trains your mind to align with your faith and goals.',
+        titleKey: 'onboarding.slide2.title',
+        descriptionKey: 'onboarding.slide2.description',
     },
     {
         id: '3',
         emoji: '🚀',
-        title: "Let's Begin",
-        description:
-            "Every day is a gift from Allah. Your journey to becoming a better Muslim starts now. Bismillah, let's go.",
+        titleKey: 'onboarding.slide3.title',
+        descriptionKey: 'onboarding.slide3.description',
     },
 ];
 
 export default function OnboardingScreen() {
     const router = useRouter();
     const { completeOnboarding } = useProgress();
+    const { t, language } = useLanguage();
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef<FlatList>(null);
+
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
 
     const onViewableItemsChanged = useRef(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -88,15 +108,15 @@ export default function OnboardingScreen() {
             <Text className="text-8xl mb-8">{item.emoji}</Text>
             <Text
                 className="text-3xl font-bold text-emerald-700 mb-6 text-center"
-                style={{ fontFamily: 'Inter_700Bold' }}
+                style={{ fontFamily: f('bold') }}
             >
-                {item.title}
+                {t(item.titleKey)}
             </Text>
             <Text
                 className="text-lg text-slate-600 text-center leading-8"
-                style={{ fontFamily: 'Inter_400Regular' }}
+                style={{ fontFamily: f('regular') }}
             >
-                {item.description}
+                {t(item.descriptionKey)}
             </Text>
         </View>
     );
@@ -138,9 +158,9 @@ export default function OnboardingScreen() {
                 >
                     <Text
                         className="text-white text-xl text-center font-semibold"
-                        style={{ fontFamily: 'Inter_600SemiBold' }}
+                        style={{ fontFamily: f('semibold') }}
                     >
-                        {isLastSlide ? 'Get Started' : 'Next'}
+                        {isLastSlide ? t('onboarding.getStarted') : t('onboarding.next')}
                     </Text>
                 </Pressable>
 
@@ -148,9 +168,9 @@ export default function OnboardingScreen() {
                     <Pressable onPress={handleStart} className="mt-4 py-2">
                         <Text
                             className="text-slate-500 text-center"
-                            style={{ fontFamily: 'Inter_400Regular' }}
+                            style={{ fontFamily: f('regular') }}
                         >
-                            Skip
+                            {t('onboarding.skip')}
                         </Text>
                     </Pressable>
                 )}

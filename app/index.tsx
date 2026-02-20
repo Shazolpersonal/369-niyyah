@@ -2,16 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StatusBar, TouchableOpacity, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Redirect } from 'expo-router';
-import { Calendar, HelpCircle, X } from 'lucide-react-native';
+import { Calendar, HelpCircle, X, Globe } from 'lucide-react-native';
 import { useProgress } from '../contexts/ProgressContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { TaskCard } from '../components/TaskCard';
 import { isSlotActive, getTodayEffectiveDateKey, getDisplayDay, isJourneyComplete } from '../utils/timeSlotManager';
-import { getAffirmation } from '../utils/contentCycler';
+import { getAffirmationByLanguage } from '../utils/contentCycler';
 import { TimeSlot } from '../types';
+
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
 
 export default function Dashboard() {
     const router = useRouter();
     const { dailyProgress, totalElapsedDays, trueStreak, isTodayComplete, isLoading, isFirstLaunch } = useProgress();
+    const { t, language, setLanguage } = useLanguage();
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAffirmation, setSelectedAffirmation] = useState('');
 
@@ -29,7 +50,7 @@ export default function Dashboard() {
 
     const handleTaskPress = (slot: TimeSlot) => {
         if (todayProgress[slot]) {
-            const affirmation = getAffirmation(totalElapsedDays, slot);
+            const affirmation = getAffirmationByLanguage(totalElapsedDays, slot, language);
             setSelectedAffirmation(affirmation);
             setModalVisible(true);
         } else {
@@ -37,12 +58,18 @@ export default function Dashboard() {
         }
     };
 
+    const toggleLanguage = () => {
+        setLanguage(language === 'en' ? 'bn' : 'en');
+    };
+
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+
     if (isLoading) {
         return (
             <SafeAreaView className="flex-1 bg-slate-50">
                 <View className="flex-1 items-center justify-center">
-                    <Text className="text-lg text-slate-600" style={{ fontFamily: 'Inter_400Regular' }}>
-                        Loading...
+                    <Text className="text-lg text-slate-600" style={{ fontFamily: f('regular') }}>
+                        {t('app.loading')}
                     </Text>
                 </View>
             </SafeAreaView>
@@ -64,24 +91,43 @@ export default function Dashboard() {
                             <Text className="text-xl mr-1">🕌</Text>
                             <Text
                                 className="text-emerald-700 font-bold text-base"
-                                style={{ fontFamily: 'Inter_700Bold' }}
+                                style={{ fontFamily: f('bold') }}
                             >
-                                369 Niyyah
+                                {t('app.name')}
                             </Text>
                         </View>
-                        <TouchableOpacity
-                            onPress={() => router.push('/guide')}
-                            activeOpacity={0.7}
-                            className="p-2"
-                        >
-                            <HelpCircle size={24} color="#10B981" />
-                        </TouchableOpacity>
+                        <View className="flex-row items-center">
+                            {/* Language Toggle */}
+                            <TouchableOpacity
+                                onPress={toggleLanguage}
+                                activeOpacity={0.7}
+                                className="p-2 mr-1"
+                            >
+                                <View className="flex-row items-center bg-emerald-50 px-2 py-1 rounded-lg">
+                                    <Globe size={16} color="#10B981" />
+                                    <Text
+                                        className="text-emerald-700 text-xs font-semibold ml-1"
+                                        style={{ fontFamily: f('semibold') }}
+                                    >
+                                        {language === 'en' ? 'বা' : 'EN'}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            {/* Help Icon */}
+                            <TouchableOpacity
+                                onPress={() => router.push('/guide')}
+                                activeOpacity={0.7}
+                                className="p-2"
+                            >
+                                <HelpCircle size={24} color="#10B981" />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <Text
                         className="text-center text-emerald-800 font-bold text-lg"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        Bismillahir Rahmanir Rahim
+                        {t('app.bismillah')}
                     </Text>
                 </View>
 
@@ -91,21 +137,21 @@ export default function Dashboard() {
                         <>
                             <Text
                                 className="text-center text-3xl font-bold text-emerald-600"
-                                style={{ fontFamily: 'Inter_700Bold' }}
+                                style={{ fontFamily: f('bold') }}
                             >
-                                🎉 MashaAllah! 🎉
+                                {t('dashboard.mashaAllah')}
                             </Text>
                             <Text
                                 className="text-center text-xl font-semibold text-slate-700 mt-2"
-                                style={{ fontFamily: 'Inter_600SemiBold' }}
+                                style={{ fontFamily: f('semibold') }}
                             >
-                                369-day journey complete!
+                                {t('dashboard.journeyComplete')}
                             </Text>
                             <Text
                                 className="text-center text-slate-500 mt-2"
-                                style={{ fontFamily: 'Inter_400Regular' }}
+                                style={{ fontFamily: f('regular') }}
                             >
-                                You are growing stronger in faith every day
+                                {t('dashboard.journeyCompleteMsg')}
                             </Text>
                         </>
                     ) : (
@@ -113,38 +159,38 @@ export default function Dashboard() {
                             {trueStreak > 0 ? (
                                 <Text
                                     className="text-center text-3xl font-bold text-slate-800"
-                                    style={{ fontFamily: 'Inter_700Bold' }}
+                                    style={{ fontFamily: f('bold') }}
                                 >
-                                    🔥 Streak: {trueStreak} {trueStreak === 1 ? 'day' : 'days'}
+                                    {t('dashboard.streak')} {trueStreak} {trueStreak === 1 ? t('dashboard.day') : t('dashboard.days')}
                                 </Text>
                             ) : isTodayComplete ? (
                                 <Text
                                     className="text-center text-3xl font-bold text-emerald-600"
-                                    style={{ fontFamily: 'Inter_700Bold' }}
+                                    style={{ fontFamily: f('bold') }}
                                 >
-                                    ✅ Today Complete!
+                                    {t('dashboard.todayComplete')}
                                 </Text>
                             ) : (
                                 <Text
                                     className="text-center text-xl font-semibold text-emerald-600"
-                                    style={{ fontFamily: 'Inter_600SemiBold' }}
+                                    style={{ fontFamily: f('semibold') }}
                                 >
-                                    Start fresh today!
+                                    {t('dashboard.startFresh')}
                                 </Text>
                             )}
                             <Text
                                 className="text-center text-slate-500 mt-2"
-                                style={{ fontFamily: 'Inter_400Regular' }}
+                                style={{ fontFamily: f('regular') }}
                             >
-                                Day {getDisplayDay(totalElapsedDays)}
+                                {t('dashboard.dayLabel')} {getDisplayDay(totalElapsedDays)}
                             </Text>
                         </>
                     )}
                     <Text
                         className="text-center text-slate-400 text-sm mt-1"
-                        style={{ fontFamily: 'Inter_400Regular' }}
+                        style={{ fontFamily: f('regular') }}
                     >
-                        Set your intention. Write it. Live it.
+                        {t('dashboard.tagline')}
                     </Text>
                 </View>
 
@@ -180,9 +226,9 @@ export default function Dashboard() {
                         <Calendar size={24} color="#10B981" />
                         <Text
                             className="text-emerald-700 font-semibold text-lg ml-3"
-                            style={{ fontFamily: 'Inter_600SemiBold' }}
+                            style={{ fontFamily: f('semibold') }}
                         >
-                            View My Progress
+                            {t('dashboard.viewProgress')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -200,9 +246,9 @@ export default function Dashboard() {
                         <View className="flex-row items-center justify-between mb-4">
                             <Text
                                 className="text-lg font-bold text-emerald-700"
-                                style={{ fontFamily: 'Inter_700Bold' }}
+                                style={{ fontFamily: f('bold') }}
                             >
-                                Today's Completed Niyyah
+                                {t('dashboard.completedNiyyah')}
                             </Text>
                             <TouchableOpacity
                                 onPress={() => setModalVisible(false)}
@@ -214,7 +260,7 @@ export default function Dashboard() {
                         <View className="bg-emerald-50 rounded-xl p-4 mb-6">
                             <Text
                                 className="text-base text-slate-700 leading-6"
-                                style={{ fontFamily: 'Inter_400Regular' }}
+                                style={{ fontFamily: f('regular') }}
                             >
                                 {selectedAffirmation}
                             </Text>
@@ -226,9 +272,9 @@ export default function Dashboard() {
                         >
                             <Text
                                 className="text-white text-center font-semibold text-base"
-                                style={{ fontFamily: 'Inter_600SemiBold' }}
+                                style={{ fontFamily: f('semibold') }}
                             >
-                                Close
+                                {t('dashboard.close')}
                             </Text>
                         </TouchableOpacity>
                     </View>

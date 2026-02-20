@@ -2,7 +2,39 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Check, Lock, ChevronRight } from 'lucide-react-native';
 import { TimeSlot } from '../types';
-import { getSlotLabel, getSlotEmoji, getSlotTimeRange, getRepetitionTarget } from '../utils/timeSlotManager';
+import { getSlotEmoji, getRepetitionTarget } from '../utils/timeSlotManager';
+import { useLanguage } from '../contexts/LanguageContext';
+
+const SLOT_LABEL_KEYS: Record<TimeSlot, string> = {
+    morning: 'slot.morning.label',
+    noon: 'slot.noon.label',
+    night: 'slot.night.label',
+};
+
+const SLOT_TIME_KEYS: Record<TimeSlot, string> = {
+    morning: 'slot.morning.timeRange',
+    noon: 'slot.noon.timeRange',
+    night: 'slot.night.timeRange',
+};
+
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
 
 interface TaskCardProps {
     slot: TimeSlot;
@@ -12,9 +44,12 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ slot, isActive, isCompleted, onPress }: TaskCardProps) {
-    const label = getSlotLabel(slot);
+    const { t, language } = useLanguage();
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+
+    const label = t(SLOT_LABEL_KEYS[slot]);
     const emoji = getSlotEmoji(slot);
-    const timeRange = getSlotTimeRange(slot);
+    const timeRange = t(SLOT_TIME_KEYS[slot]);
     const count = getRepetitionTarget(slot);
 
     if (isCompleted) {
@@ -28,11 +63,11 @@ export function TaskCard({ slot, isActive, isCompleted, onPress }: TaskCardProps
                     <Check size={24} color="#FFFFFF" strokeWidth={3} />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-emerald-700 font-bold text-lg">
+                    <Text className="text-emerald-700 font-bold text-lg" style={{ fontFamily: f('bold') }}>
                         {emoji} {label}
                     </Text>
-                    <Text className="text-emerald-600 text-sm mt-1">
-                        Completed — Tap to view
+                    <Text className="text-emerald-600 text-sm mt-1" style={{ fontFamily: f('regular') }}>
+                        {t('taskCard.completedTapToView')}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -50,11 +85,11 @@ export function TaskCard({ slot, isActive, isCompleted, onPress }: TaskCardProps
                     <Text className="text-2xl">{emoji}</Text>
                 </View>
                 <View className="flex-1">
-                    <Text className="text-slate-800 font-bold text-lg">
+                    <Text className="text-slate-800 font-bold text-lg" style={{ fontFamily: f('bold') }}>
                         {label}
                     </Text>
-                    <Text className="text-slate-500 text-sm mt-1">
-                        {timeRange} · Write ×{count}
+                    <Text className="text-slate-500 text-sm mt-1" style={{ fontFamily: f('regular') }}>
+                        {timeRange} · {t('taskCard.write')} ×{count}
                     </Text>
                 </View>
                 <ChevronRight size={24} color="#10B981" />
@@ -69,11 +104,11 @@ export function TaskCard({ slot, isActive, isCompleted, onPress }: TaskCardProps
                 <Lock size={20} color="#94A3B8" />
             </View>
             <View className="flex-1">
-                <Text className="text-slate-400 font-bold text-lg">
+                <Text className="text-slate-400 font-bold text-lg" style={{ fontFamily: f('bold') }}>
                     {label}
                 </Text>
-                <Text className="text-slate-400 text-sm mt-1">
-                    {timeRange} · Write ×{count}
+                <Text className="text-slate-400 text-sm mt-1" style={{ fontFamily: f('regular') }}>
+                    {timeRange} · {t('taskCard.write')} ×{count}
                 </Text>
             </View>
         </View>

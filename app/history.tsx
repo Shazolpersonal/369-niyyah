@@ -4,14 +4,41 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react-native';
 import { useProgress } from '../contexts/ProgressContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { CalendarDay } from '../components/CalendarDay';
 import { getEffectiveTodayDate, formatLocalDateKey } from '../utils/timeSlotManager';
 import { DayStatus, DailyProgress } from '../types';
 
-const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTH_NAMES = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+/** Returns the correct font family based on language and weight */
+const getFontFamily = (language: string, weight: 'regular' | 'medium' | 'semibold' | 'bold') => {
+    const fonts: Record<string, Record<string, string>> = {
+        en: {
+            regular: 'Inter_400Regular',
+            medium: 'Inter_500Medium',
+            semibold: 'Inter_600SemiBold',
+            bold: 'Inter_700Bold',
+        },
+        bn: {
+            regular: 'NotoSansBengali_400Regular',
+            medium: 'NotoSansBengali_500Medium',
+            semibold: 'NotoSansBengali_600SemiBold',
+            bold: 'NotoSansBengali_700Bold',
+        },
+    };
+    return fonts[language]?.[weight] || fonts['en'][weight];
+};
+
+const MONTH_KEYS = [
+    'history.month.january', 'history.month.february', 'history.month.march',
+    'history.month.april', 'history.month.may', 'history.month.june',
+    'history.month.july', 'history.month.august', 'history.month.september',
+    'history.month.october', 'history.month.november', 'history.month.december',
+];
+
+const WEEKDAY_KEYS = [
+    'history.weekday.sun', 'history.weekday.mon', 'history.weekday.tue',
+    'history.weekday.wed', 'history.weekday.thu', 'history.weekday.fri',
+    'history.weekday.sat',
 ];
 
 function getDayStatus(
@@ -31,6 +58,9 @@ function getDayStatus(
 export default function HistoryScreen() {
     const router = useRouter();
     const { dailyProgress, startDate } = useProgress();
+    const { t, language } = useLanguage();
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+
     const effectiveToday = getEffectiveTodayDate();
     const todayKey = formatLocalDateKey(effectiveToday);
 
@@ -112,6 +142,14 @@ export default function HistoryScreen() {
 
     const canGoNext = new Date(viewYear, viewMonth + 1, 1) <= effectiveToday;
 
+    // Legend items with translation keys
+    const legendItems = [
+        { color: 'bg-emerald-500', labelKey: 'history.complete' },
+        { color: 'bg-amber-400', labelKey: 'history.partial' },
+        { color: 'bg-red-400', labelKey: 'history.missed' },
+        { color: 'bg-slate-100', labelKey: 'history.pending' },
+    ];
+
     return (
         <SafeAreaView className="flex-1 bg-slate-50">
             {/* Header */}
@@ -121,9 +159,9 @@ export default function HistoryScreen() {
                 </TouchableOpacity>
                 <Text
                     className="text-lg font-semibold text-slate-800 flex-1"
-                    style={{ fontFamily: 'Inter_600SemiBold' }}
+                    style={{ fontFamily: f('semibold') }}
                 >
-                    My Progress
+                    {t('history.title')}
                 </Text>
             </View>
 
@@ -135,9 +173,9 @@ export default function HistoryScreen() {
                     </TouchableOpacity>
                     <Text
                         className="text-xl font-bold text-slate-800"
-                        style={{ fontFamily: 'Inter_700Bold' }}
+                        style={{ fontFamily: f('bold') }}
                     >
-                        {MONTH_NAMES[viewMonth]} {viewYear}
+                        {t(MONTH_KEYS[viewMonth])} {viewYear}
                     </Text>
                     <TouchableOpacity
                         onPress={handleNextMonth}
@@ -151,40 +189,40 @@ export default function HistoryScreen() {
                 {/* Stats */}
                 <View className="flex-row mb-6 gap-3">
                     <View className="flex-1 bg-emerald-50 rounded-xl p-3 items-center">
-                        <Text className="text-2xl font-bold text-emerald-600" style={{ fontFamily: 'Inter_700Bold' }}>
+                        <Text className="text-2xl font-bold text-emerald-600" style={{ fontFamily: f('bold') }}>
                             {monthStats.complete}
                         </Text>
-                        <Text className="text-xs text-emerald-600 mt-1" style={{ fontFamily: 'Inter_500Medium' }}>
-                            Complete
+                        <Text className="text-xs text-emerald-600 mt-1" style={{ fontFamily: f('medium') }}>
+                            {t('history.complete')}
                         </Text>
                     </View>
                     <View className="flex-1 bg-amber-50 rounded-xl p-3 items-center">
-                        <Text className="text-2xl font-bold text-amber-600" style={{ fontFamily: 'Inter_700Bold' }}>
+                        <Text className="text-2xl font-bold text-amber-600" style={{ fontFamily: f('bold') }}>
                             {monthStats.partial}
                         </Text>
-                        <Text className="text-xs text-amber-600 mt-1" style={{ fontFamily: 'Inter_500Medium' }}>
-                            Partial
+                        <Text className="text-xs text-amber-600 mt-1" style={{ fontFamily: f('medium') }}>
+                            {t('history.partial')}
                         </Text>
                     </View>
                     <View className="flex-1 bg-slate-100 rounded-xl p-3 items-center">
-                        <Text className="text-2xl font-bold text-slate-600" style={{ fontFamily: 'Inter_700Bold' }}>
+                        <Text className="text-2xl font-bold text-slate-600" style={{ fontFamily: f('bold') }}>
                             {monthStats.total}
                         </Text>
-                        <Text className="text-xs text-slate-600 mt-1" style={{ fontFamily: 'Inter_500Medium' }}>
-                            Total Days
+                        <Text className="text-xs text-slate-600 mt-1" style={{ fontFamily: f('medium') }}>
+                            {t('history.totalDays')}
                         </Text>
                     </View>
                 </View>
 
                 {/* Weekday Headers */}
                 <View className="flex-row mb-2">
-                    {WEEKDAY_LABELS.map((label) => (
-                        <View key={label} className="flex-1 items-center">
+                    {WEEKDAY_KEYS.map((key) => (
+                        <View key={key} className="flex-1 items-center">
                             <Text
                                 className="text-xs text-slate-400 font-semibold"
-                                style={{ fontFamily: 'Inter_600SemiBold' }}
+                                style={{ fontFamily: f('semibold') }}
                             >
-                                {label}
+                                {t(key)}
                             </Text>
                         </View>
                     ))}
@@ -215,16 +253,11 @@ export default function HistoryScreen() {
 
                 {/* Legend */}
                 <View className="flex-row flex-wrap gap-4 mt-6 justify-center">
-                    {[
-                        { color: 'bg-emerald-500', label: 'Complete' },
-                        { color: 'bg-amber-400', label: 'Partial' },
-                        { color: 'bg-red-400', label: 'Missed' },
-                        { color: 'bg-slate-100', label: 'Pending' },
-                    ].map(({ color, label }) => (
-                        <View key={label} className="flex-row items-center">
+                    {legendItems.map(({ color, labelKey }) => (
+                        <View key={labelKey} className="flex-row items-center">
                             <View className={`w-3 h-3 rounded-full ${color} mr-1`} />
-                            <Text className="text-xs text-slate-500" style={{ fontFamily: 'Inter_400Regular' }}>
-                                {label}
+                            <Text className="text-xs text-slate-500" style={{ fontFamily: f('regular') }}>
+                                {t(labelKey)}
                             </Text>
                         </View>
                     ))}
@@ -241,7 +274,7 @@ export default function HistoryScreen() {
                 <View className="flex-1 justify-center items-center bg-black/50 px-6">
                     <View className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-lg">
                         <View className="flex-row items-center justify-between mb-4">
-                            <Text className="text-lg font-bold text-slate-800" style={{ fontFamily: 'Inter_700Bold' }}>
+                            <Text className="text-lg font-bold text-slate-800" style={{ fontFamily: f('bold') }}>
                                 {selectedDay}
                             </Text>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -253,26 +286,26 @@ export default function HistoryScreen() {
                             <View className="gap-3">
                                 <View className="flex-row items-center">
                                     <Text className="text-2xl mr-3">{selectedProgress.morning ? '✅' : '⬜'}</Text>
-                                    <Text className="text-base text-slate-700" style={{ fontFamily: 'Inter_500Medium' }}>
-                                        Morning Niyyah
+                                    <Text className="text-base text-slate-700" style={{ fontFamily: f('medium') }}>
+                                        {t('history.morningNiyyah')}
                                     </Text>
                                 </View>
                                 <View className="flex-row items-center">
                                     <Text className="text-2xl mr-3">{selectedProgress.noon ? '✅' : '⬜'}</Text>
-                                    <Text className="text-base text-slate-700" style={{ fontFamily: 'Inter_500Medium' }}>
-                                        Afternoon Niyyah
+                                    <Text className="text-base text-slate-700" style={{ fontFamily: f('medium') }}>
+                                        {t('history.afternoonNiyyah')}
                                     </Text>
                                 </View>
                                 <View className="flex-row items-center">
                                     <Text className="text-2xl mr-3">{selectedProgress.night ? '✅' : '⬜'}</Text>
-                                    <Text className="text-base text-slate-700" style={{ fontFamily: 'Inter_500Medium' }}>
-                                        Evening Niyyah
+                                    <Text className="text-base text-slate-700" style={{ fontFamily: f('medium') }}>
+                                        {t('history.eveningNiyyah')}
                                     </Text>
                                 </View>
                             </View>
                         ) : (
-                            <Text className="text-slate-500 text-center py-4" style={{ fontFamily: 'Inter_400Regular' }}>
-                                No progress recorded for this day.
+                            <Text className="text-slate-500 text-center py-4" style={{ fontFamily: f('regular') }}>
+                                {t('history.noProgress')}
                             </Text>
                         )}
 
@@ -280,8 +313,8 @@ export default function HistoryScreen() {
                             className="bg-emerald-500 py-3 rounded-xl mt-6"
                             onPress={() => setModalVisible(false)}
                         >
-                            <Text className="text-white text-center font-semibold" style={{ fontFamily: 'Inter_600SemiBold' }}>
-                                Close
+                            <Text className="text-white text-center font-semibold" style={{ fontFamily: f('semibold') }}>
+                                {t('history.close')}
                             </Text>
                         </TouchableOpacity>
                     </View>
