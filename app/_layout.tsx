@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -18,6 +19,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { ProgressProvider } from '../contexts/ProgressContext';
 import { configureNotificationHandler } from '../utils/notifications';
+import AnimatedSplash from '../components/AnimatedSplash';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -27,6 +29,8 @@ SplashScreen.preventAutoHideAsync();
 configureNotificationHandler();
 
 export default function RootLayout() {
+    const [splashComplete, setSplashComplete] = useState(false);
+
     const [fontsLoaded] = useFonts({
         Inter_400Regular,
         Inter_500Medium,
@@ -38,12 +42,6 @@ export default function RootLayout() {
         NotoSansBengali_700Bold,
     });
 
-    useEffect(() => {
-        if (fontsLoaded) {
-            SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
-
     if (!fontsLoaded) {
         return null;
     }
@@ -51,14 +49,22 @@ export default function RootLayout() {
     return (
         <LanguageProvider>
             <ProgressProvider>
-                <StatusBar style="dark" />
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        animation: 'slide_from_right',
-                        contentStyle: { backgroundColor: '#F8FAFC' },
-                    }}
-                />
+                <View style={{ flex: 1 }}>
+                    <StatusBar style="dark" />
+                    <Stack
+                        screenOptions={{
+                            headerShown: false,
+                            animation: 'slide_from_right',
+                            contentStyle: { backgroundColor: '#F8FAFC' },
+                        }}
+                    />
+                    {!splashComplete && (
+                        <AnimatedSplash
+                            isAppReady={fontsLoaded}
+                            onAnimationComplete={() => setSplashComplete(true)}
+                        />
+                    )}
+                </View>
             </ProgressProvider>
         </LanguageProvider>
     );
