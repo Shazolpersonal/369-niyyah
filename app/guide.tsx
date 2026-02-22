@@ -1,11 +1,26 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
-import { TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeIn } from 'react-native-reanimated';
+
 import { useLanguage } from '../contexts/LanguageContext';
 import { getFontFamily } from '../utils/fonts';
+import { Accordion } from '../components/Accordion';
+import { useStaggeredEntry } from '../utils/useStaggeredEntry';
+
+function StaggeredView({ children, index, delay = 0 }: { children: React.ReactNode, index: number, delay?: number }) {
+    const { animatedStyle } = useStaggeredEntry(index, delay, 100, 20);
+    return <Animated.View style={animatedStyle}>{children}</Animated.View>;
+}
+
+const METHOD_ITEMS = [
+    { emoji: '🌅', titleKey: 'guide.method.morning.title', descKey: 'guide.method.morning.desc' },
+    { emoji: '☀️', titleKey: 'guide.method.noon.title', descKey: 'guide.method.noon.desc' },
+    { emoji: '🌙', titleKey: 'guide.method.night.title', descKey: 'guide.method.night.desc' },
+];
 
 export default function GuideScreen() {
     const router = useRouter();
@@ -13,153 +28,99 @@ export default function GuideScreen() {
     const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
 
     return (
-        <SafeAreaView className="flex-1 bg-slate-50">
-            {/* Header */}
-            <View className="flex-row items-center px-4 py-3 border-b border-slate-100">
-                <TouchableOpacity onPress={() => router.back()} className="p-2 mr-2">
-                    <ArrowLeft size={24} color="#334155" />
-                </TouchableOpacity>
-                <Text
-                    className="text-lg font-semibold text-slate-800"
-                    style={{ fontFamily: f('semibold') }}
-                >
-                    {t('guide.title')}
-                </Text>
-            </View>
+        <View style={styles.root}>
+            <LinearGradient
+                colors={['#064E3B', '#0F766E', '#134E4A', '#1E293B', '#0F172A'] as any}
+                locations={[0, 0.15, 0.25, 0.45, 0.7]}
+                style={StyleSheet.absoluteFill}
+            />
+            <SafeAreaView style={{ flex: 1 }}>
+                <Animated.View entering={FadeIn} style={styles.header}>
+                    <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+                        <ArrowLeft size={22} color="#D4A847" />
+                    </TouchableOpacity>
+                    <Text style={[styles.headerTitle, { fontFamily: f('bold') }]}>
+                        {t('guide.title')}
+                    </Text>
+                </Animated.View>
 
-            <ScrollView
-                className="flex-1"
-                contentContainerStyle={{ padding: 24, paddingBottom: 48 }}
-            >
-                {/* What is 369 Niyyah */}
-                <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
-                    <Text
-                        className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: f('bold') }}
-                    >
-                        {t('guide.whatIs.title')}
-                    </Text>
-                    <Text
-                        className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: f('regular') }}
-                    >
-                        {t('guide.whatIs.body')}
-                    </Text>
-                </View>
+                <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                    <StaggeredView index={0}>
+                        <Accordion title={t('guide.whatIs.title')} initiallyExpanded={true}>
+                            <Text style={[styles.bodyText, { fontFamily: f('regular') }]}>{t('guide.whatIs.body')}</Text>
+                        </Accordion>
+                    </StaggeredView>
 
-                {/* The 369 Method */}
-                <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
-                    <Text
-                        className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: f('bold') }}
-                    >
-                        {t('guide.method.title')}
-                    </Text>
-                    <Text
-                        className="text-base text-slate-600 leading-7 mb-3"
-                        style={{ fontFamily: f('regular') }}
-                    >
-                        {t('guide.method.intro')}
-                    </Text>
-
-                    <View className="gap-3">
-                        <View className="flex-row items-start">
-                            <Text className="text-2xl mr-3">🌅</Text>
-                            <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
-                                    {t('guide.method.morning.title')}
-                                </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
-                                    {t('guide.method.morning.desc')}
-                                </Text>
+                    <StaggeredView index={1}>
+                        <Accordion title={t('guide.method.title')}>
+                            <Text style={[styles.bodyText, { fontFamily: f('regular'), marginBottom: 16 }]}>{t('guide.method.intro')}</Text>
+                            <View style={{ gap: 16 }}>
+                                {METHOD_ITEMS.map((item, i) => (
+                                    <View key={i} style={styles.methodRow}>
+                                        <View style={styles.methodEmojiWrap}>
+                                            <Text style={{ fontSize: 22 }}>{item.emoji}</Text>
+                                        </View>
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={[styles.methodTitle, { fontFamily: f('semibold') }]}>{t(item.titleKey)}</Text>
+                                            <Text style={[styles.methodDesc, { fontFamily: f('regular') }]}>{t(item.descKey)}</Text>
+                                        </View>
+                                    </View>
+                                ))}
                             </View>
+                        </Accordion>
+                    </StaggeredView>
+
+                    <StaggeredView index={2}>
+                        <Accordion title={t('guide.howToWrite.title')}>
+                            <Text style={[styles.bodyText, { fontFamily: f('regular') }]}>{t('guide.howToWrite.body')}</Text>
+                        </Accordion>
+                    </StaggeredView>
+
+                    <StaggeredView index={3}>
+                        <Accordion title={t('guide.themes.title')}>
+                            <Text style={[styles.bodyText, { fontFamily: f('regular') }]}>{t('guide.themes.body')}</Text>
+                        </Accordion>
+                    </StaggeredView>
+
+                    <StaggeredView index={4}>
+                        <Accordion title={t('guide.streaks.title')}>
+                            <Text style={[styles.bodyText, { fontFamily: f('regular') }]}>{t('guide.streaks.body')}</Text>
+                        </Accordion>
+                    </StaggeredView>
+
+                    <StaggeredView index={5}>
+                        <View style={styles.duaCard}>
+                            <Text style={styles.duaEmoji}>🤲</Text>
+                            <Text style={[styles.duaText, { fontFamily: f('medium') }]}>{t('guide.dua')}</Text>
                         </View>
-
-                        <View className="flex-row items-start">
-                            <Text className="text-2xl mr-3">☀️</Text>
-                            <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
-                                    {t('guide.method.noon.title')}
-                                </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
-                                    {t('guide.method.noon.desc')}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View className="flex-row items-start">
-                            <Text className="text-2xl mr-3">🌙</Text>
-                            <View className="flex-1">
-                                <Text className="text-base font-semibold text-slate-800" style={{ fontFamily: f('semibold') }}>
-                                    {t('guide.method.night.title')}
-                                </Text>
-                                <Text className="text-sm text-slate-500 mt-1" style={{ fontFamily: f('regular') }}>
-                                    {t('guide.method.night.desc')}
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-                {/* How to Write */}
-                <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
-                    <Text
-                        className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: f('bold') }}
-                    >
-                        {t('guide.howToWrite.title')}
-                    </Text>
-                    <Text
-                        className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: f('regular') }}
-                    >
-                        {t('guide.howToWrite.body')}
-                    </Text>
-                </View>
-
-                {/* Daily Themes */}
-                <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
-                    <Text
-                        className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: f('bold') }}
-                    >
-                        {t('guide.themes.title')}
-                    </Text>
-                    <Text
-                        className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: f('regular') }}
-                    >
-                        {t('guide.themes.body')}
-                    </Text>
-                </View>
-
-                {/* Streaks */}
-                <View className="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100">
-                    <Text
-                        className="text-lg font-bold text-emerald-700 mb-3"
-                        style={{ fontFamily: f('bold') }}
-                    >
-                        {t('guide.streaks.title')}
-                    </Text>
-                    <Text
-                        className="text-base text-slate-600 leading-7"
-                        style={{ fontFamily: f('regular') }}
-                    >
-                        {t('guide.streaks.body')}
-                    </Text>
-                </View>
-
-                {/* Dua */}
-                <View className="bg-emerald-50 rounded-2xl p-5 items-center">
-                    <Text className="text-3xl mb-3">🤲</Text>
-                    <Text
-                        className="text-base text-emerald-700 text-center leading-7"
-                        style={{ fontFamily: f('medium') }}
-                    >
-                        {t('guide.dua')}
-                    </Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                    </StaggeredView>
+                </ScrollView>
+            </SafeAreaView>
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    root: { flex: 1 },
+    header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+    backBtn: {
+        padding: 8, marginRight: 12, backgroundColor: 'rgba(212,168,71,0.1)',
+        borderRadius: 12, borderWidth: 1, borderColor: 'rgba(212,168,71,0.15)',
+    },
+    headerTitle: { fontSize: 20, color: '#FFFFFF', letterSpacing: 0.3 },
+    scrollContent: { padding: 20, paddingBottom: 48 },
+    bodyText: { fontSize: 16, color: 'rgba(255,255,255,0.75)', lineHeight: 28 },
+    methodRow: { flexDirection: 'row', alignItems: 'flex-start' },
+    methodEmojiWrap: {
+        width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.06)',
+        alignItems: 'center', justifyContent: 'center', marginRight: 14,
+    },
+    methodTitle: { fontSize: 16, color: '#FFFFFF' },
+    methodDesc: { fontSize: 14, color: 'rgba(255,255,255,0.6)', marginTop: 4, lineHeight: 22 },
+    duaCard: {
+        backgroundColor: '#0F172A', borderRadius: 20, padding: 28, alignItems: 'center',
+        marginTop: 8, borderWidth: 1, borderColor: 'rgba(212,168,71,0.2)',
+    },
+    duaEmoji: { fontSize: 40, marginBottom: 16 },
+    duaText: { fontSize: 16, color: '#D4A847', textAlign: 'center', lineHeight: 28 },
+});

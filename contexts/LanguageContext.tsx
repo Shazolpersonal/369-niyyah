@@ -61,12 +61,13 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
         [language]
     );
 
+    const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t]);
+
     // Don't render until language preference is loaded
+    // NOTE: useMemo must be BEFORE this return to comply with Rules of Hooks
     if (!isLoaded) {
         return null;
     }
-
-    const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t]);
 
     return (
         <LanguageContext.Provider value={value}>

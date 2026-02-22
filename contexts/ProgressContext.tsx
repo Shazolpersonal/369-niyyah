@@ -139,9 +139,9 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [isFirstLaunch, setIsFirstLaunch] = useState(true);
 
-    // Derived values
-    const totalElapsedDays = calculateTotalElapsedDays(startDate);
-    const trueStreak = calculateTrueStreak(dailyProgress, startDate);
+    // Derived values (memoized to avoid expensive recalculation on every render)
+    const totalElapsedDays = useMemo(() => calculateTotalElapsedDays(startDate), [startDate]);
+    const trueStreak = useMemo(() => calculateTrueStreak(dailyProgress, startDate), [dailyProgress, startDate]);
 
     const todayKey = getTodayEffectiveDateKey();
     const todayProgress = dailyProgress[todayKey];

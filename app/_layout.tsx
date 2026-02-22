@@ -21,6 +21,8 @@ import { ProgressProvider } from '../contexts/ProgressContext';
 import { configureNotificationHandler } from '../utils/notifications';
 import AnimatedSplash from '../components/AnimatedSplash';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { ToastProvider } from '../components/Toast';
+import { initializeAds } from '../utils/adConfig';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -28,6 +30,9 @@ SplashScreen.preventAutoHideAsync();
 
 // Configure notification handler
 configureNotificationHandler();
+
+// Initialize AdMob SDK
+initializeAds();
 
 export default function RootLayout() {
     const [splashComplete, setSplashComplete] = useState(false);
@@ -66,6 +71,7 @@ export default function RootLayout() {
                                 onAnimationComplete={() => setSplashComplete(true)}
                             />
                         )}
+                        <ToastProvider />
                     </View>
                 </ProgressProvider>
             </LanguageProvider>

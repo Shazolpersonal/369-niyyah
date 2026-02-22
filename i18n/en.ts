@@ -7,6 +7,10 @@ export const en: Record<string, string> = {
     'app.bismillah': 'Bismillahir Rahmanir Rahim',
     'app.loading': 'Loading...',
 
+    // ===== Tabs =====
+    'tabs.home': 'Home',
+    'tabs.history': 'History',
+
     // ===== Dashboard =====
     'dashboard.mashaAllah': '🎉 MashaAllah! 🎉',
     'dashboard.journeyComplete': '369-day journey complete!',
@@ -120,4 +124,21 @@ export const en: Record<string, string> = {
     'notification.noon.body': 'Afternoon Niyyah awaits. Pause, remember Allah, and write your affirmation.',
     'notification.night.title': '🌙 Evening Niyyah',
     'notification.night.body': 'Evening Niyyah time. End your day with gratitude and peace. Alhamdulillah.',
+
+    // ===== Achievements =====
+    'achievements.title': 'Achievements',
+    'achievements.firstStep.title': 'First Step',
+    'achievements.firstStep.desc': 'Completed your first Niyyah.',
+    'achievements.streak3.title': '3-Day Streak',
+    'achievements.streak3.desc': 'Consistent for 3 days.',
+    'achievements.streak7.title': '7-Day Streak',
+    'achievements.streak7.desc': 'A full week of dedication.',
+    'achievements.habit21.title': '21-Day Habit',
+    'achievements.habit21.desc': 'It takes 21 days to form a habit.',
+    'achievements.master33.title': '369 Master',
+    'achievements.master33.desc': 'Completed the 33-day journey.',
+    'achievements.earlyBird.title': 'Early Bird',
+    'achievements.earlyBird.desc': 'Completed a Morning Niyyah.',
+    'achievements.nightOwl.title': 'Night Owl',
+    'achievements.nightOwl.desc': 'Completed an Evening Niyyah.',
 };
