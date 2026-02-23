@@ -8,52 +8,52 @@ interface NotificationContent {
 
 const MORNING_QUOTES = {
     en: [
-        "A new day brings new mercy.",
-        "Your morning intention sets the stage.",
-        "Rise with purpose, shine with faith.",
-        "Begin the day with Gratitude.",
-        "Breathe in peace, exhale worries."
+        "A profound new day has begun; what intention will you set today?",
+        "Breathe. Awaken your heart. Your morning Niyyah awaits.",
+        "Today is a blank canvas. Let your faith guide the first stroke.",
+        "Step into the morning with gratitude and unbreakable trust in Allah.",
+        "Release yesterday's worries. Anchor your soul with today's affirmation."
     ],
     bn: [
-        "নতুন দিন, নতুন রহমত।",
-        "আপনার সকালের নিয়ত আপনার দিন ঠিক করে দেয়।",
-        "উদ্দেশ্য নিয়ে উঠুন, বিশ্বাসের সাথে উজ্জ্বল হোন।",
-        "কৃতজ্ঞতার সাথে দিন শুরু করুন।",
-        "শান্তি শ্বাস নিন, দুশ্চিন্তা ছাড়ুন।"
+        "এক চমৎকার নতুন দিনের শুরু; আজ আপনার নিয়ত কী হবে?",
+        "একটি দীর্ঘ শ্বাস নিন। আপনার হৃদয়কে জাগ্রত করুন। সকালের নিয়ত আপনার অপেক্ষায়।",
+        "আজকের দিনটি একটি শূন্য ক্যানভাস। আপনার বিশ্বাস দিয়ে প্রথম আঁচড়টি কাটুন।",
+        "কৃতজ্ঞতা এবং আল্লাহর ওপর অবিচল বিশ্বাস নিয়ে আজকের দিনটি শুরু করুন।",
+        "অতীতের সকল দুশ্চিন্তা মুছে ফেলুন। আজকের নিয়তের মাধ্যমে আত্মাকে প্রশান্ত করুন।"
     ]
 };
 
 const NOON_QUOTES = {
     en: [
-        "Pause and reconnect.",
-        "Mid-day check: Are you on track?",
-        "Take a breath. You're doing great.",
-        "A moment of silence for a busy mind.",
-        "Refresh your intention for the rest of the day."
+        "Pause the noise of the world. Reconnect with your Creator.",
+        "Mid-day reflections: Are your actions aligned with your morning intention?",
+        "Take a moment of stillness. Your soul needs nourishment too.",
+        "In the midst of chaos, let your Niyyah be your anchor.",
+        "Renew your focus. There is immense power in remembering Allah right now."
     ],
     bn: [
-        "একটু থামুন এবং নতুন করে ভাবুন।",
-        "দুপুরের বিরতি: চলুন নিয়ত গুলো রিনিউ করি।",
-        "একটি শ্বাস নিন। আপনি ভালো করছেন।",
-        "ব্যস্ত দিনের মাঝে একটু নীরবতা।",
-        "দিনের বাকি জন্য আপনার নিয়ত সতেজ করুন।"
+        "দুনিয়ার কোলাহল থেকে একটু বিরতি নিন। আপনার রবের সাথে পুনরায় সংযোগ স্থাপন করুন।",
+        "দুপুরের আত্মজিজ্ঞাসা: আপনার কাজগুলো কি সকালের নিয়তের সাথে সামঞ্জস্যপূর্ণ?",
+        "একটু নীরবতার সুযোগ নিন। আপনার আত্মারও প্রশান্তির প্রয়োজন।",
+        "দিনের ব্যস্ততার মাঝে, অন্তরের নিয়তই হোক আপনার সবচেয়ে বড় আশ্রয়।",
+        "আপনার মনোযোগ নতুন করে স্থির করুন। ঠিক এই মুহূর্তে আল্লাহকে স্মরণের মাঝে বিপুল শক্তি রয়েছে।"
     ]
 };
 
 const NIGHT_QUOTES = {
     en: [
-        "Reflect on the day's blessings.",
-        "Let go of today's burdens.",
-        "End the day with a grateful heart.",
-        "Rest peacefully, tomorrow is a new start.",
-        "Your nighttime Niyyah brings clarity."
+        "As the day closes, forgive yourself and surrender to His mercy.",
+        "Leave the burdens of today behind. End your night in peaceful gratitude.",
+        "Reflect on the invisible protections Allah wrapped you in today.",
+        "The day is done. Cleanse your heart with your evening Niyyah.",
+        "Rest your body, calm your mind, and let your faith cradle you tonight."
     ],
     bn: [
-        "আজকের দিনের রহমত গুলো স্মরণ করুন।",
-        "আজকের বোঝাগুলো ছেড়ে দিন।",
-        "একটি কৃতজ্ঞ হৃদয় নিয়ে দিনটি শেষ করুন।",
-        "শান্তিতে বিশ্রাম নিন, আগামীকাল একটি নতুন শুরু।",
-        "রাতের বেলা নিয়ত করা আপনার মনে প্রশান্তি আনবে।"
+        "দিন শেষে নিজেকে ক্ষমা করুন এবং পরম করুণাময়ের কাছে সমর্পণ করুন।",
+        "আজকের যত ভার, সব নামিয়ে রাখুন। এক প্রশান্ত কৃতজ্ঞতায় রাতটি শেষ করুন।",
+        "আজ সারাদিন আল্লাহ আপনাকে যে অদৃশ্য সুরক্ষায় ঢেকে রেখেছিলেন, তা স্মরণ করুন।",
+        "দিনের কর্মব্যস্ততা শেষ। রাতের নিয়তের মাধ্যমে আপনার অন্তর পরিষ্কার করুন।",
+        "শরীরকে বিশ্রাম দিন, মন শান্ত করুন; আজকের রাতে আপনার ঈমানই হোক আপনার প্রশান্তির কোল।"
     ]
 };
 

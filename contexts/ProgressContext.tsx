@@ -171,17 +171,27 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
                 const savedData = await AsyncStorage.getItem(STORAGE_KEY);
 
                 if (savedData) {
-                    const parsed: PersistedData = JSON.parse(savedData);
+                    try {
+                        const parsed: PersistedData = JSON.parse(savedData);
 
-                    // Convert old ISO date format to YYYY-MM-DD if needed
-                    let normalizedStartDate = parsed.startDate;
-                    if (normalizedStartDate && normalizedStartDate.includes('T')) {
-                        const d = new Date(normalizedStartDate);
-                        normalizedStartDate = getLocalDateKey(d);
+                        // Convert old ISO date format to YYYY-MM-DD if needed
+                        let normalizedStartDate = parsed.startDate;
+                        if (normalizedStartDate && normalizedStartDate.includes('T')) {
+                            const d = new Date(normalizedStartDate);
+                            normalizedStartDate = getLocalDateKey(d);
+                        }
+
+                        setStartDate(normalizedStartDate);
+                        setDailyProgress(parsed.dailyProgress || {});
+                    } catch (parseError) {
+                        console.error('Failed to parse saved progress, data might be corrupted:', parseError);
+                        // Fallback: reset corrupted data to start fresh immediately behind the scenes
+                        const referenceTime = new Date();
+                        const effectiveStart = getEffectiveStartDateFromTime(referenceTime);
+                        setStartDate(effectiveStart);
+                        setDailyProgress({});
+                        await AsyncStorage.removeItem(STORAGE_KEY);
                     }
-
-                    setStartDate(normalizedStartDate);
-                    setDailyProgress(parsed.dailyProgress || {});
                 } else if (!isFirst) {
                     // Not first launch but no data — initialize
                     const referenceTime = new Date();

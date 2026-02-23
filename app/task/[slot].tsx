@@ -6,7 +6,7 @@ import { ArrowLeft, CheckCircle } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
     useSharedValue, useAnimatedStyle, withSpring, withTiming, withSequence,
-    interpolateColor, FadeIn, SlideInDown, Easing,
+    interpolateColor, FadeIn, SlideInDown, Easing, runOnJS
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
@@ -79,7 +79,9 @@ export default function TaskInputScreen() {
             successScale.value = 1;
             setTimeout(() => {
                 successOpacity.value = withTiming(0, { duration: 300 });
-                successScale.value = withTiming(0.5, { duration: 300 }, () => { setShowSuccess(false); });
+                successScale.value = withTiming(0.5, { duration: 300 }, (finished) => {
+                    if (finished) runOnJS(setShowSuccess)(false);
+                });
             }, 1000);
         }
     }, [repetitionsCompleted, repetitionTarget, slot, completeTask, showAd]);

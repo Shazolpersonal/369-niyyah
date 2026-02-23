@@ -31,288 +31,288 @@ export const affirmations: AffirmationDay[] = [
     // Day 1 — Tawakkul
     {
         day: 1,
-        morning: "I begin this day with Bismillah, placing my full trust in Allah's perfect plan.",
-        noon: "Whatever happens today is by Allah's decree — I accept it with a peaceful heart.",
-        night: "Alhamdulillah for today. I release my worries to Allah and rest in His mercy.",
+        morning: "I release the illusion of control and completely surrender my worries to the perfect timing of Allah.",
+        noon: "Whatever unfolds today is a brushstroke in Allah's masterpiece for me; I accept His decree with a tranquil heart.",
+        night: "Alhamdulillah. I forgive myself, I release the burdens of this day, and I rest safely in the mercy of Ar-Rahman.",
     },
     // Day 2 — Sabr
     {
         day: 2,
-        morning: "I choose patience today because Allah promises that with hardship comes ease.",
-        noon: "I will not react with anger. I breathe, I pause, I remember Allah.",
-        night: "Alhamdulillah, I made it through today. My patience is building my character and my Jannah.",
+        morning: "I anchor myself in patience, knowing that every delay is a deeply calculated protection from Allah.",
+        noon: "In moments of friction, I choose to pause, breathe, and let my emotional restraint be an act of worship.",
+        night: "Alhamdulillah. My resilience today has fortified my soul and built another brick in my eternal home.",
     },
     // Day 3 — Shukr
     {
         day: 3,
-        morning: "I am grateful for waking up today — not everyone was given this gift.",
-        noon: "I choose to focus on what Allah has given me, not what He has not.",
-        night: "Alhamdulillah for every blessing I noticed today and the millions I did not.",
+        morning: "I awaken with profound gratitude, acknowledging that every breath drawn today is a deliberate gift from my Creator.",
+        noon: "Instead of dwelling on what is missing, I immerse myself in the overwhelming abundance Allah has already provided.",
+        night: "Alhamdulillah for the visible miracles I recognized today, and the invisible protections I was unaware of.",
     },
     // Day 4 — Health & Body
     {
         day: 4,
-        morning: "My body is an amanah from Allah. I will honor it with healthy choices today.",
-        noon: "I am strong because Allah created me with purpose and potential.",
-        night: "Alhamdulillah for my health. I do not take a single heartbeat for granted.",
+        morning: "My body is a sacred vessel given in trust; today, I commit to treating it with profound respect and care.",
+        noon: "Every ounce of my energy is purposeful; I channel it towards actions that elevate me and please my Lord.",
+        night: "Alhamdulillah for the miraculous engineering of my body. It carried my soul faithfully through another day.",
     },
     // Day 5 — Family & Relationships
     {
         day: 5,
-        morning: "I will speak kindly to my family today — they are my greatest blessing.",
-        noon: "I am responsible for the love and peace in my home. I choose gentleness.",
-        night: "Alhamdulillah for my family. Ya Allah, protect them and keep us united.",
+        morning: "I consciously choose to be a source of warmth and unwavering kindness to the people Allah has placed in my care.",
+        noon: "I am the guardian of my home's peace; I respond to tension with gentle wisdom rather than reactive anger.",
+        night: "Alhamdulillah for the profound gift of companionship. Ya Allah, envelop my loved ones in Your divine protection.",
     },
     // Day 6 — Rizq & Provision
     {
         day: 6,
-        morning: "I step into this day knowing that my rizq is already written by Allah.",
-        noon: "My rizq is written — I work hard and trust Allah for the results.",
-        night: "Alhamdulillah for every provision today — food, shelter, love, and breath.",
+        morning: "I step into the world unburdened by financial anxiety, deeply assured that my limitless Provider has already written my share.",
+        noon: "My effort is my worship, but the outcome is divine grace. I work with excellence and attach my heart only to Ar-Razzaq.",
+        night: "Alhamdulillah. Every morsel of food, every breath, and every quiet moment of health today was a whispered miracle from my Lord.",
     },
     // Day 7 — Self-Discipline
     {
         day: 7,
-        morning: "I am in control of my nafs today. I choose obedience to Allah over desire.",
-        noon: "I guard my tongue, my eyes, and my heart because they will be questioned.",
-        night: "Alhamdulillah, I chose discipline over distraction today. Every small victory matters.",
+        morning: "I reclaim mastery over my impulses; today, I choose the enduring sweetness of obedience over the fleeting illusion of desire.",
+        noon: "Every time I redirect my gaze, swallow an angry word, or lower my ego, I am silently building my fortress in Jannah.",
+        night: "Alhamdulillah. Even in my smallest victories against my own nafs today, I drew a millimeter closer to the Divine.",
     },
     // Day 8 — Taqwa
     {
         day: 8,
-        morning: "I walk through this day with taqwa — aware that Allah sees everything I do.",
-        noon: "In every decision, I ask myself: does this please Allah? That is my compass.",
-        night: "Alhamdulillah for the awareness of Allah's presence. It keeps me on the straight path.",
+        morning: "I wrap my consciousness in the awareness of Allah. His loving and majestic sight covers me wherever I go today.",
+        noon: "In the quiet spaces where no human eye can see, I am not alone. I honor the divine presence with integrity.",
+        night: "Alhamdulillah. I end this day deeply grateful for the internal compass of Taqwa that kept me from losing my way.",
     },
     // Day 9 — Knowledge & Growth
     {
         day: 9,
-        morning: "I am a student of life. Today I will learn something that brings me closer to Allah.",
-        noon: "Knowledge is light. I seek it with sincerity and apply it with wisdom.",
-        night: "Alhamdulillah for what I learned today. Ya Allah, increase me in beneficial knowledge.",
+        morning: "My mind is a sacred space designed for divine light. Today, I seek knowledge that humbles my heart and elevates my soul.",
+        noon: "I detach from the arrogance of knowing everything. I remain a curious student in Allah's vast, beautiful universe.",
+        night: "Alhamdulillah. The wisdom I gained today has peeled away another layer of ignorance, drawing me closer to the Truth.",
     },
     // Day 10 — Forgiveness
     {
         day: 10,
-        morning: "I forgive those who have wronged me because Allah loves those who forgive.",
-        noon: "I release bitterness and resentment. My heart deserves peace, and Allah deserves my trust.",
-        night: "Alhamdulillah, I choose forgiveness tonight. Ya Allah, forgive me as I forgive others.",
+        morning: "I strip away the heavy armor of resentment. I choose to forgive others not because they are flawless, but because my soul deserves peace.",
+        noon: "I release the suffocating grip of past hurts. Just as I desperately crave Allah's mercy, I extend mercy to His creation.",
+        night: "Alhamdulillah. Tonight, I empty my heart of all bitterness. I forgive, I let go, and I sleep enveloped in tranquility.",
     },
     // Day 11 — Purpose & Legacy
     {
         day: 11,
-        morning: "I was created for a purpose. Today I will live with intention and meaning.",
-        noon: "Every action I take today is a seed for my akhirah. I plant wisely.",
-        night: "Alhamdulillah for the opportunity to serve. My legacy is built one good deed at a time.",
+        morning: "My existence is deliberate. I was woven into the fabric of this timeline by Allah to add a unique light to His world.",
+        noon: "I am not here merely to consume and survive; I am here to serve, uplift, and leave a quiet legacy of pure goodness.",
+        night: "Alhamdulillah. Today’s actions were seeds planted in the soil of this life, waiting to bloom in my Akhirah.",
     },
     // Day 12 — Confidence & Courage
     {
         day: 12,
-        morning: "I am brave because Allah is with me. No challenge is greater than His support.",
-        noon: "I do not shrink from my potential. Allah created me capable and worthy.",
-        night: "Alhamdulillah for the courage I found today. With Allah, I am never alone.",
+        morning: "I walk into uncertainty with quiet majesty, knowing that the One who commands the stars is fiercely guiding my steps.",
+        noon: "I refuse to let the opinions of mortals define my worth. My dignity is rooted eternally in being a servant of the Most High.",
+        night: "Alhamdulillah. In moments of doubt today, my faith acted as an unbreakable anchor. With Allah, I am invincible.",
     },
     // Day 13 — Community & Ummah
     {
         day: 13,
-        morning: "I am part of a beautiful Ummah. Today I will be a source of good for others.",
-        noon: "I choose kindness in every interaction. A smile, a kind word — these are sadaqah.",
-        night: "Alhamdulillah for the people in my life. Ya Allah, bless our Ummah with unity.",
+        morning: "I approach every soul I meet today as a profound mirror reflecting Allah's creation. I choose to be a healing presence.",
+        noon: "A gentle smile, a listening ear, or a suppressed judgment—my smallest acts of emotional generosity are monumental charities.",
+        night: "Alhamdulillah for the intricate web of human connection. Ya Allah, mend the fractured hearts within our beautiful Ummah.",
     },
     // Day 14 — Dua & Connection
     {
         day: 14,
-        morning: "I start this day talking to Allah. My dua is my most powerful tool.",
-        noon: "Allah hears every whisper of my heart. I am never too broken to make dua.",
-        night: "Alhamdulillah for the gift of dua. I end this day in conversation with my Lord.",
+        morning: "I ignite my day with whispered conversations with the Divine. My dua is not just a request, it is an intimate sanctuary.",
+        noon: "In the overwhelming rush of life, I remember that the Creator of the cosmos is intimately listening to the silence of my heart.",
+        night: "Alhamdulillah. I surrender my unsaid fears and unspoken hopes into the safest hands. I sleep knowing I have been heard.",
     },
     // Day 15 — Contentment
     {
         day: 15,
-        morning: "I am content with what Allah has given me. Contentment is true richness.",
-        noon: "I do not compare my life to others. Allah's plan for me is uniquely beautiful.",
-        night: "Alhamdulillah, I am at peace tonight. What I have is enough, and Allah knows best.",
+        morning: "I sever the toxic chains of comparison. The narrative Allah has masterfully written for me is uniquely tailored and breathtakingly perfect.",
+        noon: "I find extravagant luxury in the simple blessings currently surrounding me. True wealth is an unshakeably content heart.",
+        night: "Alhamdulillah. If everything is stripped away and only my faith remains, I am still the wealthiest soul alive.",
     },
     // Day 16 — Accountability
     {
         day: 16,
-        morning: "I will make today count. Every moment is an opportunity to earn Allah's pleasure.",
-        noon: "I hold myself accountable before Allah holds me accountable. I correct my mistakes now.",
-        night: "Alhamdulillah for another day of life. I seek forgiveness for my shortcomings tonight.",
+        morning: "I take radical ownership of my spiritual trajectory. Today, I am fiercely mindful of the script I am writing for my Day of Judgment.",
+        noon: "I do not disguise my flaws with excuses. I confront my shortcomings with vulnerability, knowing Allah's mercy outpaces my mistakes.",
+        night: "Alhamdulillah for the profound gift of Tawbah. I sweep my spiritual slate clean tonight through sincere repentance.",
     },
     // Day 17 — Positivity & Hope
     {
         day: 17,
-        morning: "Today is full of possibility. Allah's mercy renews every single morning.",
-        noon: "I choose hope over despair. Allah's plan is always better than my worries.",
-        night: "Alhamdulillah for this day of hope. Tomorrow holds even more of Allah's blessings.",
+        morning: "I deliberately program my mind to expect immense goodness from Allah. My optimism is a radiant reflection of my trust in Him.",
+        noon: "Even when surrounded by turbulence, I maintain an inner oasis of hope. The darkest ink often writes the most brilliant chapters of His decree.",
+        night: "Alhamdulillah for the psychological resilience birthed from faith. I fall asleep anticipating the beautiful dawn of His mercy tomorrow.",
     },
     // Day 18 — Tawakkul (Cycle 2)
     {
         day: 18,
-        morning: "I surrender my plans to Allah. He is the best of planners, and I trust Him completely.",
-        noon: "When uncertainty strikes, I remember: Allah has never failed me, and He never will.",
-        night: "Alhamdulillah, I let go of control tonight. Allah holds everything in perfect balance.",
+        morning: "I step away from the exhausting pursuit of controlling every variable. I tie my camel, and leave the miraculous orchestration to the Divine.",
+        noon: "When panic attempts to conquer my mind, I retreat into the comforting certainty that Allah’s wisdom infinitely surpasses my comprehension.",
+        night: "Alhamdulillah. What missed me was never meant for me, and what reached me could not have missed me. I rest in divine certainty.",
     },
     // Day 19 — Sabr (Cycle 2)
     {
         day: 19,
-        morning: "Patience is not passive — it is powerful. Today I endure with strength and faith.",
-        noon: "Every test is a chance to prove my iman. I stand firm because Allah rewards the patient.",
-        night: "Alhamdulillah for every moment I chose patience today. Allah sees my struggle and my strength.",
+        morning: "My patience today is not a silent defeat; it is an incredibly active and powerful spiritual endurance, heavily subsidized by divine reward.",
+        noon: "I visualize my temporal frustrations as spiritual currency, rapidly accumulating immense wealth in the eternal banks of Jannah.",
+        night: "Alhamdulillah for the quiet dignity of holding my composure today. Sabr is the beautiful, invisible garment of the believers.",
     },
     // Day 20 — Shukr (Cycle 2)
     {
         day: 20,
-        morning: "I open my eyes with gratitude. SubhanAllah for the miracle of a new day.",
-        noon: "Gratitude transforms my perspective. I see blessings where others might see problems.",
-        night: "Alhamdulillah for the big and small moments of today. My heart overflows with thankfulness.",
+        morning: "I plunge into radical gratitude. I choose to be overwhelmed by the sheer magnitude of blessings I did absolutely nothing to earn.",
+        noon: "Complaining acts as a blindfold to the miraculous. I consciously remove it, aggressively hunting for reasons to praise my Creator.",
+        night: "Alhamdulillah times infinity. Even if I spent my entire existence in prostration, I could not repay the gift of a single heartbeat.",
     },
     // Day 21 — Health & Body (Cycle 2)
     {
         day: 21,
-        morning: "I nourish my body with what is halal and good. It is a trust from Allah.",
-        noon: "My energy today is a gift. I use it wisely — for worship, for work, for goodness.",
-        night: "Alhamdulillah for the strength and health I experienced today. I rest now to renew.",
+        morning: "I dissolve all toxicity from my mind and body. The physical vessel Allah granted me requires pure fuel and pure thoughts to thrive.",
+        noon: "My vitality is not guaranteed; it is a daily loan from the Creator. I promise to spend this energy on things that elevate my soul.",
+        night: "Alhamdulillah. As I sleep, my body quietly repairs itself by the decree of Al-Khaliq. I surrender to this miraculous healing.",
     },
     // Day 22 — Family (Cycle 2)
     {
         day: 22,
-        morning: "I will be present with my family today. Quality time is a form of ibadah.",
-        noon: "I choose patience with my loved ones. They are testing ground for my best character.",
-        night: "Alhamdulillah for the warmth of home. Ya Allah, make my family the coolness of my eyes.",
+        morning: "I break generational cycles of anger. Today, my presence in my family will be a sanctuary of emotional safety and prophetic gentleness.",
+        noon: "Instead of demanding perfection from my loved ones, I offer them the same patient grace I desperately seek from Allah.",
+        night: "Alhamdulillah. No family is flawless, but mine is the specific theater Allah chose for my spiritual growth. I love them fiercely tonight.",
     },
     // Day 23 — Rizq (Cycle 2)
     {
         day: 23,
-        morning: "I trust that Allah will provide from sources I never expected. He is Ar-Razzaq.",
-        noon: "I work with excellence and leave the results to Allah. My effort is my ibadah.",
-        night: "Alhamdulillah for every door that opened and every door that closed — both are mercy.",
+        morning: "I untangle my self-worth from my bank account. The One who effortlessly feeds the birds will never abandon a heart attached to Him.",
+        noon: "My true wealth isn't measured by what I accumulate, but by what I give away. I purify my income with a radically generous spirit.",
+        night: "Alhamdulillah for closed doors. They were merely divine redirections protecting me from things that belonged to my past, not my future.",
     },
     // Day 24 — Self-Discipline (Cycle 2)
     {
         day: 24,
-        morning: "Today I choose what is right over what is easy. Discipline is freedom.",
-        noon: "I say no to distractions and yes to what brings me closer to Allah.",
-        night: "Alhamdulillah for the willpower Allah gave me today. Each day I grow stronger.",
+        morning: "Today, I become the architect of my habits. I reject instant gratification to build a devastatingly beautiful, long-term spiritual discipline.",
+        noon: "Discipline is not punishment; it is the ultimate expression of self-respect. I honor Allah by maximizing the potential He buried within me.",
+        night: "Alhamdulillah for the friction of growth today. The muscle of my willpower tore slightly today, only to rebuild itself stronger tomorrow.",
     },
     // Day 25 — Taqwa (Cycle 2)
     {
         day: 25,
-        morning: "I carry Allah's awareness in my heart today. It guides every step I take.",
-        noon: "Taqwa is not perfection — it is constant awareness and turning back to Allah.",
-        night: "Alhamdulillah, I lived today with consciousness of Allah. That is the best garment.",
+        morning: "Taqwa is the invisible shield I wear against the whispers of this world. Today, my soul is fiercely guarded by the awareness of Allah.",
+        noon: "I strive to make my private thoughts as beautiful as my public image. Allah reads the unsent letters of my heart.",
+        night: "Alhamdulillah for the internal alarm of my conscience today. Even my spiritual stumbles are proof that I am a soul struggling to stay awake.",
     },
     // Day 26 — Knowledge (Cycle 2)
     {
         day: 26,
-        morning: "Every day is a classroom. I approach today eager to learn and grow.",
-        noon: "I share what I know with sincerity. Teaching others is sadaqah jariyah.",
-        night: "Alhamdulillah for the wisdom that came to me today. Ya Allah, make it beneficial.",
+        morning: "I approach every person and every challenge today as a completely unique curriculum designed directly by the Master Teacher.",
+        noon: "True intelligence is knowing how desperately I need Allah’s guidance. I trade the illusion of my intellect for the certainty of His revelation.",
+        night: "Alhamdulillah for the subtle epiphanies of today. Information became wisdom the moment I connected it back to my Creator.",
     },
     // Day 27 — Forgiveness (Cycle 2)
     {
         day: 27,
-        morning: "I start today with a clean heart. I carry no grudges, only trust in Allah's justice.",
-        noon: "Forgiveness is not weakness — it is the strength of a heart that trusts Allah.",
-        night: "Alhamdulillah, I freed my heart tonight. I ask Allah to forgive all of us.",
+        morning: "Holding grudges is drinking poison and expecting the other person to die. Today, I dramatically emancipate my soul through total forgiveness.",
+        noon: "I extend massive grace to myself. I am a flawed human beautifully disguised, desperately relying on the cover of Al-Sattar.",
+        night: "Alhamdulillah. I sleep tonight with a chest completely empty of malice. Whoever wronged me, I leave their accounting entirely to the Most Just.",
     },
     // Day 28 — Purpose (Cycle 2)
     {
         day: 28,
-        morning: "My life has divine purpose. I align my actions with the pleasure of Allah.",
-        noon: "I am not here by accident. Allah placed me in this time and place for a reason.",
-        night: "Alhamdulillah for the clarity of purpose. My existence is to worship, to love, and to serve.",
+        morning: "I am not a wandering atom in a chaotic universe. I am a deliberate masterpiece executing a specific mission on behalf of Ar-Rahman.",
+        noon: "I refuse to sleepwalk through this brief existence. Every conversation, every keystroke, and every smile is an intentional act of devotion.",
+        night: "Alhamdulillah for the piercing clarity of knowing my 'why'. I belong to Allah, and to Him is my inevitable, magnificent return.",
     },
     // Day 29 — Confidence (Cycle 2)
     {
         day: 29,
-        morning: "I walk confidently because my Lord walks with me. I fear nothing but Allah.",
-        noon: "My worth is defined by Allah, not by people's opinions. I am enough as He made me.",
-        night: "Alhamdulillah for the confidence that comes from iman. I am Allah's creation — perfectly made.",
+        morning: "I silence the inner critic and amplify the voice of faith. The Creator of galaxies did not design me to live a small, fearful life.",
+        noon: "My confidence is not arrogance; it is a profound trust in the equipment and abilities Allah has permanently coded into my DNA.",
+        night: "Alhamdulillah for the quiet boldness I exhibited today. When I fear only the Creator, the entire creation shrinks into insignificance.",
     },
     // Day 30 — Community (Cycle 2)
     {
         day: 30,
-        morning: "I will uplift someone today. The best of people are those who benefit others.",
-        noon: "I avoid backbiting and gossip. My words will be a bridge, not a weapon.",
-        night: "Alhamdulillah for the Ummah. Ya Allah, heal our divisions and unite us in Your path.",
+        morning: "I bleed love into a fractured world. Today, I refuse to be a passive bystander in my community; I will be an active agent of Khayr.",
+        noon: "I elevate the dignity of every person I encounter. My words will build bridges of empathy, completely shattering the walls of prejudice.",
+        night: "Alhamdulillah for the collective heartbeat of the Ummah. Ya Allah, mend our collective trauma and unite us upon the purest love for You.",
     },
     // Day 31 — Dua (Cycle 2)
     {
         day: 31,
-        morning: "I pour my heart to Allah this morning. He is closer to me than my jugular vein.",
-        noon: "My dua today is not just asking — it is thanking, praising, and surrendering to Allah.",
-        night: "Alhamdulillah, I end today in sujood of the heart. Allah, You are my everything.",
+        morning: "I arm myself with whispered prayers. Dua is the invisible artillery that can alter the very fabric of my pre-destined reality.",
+        noon: "I do not negotiate with my limitations; I present them completely to the Limitless Reality. My dua is an act of total psychological surrender.",
+        night: "Alhamdulillah for the breathtaking privilege of conversational intimacy with God. I spoke, He listened, and my soul is intensely pacified.",
     },
     // Day 32 — Contentment (Cycle 2)
     {
         day: 32,
-        morning: "I wake up rich in faith. No amount of dunya can replace the peace of iman.",
-        noon: "I celebrate other people's success without jealousy. Allah's blessings are limitless.",
-        night: "Alhamdulillah, my heart is satisfied tonight. Allah's qadr is always in my favor.",
+        morning: "I violently reject the modern obsession with ‘more’. My soul is luxuriously drenched in the profound sufficiency of what I already have.",
+        noon: "I celebrate the success of others without a single drop of envy. Allah’s treasuries are infinite; someone else's blessing does not diminish mine.",
+        night: "Alhamdulillah for the quiet, elegant beauty of an ordinary day. I am deeply anchored in the majestic peace of Al-Qana'ah (contentment).",
     },
     // Day 33 — Accountability (Cycle 2)
     {
         day: 33,
-        morning: "I am mindful of my actions today. The angels are recording, and Allah is watching.",
-        noon: "I do not delay repentance. If I slip, I turn back to Allah immediately.",
-        night: "Alhamdulillah for tawbah. Ya Allah, accept my repentance and purify my record.",
+        morning: "I step into the arena of radical self-honesty. Today I will own my psychological shadows instead of projecting them onto others.",
+        noon: "I treat every fleeting hour as an intense, unrepeatable interview with the Divine. How I spend my time is the truest declaration of my faith.",
+        night: "Alhamdulillah for the spiritual reset button of Istighfar. My sins are vast, but my Lord's forgiveness is breathtakingly oceanic.",
     },
     // Day 34 — Positivity (Cycle 2)
     {
         day: 34,
-        morning: "I choose to see the khayr in everything today. Allah's wisdom is behind every event.",
-        noon: "Optimism is part of my faith. I expect the best from Allah because He is Al-Wadud.",
-        night: "Alhamdulillah for a day filled with hope. I sleep tonight smiling at Allah's beautiful plan.",
+        morning: "I vigorously defend my mind from the toxic contagion of pessimism. I am a fierce optimist because my Lord is the Source of all Light.",
+        noon: "Every obstacle in my path is essentially divine redirection. What feels like a brutal rejection is actually Allah’s fierce, loving protection.",
+        night: "Alhamdulillah for the sheer psychological resilience of faith. I end this day absolutely convinced that a brilliant dawn is mathematically inevitable.",
     },
     // Day 35 — Tawakkul (Cycle 3)
     {
         day: 35,
-        morning: "I tie my camel and trust Allah. I do my part and leave the rest to the Most Wise.",
-        noon: "My heart is at ease because I know Allah controls everything I cannot.",
-        night: "Alhamdulillah, I trusted Allah today and He did not let me down. He never does.",
+        morning: "I completely retire from the exhausting job of trying to be the general manager of the universe. I do my best, and I let God do His.",
+        noon: "My anxiety fundamentally whispers that Allah is absent. I loudly declare over that anxiety: 'My Lord is here, and He is ruthlessly in control.'",
+        night: "Alhamdulillah. I drop the heavy armor of self-reliance tonight. I am a fragile creation, resting in the impenetrable arms of the Sustainer.",
     },
     // Day 36 — Sabr (Cycle 3)
     {
         day: 36,
-        morning: "Beautiful patience — sabr jameel — is my goal today. Silence with trust in Allah.",
-        noon: "I do not complain. Instead, I convert my pain into dua and my tears into worship.",
-        night: "Alhamdulillah for the patience that carried me through today. Allah is with the patient.",
+        morning: "I inhale endurance and exhale frustration. Today's delays are not Allah ignoring me; they are Allah preparing me for what I asked for.",
+        noon: "Patience is not grinning through the pain; it is standing completely still in the storm, knowing the Captain is awake.",
+        night: "Alhamdulillah. I survived a day that demanded everything I had. My silent struggles today echo loudly in the heavens tonight.",
     },
     // Day 37 — Shukr (Cycle 3)
     {
         day: 37,
-        morning: "If I can only say one thing today, it is Alhamdulillah. Gratitude is my superpower.",
-        noon: "I look around and count blessings instead of problems. SubhanAllah, they are countless.",
-        night: "Alhamdulillah, Alhamdulillah, Alhamdulillah. My tongue never tires of thanking Allah.",
+        morning: "I categorically refuse to normalize my blessings. Every drop of water I drink today is a staggering cosmic miracle.",
+        noon: "The antidote to my dissatisfaction is aggressive gratitude. I am forcefully shifting my gaze from what is missing to what is overwhelmingly present.",
+        night: "Alhamdulillah. If gratitude is a currency, let me be the most reckless spender tonight. Thank You, Ya Allah, for absolutely everything.",
     },
-    // Day 38 — Health (Cycle 3)
+    // Day 38 — Forgiveness (Cycle 3)
     {
         day: 38,
-        morning: "Today I commit to treating my body with kindness. It carries my soul to worship Allah.",
-        noon: "Rest is not laziness — it is part of taking care of the amanah of my body.",
-        night: "Alhamdulillah for every cell in my body that works perfectly without me even knowing.",
+        morning: "I stop being the harsh judge of my own past. The version of me that sinned was simply searching for the peace only Allah can give.",
+        noon: "I release the spiritual tension of being 'right'. I prioritize the softness of my heart over the victory of my ego.",
+        night: "Alhamdulillah. The burden of holding grudges is too heavy to carry into tomorrow. I drop it at the door of sleep.",
     },
-    // Day 39 — Family (Cycle 3)
+    // Day 39 — Taqwa (Cycle 3)
     {
         day: 39,
-        morning: "I will make my family smile today. Bringing joy to loved ones is ibadah.",
-        noon: "I pray for my parents, my family, and my future. Ya Allah, bless every bond.",
-        night: "Alhamdulillah for the love that surrounds me. Family is Allah's mercy made visible.",
+        morning: "I navigate today with a beautifully heightened sensitivity to the divine. Every choice I make is a letter I am writing to Allah.",
+        noon: "I do not seek the applause of the crowd; I seek the quiet smile of my Creator. His view of me is the only metric that survives the grave.",
+        night: "Alhamdulillah for the internal compass that gently corrected my course today. Ya Allah, make my private self my truest self.",
     },
-    // Day 40 — Rizq (Cycle 3)
+    // Day 40 — Purpose (Cycle 3)
     {
         day: 40,
-        morning: "I go out today remembering that not a leaf falls without Allah's knowledge. He knows my needs.",
-        noon: "I am grateful for the halal rizq Allah has given me. It feeds my body and my soul.",
-        night: "Alhamdulillah for abundance — in wealth, in health, in love, and in iman.",
+        morning: "I step into my role as a Khalifa on this earth. My very breath today is a mandate to establish beauty, justice, and mercy.",
+        noon: "I stop waiting for a spectacular calling. My divine purpose is hidden exactly where I am right now: in how I treat the person in front of me.",
+        night: "Alhamdulillah. I am a small, intricately designed piece of a massive, divine puzzle. Tonight, I rest perfectly in my place.",
     },
-    // Day 41 — Self-Discipline (Cycle 3)
+    // Day 41 — Reflection & Renewal
     {
         day: 41,
-        morning: "I begin this final day of the cycle with intention. My discipline is my dedication to Allah.",
-        noon: "I have grown stronger over these days. With each affirmation, my connection to Allah deepens.",
-        night: "Alhamdulillah for completing this cycle. I am not the same person I was 41 days ago. I am closer to Allah.",
+        morning: "I look back at the last 40 days not with pride, but with profound awe at how gently Allah has evolved my soul.",
+        noon: "This is not the end of a journey; it is the equipping for a new one. I am fundamentally different than I was 40 days ago.",
+        night: "Alhamdulillah for the stamina to reach this day. Ya Allah, seal this transformation in my heart, and let tomorrow be a beautiful new beginning.",
     },
 ];

@@ -26,16 +26,20 @@ export const en: Record<string, string> = {
     'dashboard.completedNiyyah': "Today's Completed Niyyah",
     'dashboard.close': 'Close',
 
+    // ===== Buttons =====
+    'button.next': 'Continue',
+    'button.getStarted': 'Begin Journey',
+    'button.skip': 'Skip',
+
     // ===== Onboarding =====
     'onboarding.slide1.title': 'Bismillah',
-    'onboarding.slide1.description': 'Welcome to 369 Niyyah. Begin every day with intention and end it with gratitude. This app helps you build a stronger connection with Allah through daily written affirmations.',
-    'onboarding.slide2.title': 'The 369 Method',
-    'onboarding.slide2.description': 'Write your affirmation 3 times every morning, 6 times at noon, and 9 times before bed. This powerful repetition trains your mind to align with your faith and goals.',
-    'onboarding.slide3.title': "Let's Begin",
-    'onboarding.slide3.description': "Every day is a gift from Allah. Your journey to becoming a better Muslim starts now. Bismillah, let's go.",
-    'onboarding.getStarted': 'Get Started',
-    'onboarding.next': 'Next',
-    'onboarding.skip': 'Skip',
+    'onboarding.slide1.description': 'Welcome to 369 Niyyah. Anchor your heart with intention every morning, and release your soul with gratitude every night. A private sanctuary to profoundly connect with Allah.',
+
+    'onboarding.slide2.title': 'The 3-6-9 Method',
+    'onboarding.slide2.description': 'Engage in a beautiful prophetic rhythm: write your Niyyah three times in the morning to awaken your spirit, six times at noon to refocus your mind, and nine times at night to find enduring peace.',
+
+    'onboarding.slide3.title': 'A 41-Day Spiritual Arc',
+    'onboarding.slide3.description': 'Immerse yourself in deeply psychological themes—from radical Tawakkul to unshakeable Sabr. Build an unbreakable habit of intentional living over 41 transformative days.',
 
     // ===== Guide =====
     'guide.title': 'How It Works',
@@ -70,6 +74,46 @@ export const en: Record<string, string> = {
     'history.month.february': 'February',
     'history.month.march': 'March',
     'history.month.april': 'April',
+    // ===== Home / Main =====
+    'home.greeting.morning': 'A beautiful morning,',
+    'home.greeting.noon': 'A peaceful afternoon,',
+    'home.greeting.night': 'A tranquil evening,',
+
+    'home.progress.title': 'Your Arc',
+    'home.progress.day': 'Day {day} of 41',
+    'home.progress.cycle': 'Cycle {cycle}',
+
+    'home.todayTheme': "Today's Focus: {theme}",
+
+    'home.slots.morning.title': 'Morning Niyyah',
+    'home.slots.morning.subtitle': 'Awaken your intention (Write 3 times)',
+
+    'home.slots.noon.title': 'Noon Reflection',
+    'home.slots.noon.subtitle': 'Re-anchor your focus (Write 6 times)',
+
+    'home.slots.night.title': 'Evening Surrender',
+    'home.slots.night.subtitle': 'Release in gratitude (Write 9 times)',
+
+    'home.slots.status.completed': 'Fulfilled',
+    'home.slots.status.missed': 'Passed',
+    'home.slots.status.pending': 'Yet to write',
+    'home.slots.status.locked': 'Locked until {time}',
+
+    // ===== Write Screen =====
+    'write.title.morning': 'Morning Niyyah',
+    'write.title.noon': 'Noon Reflection',
+    'write.title.night': 'Evening Surrender',
+
+    'write.instruction': 'Internalize this truth by writing it exactly:',
+    'write.placeholder': 'Start writing here...',
+    'write.progress': '{current} / {total} written',
+    'write.button.save': 'Seal Intention',
+
+    'write.success.title': 'Alhamdulillah',
+    'write.success.message.morning': 'Your morning is grounded. Carry this peace into your day.',
+    'write.success.message.noon': 'Your focus is renewed. Return to your tasks with divine presence.',
+    'write.success.message.night': 'Your heart is cleansed. Rest now in His profound mercy.',
+    'write.success.button': 'Return Home',
     'history.month.may': 'May',
     'history.month.june': 'June',
     'history.month.july': 'July',
@@ -105,6 +149,30 @@ export const en: Record<string, string> = {
     'task.backToDashboard': 'Back to Dashboard',
     'task.mashaAllah': 'MashaAllah!',
 
+    // ===== Notifications & Settings =====
+    'permissions.notification.title': 'Permit Gentle Reminders',
+    'permissions.notification.message': 'Allow us to softly nudge you when it is time to write your next Niyyah, ensuring you never miss a moment of profound reflection.',
+    'permissions.button.allow': 'Allow Reminders',
+    'permissions.button.later': 'Maybe Later',
+
+    'settings.title': 'Your Profile',
+    'settings.name.title': 'Your Name',
+    'settings.name.placeholder': 'Enter your name',
+    'settings.name.save': 'Update Name',
+
+    'settings.notifications.title': 'Gentle Nudges',
+    'settings.notifications.toggle': 'Enable Reminders',
+    'settings.notifications.desc': 'Receive whispered affirmations at your writing times.',
+
+    'settings.progress.title': 'Your Spiritual Journey',
+    'settings.progress.reset': 'Reset Entire Progress',
+    'settings.progress.resetDesc': 'Start a completely new 41-day cycle from Day 1.',
+    'settings.progress.resetConfirm.title': 'Are you utterly certain?',
+    'settings.progress.resetConfirm.message': 'This will permanently erase your current streak and all past history. This cannot be undone.',
+
+    'settings.dangerZone': 'Danger Zone',
+    'settings.version': 'Version {version}',
+
     // ===== Task Card =====
     'taskCard.completedTapToView': 'Completed — Tap to view',
     'taskCard.write': 'Write',
@@ -126,19 +194,36 @@ export const en: Record<string, string> = {
     'notification.night.body': 'Evening Niyyah time. End your day with gratitude and peace. Alhamdulillah.',
 
     // ===== Achievements =====
-    'achievements.title': 'Achievements',
-    'achievements.firstStep.title': 'First Step',
-    'achievements.firstStep.desc': 'Completed your first Niyyah.',
-    'achievements.streak3.title': '3-Day Streak',
-    'achievements.streak3.desc': 'Consistent for 3 days.',
-    'achievements.streak7.title': '7-Day Streak',
-    'achievements.streak7.desc': 'A full week of dedication.',
-    'achievements.habit21.title': '21-Day Habit',
-    'achievements.habit21.desc': 'It takes 21 days to form a habit.',
-    'achievements.master33.title': '369 Master',
-    'achievements.master33.desc': 'Completed the 33-day journey.',
-    'achievements.earlyBird.title': 'Early Bird',
-    'achievements.earlyBird.desc': 'Completed a Morning Niyyah.',
-    'achievements.nightOwl.title': 'Night Owl',
-    'achievements.nightOwl.desc': 'Completed an Evening Niyyah.',
+    'achievements.title': 'Milestones of the Heart',
+    'achievements.empty': 'Your journey of consistent devotion is just taking root. Keep writing.',
+
+    'badge.first_step.name': 'The Awakening',
+    'badge.first_step.desc': 'You took the very first step toward deliberate intention.',
+
+    'badge.three_days.name': 'The Seed of Discipline',
+    'badge.three_days.desc': 'A beautiful 3-day quiet streak. The roots are forming.',
+
+    'badge.seven_days.name': 'The Gentle Rhythm',
+    'badge.seven_days.desc': 'A full week of unbreakable devotion. Your soul recognizes the pattern.',
+
+    'badge.twenty_one_days.name': 'The Steadfast Anchor',
+    'badge.twenty_one_days.desc': '21 days of persistence. Your intentions are now a fortress.',
+
+    'badge.forty_one_days.name': 'The Transformed Heart',
+    'badge.forty_one_days.desc': 'A magnificent milestone. An entire 41-day cycle, sealed with grace.',
+
+    'badge.morning_person.name': 'The Dawn Seeker',
+    'badge.morning_person.desc': '10 morning intentions fulfilled. You secure the first light.',
+
+    'badge.night_owl.name': 'The Night Sentinel',
+    'badge.night_owl.desc': '10 evening surrenders completed. You rest profoundly.',
+
+    'badge.perfectionist.name': 'The Flawless Echo',
+    'badge.perfectionist.desc': 'You wrote 5 consecutive Niyyahs without a single misstep.',
+
+    'badge.weekend_warrior.name': 'The Unbroken Weekend',
+    'badge.weekend_warrior.desc': 'You maintained your sacred discipline perfectly over a weekend.',
+
+    'badge.cycle_two.name': 'The Deepened Path',
+    'badge.cycle_two.desc': 'You chose to start a second cycle. The journey deepens.'
 };

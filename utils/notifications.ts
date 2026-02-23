@@ -64,7 +64,7 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
     if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('niyyah-reminders', {
             name: 'Niyyah Reminders',
-            description: 'Daily spiritual nudges for your 369 journey.',
+            description: '3 daily reminders for Morning, Afternoon, and Evening slots.',
             importance: Notifications.AndroidImportance.HIGH,
             vibrationPattern: [0, 500, 250, 500],
             lightColor: '#10B981',

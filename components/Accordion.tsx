@@ -18,36 +18,19 @@ interface AccordionProps {
 
 export function Accordion({ title, children, initiallyExpanded = false }: AccordionProps) {
     const [expanded, setExpanded] = useState(initiallyExpanded);
-    const [contentHeight, setContentHeight] = useState(0);
     const progress = useSharedValue(initiallyExpanded ? 1 : 0);
 
-    const onLayout = useCallback((event: LayoutChangeEvent) => {
-        const { height } = event.nativeEvent.layout;
-        if (height > 0) setContentHeight(height);
-    }, []);
-
     const toggle = () => {
-        setExpanded((prev) => {
-            progress.value = withSpring(prev ? 0 : 1, {
-                damping: 20,
-                stiffness: 200,
-            });
-            return !prev;
+        setExpanded(!expanded);
+        progress.value = withSpring(expanded ? 0 : 1, {
+            damping: 20,
+            stiffness: 200,
         });
     };
 
     const rStyle = useAnimatedStyle(() => {
-        if (contentHeight <= 0) {
-            return {
-                height: progress.value > 0.5 ? undefined : 0,
-                opacity: progress.value,
-                overflow: 'hidden' as const,
-            };
-        }
         return {
-            height: interpolate(progress.value, [0, 1], [0, contentHeight], Extrapolation.CLAMP),
             opacity: progress.value,
-            overflow: 'hidden' as const,
         };
     });
 
@@ -72,11 +55,13 @@ export function Accordion({ title, children, initiallyExpanded = false }: Accord
                 </Animated.View>
             </Pressable>
 
-            <Animated.View style={rStyle}>
-                <View onLayout={onLayout} style={styles.content}>
-                    {children}
-                </View>
-            </Animated.View>
+            {expanded && (
+                <Animated.View style={rStyle}>
+                    <View style={styles.content}>
+                        {children}
+                    </View>
+                </Animated.View>
+            )}
         </View>
     );
 }

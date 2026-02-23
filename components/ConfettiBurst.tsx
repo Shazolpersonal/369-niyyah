@@ -28,11 +28,7 @@ const ConfettiPiece = ({ x, y, color, size, delay, duration, onComplete }: Confe
     const progress = useSharedValue(0);
 
     useEffect(() => {
-        progress.value = withDelay(delay, withTiming(1, { duration }, (finished) => {
-            if (finished && onComplete) {
-                // Not running on JS thread to save memory unless needed
-            }
-        }));
+        progress.value = withDelay(delay, withTiming(1, { duration }));
     }, [delay, duration]);
 
     const rStyle = useAnimatedStyle(() => {
