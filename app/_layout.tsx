@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
     useFonts,
@@ -23,6 +23,9 @@ import AnimatedSplash from '../components/AnimatedSplash';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { ToastProvider } from '../components/Toast';
 import { initializeAds } from '../utils/adConfig';
+import * as Notifications from 'expo-notifications';
+import { registerBackgroundFetchAsync } from '../utils/backgroundTasks';
+import { recordNotificationInteraction } from '../utils/notificationAnalytics';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -36,6 +39,33 @@ initializeAds();
 
 export default function RootLayout() {
     const [splashComplete, setSplashComplete] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        // Register background tasks purely outside of React lifecycle.
+        registerBackgroundFetchAsync();
+
+        // Listen to notification interactions (taps and quick actions)
+        const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+            const data = response.notification.request.content.data;
+            const actionIdentifier = response.actionIdentifier;
+
+            if (data?.slot) {
+                // Record the hour to adapt future push times
+                recordNotificationInteraction(data.slot as any);
+            }
+
+            if (actionIdentifier === 'write_niyyah' || actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
+                // Navigate user straight into the app dashboard/tabs
+                router.push('/(tabs)');
+            } else if (actionIdentifier === 'snooze') {
+                // Rescheduling feature
+                console.log('User snoozed the notification');
+            }
+        });
+
+        return () => subscription.remove();
+    }, [router]);
 
     const [fontsLoaded] = useFonts({
         Inter_400Regular,
