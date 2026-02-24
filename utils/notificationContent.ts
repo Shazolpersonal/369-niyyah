@@ -60,10 +60,10 @@ const NIGHT_QUOTES = {
 /**
  * Get a dynamic message based on time slot, language, and the current day of the year
  */
-export const getDynamicNotificationMessage = (slot: TimeSlot, language: Language): NotificationContent => {
+export const getDynamicNotificationMessage = (slot: TimeSlot, language: Language, targetDate: Date = new Date()): NotificationContent => {
     // Basic daily rotation index to ensure it cycles consistently per day
     const dayOfYear = Math.floor(
-        (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24
+        (targetDate.getTime() - new Date(targetDate.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24
     );
 
     let quotesEn: string[];

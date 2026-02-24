@@ -117,7 +117,7 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
         targetDate.setDate(targetDate.getDate() + i);
 
         for (const slot of slots) {
-            const { title, body } = getDynamicNotificationMessage(slot, language);
+            const { title, body } = getDynamicNotificationMessage(slot, language, targetDate);
 
             let optimalHour = BASE_NOTIFICATION_HOURS[slot];
             switch (slot) {
@@ -128,6 +128,12 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
 
             // Target scheduling date/time
             const scheduleTime = new Date(targetDate);
+
+            // 🔥 The $10k Architecture Fix: Shift midnight hours to the next true calendar day
+            if (slot === 'night' && optimalHour < 5) {
+                scheduleTime.setDate(scheduleTime.getDate() + 1);
+            }
+
             scheduleTime.setHours(optimalHour, 0, 0, 0);
 
             // Don't schedule in the past
