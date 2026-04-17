@@ -7,10 +7,8 @@ export const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND_NOTIFICATION_TASK';
 // Define the task out of the React lifecycle
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
     try {
-        console.log(`[Background Fetch] Running '${BACKGROUND_NOTIFICATION_TASK}'...`);
         // Reschedule for the next 14 days dynamically
         await scheduleAllNotifications(14);
-        console.log(`[Background Fetch] Rescheduled notifications successfully.`);
         return BackgroundFetch.BackgroundFetchResult.NewData;
     } catch (error) {
         console.error(`[Background Fetch] Error:`, error);
@@ -28,7 +26,6 @@ export async function registerBackgroundFetchAsync() {
             stopOnTerminate: false, // Android only: Keep running after app close
             startOnBoot: true,     // Android only: Restart on device boot
         });
-        console.log('[Background Fetch] Registered successfully.');
     } catch (err) {
         console.warn('[Background Fetch] Registration failed:', err);
     }
@@ -42,7 +39,6 @@ export async function unregisterBackgroundFetchAsync() {
         const isRegistered = await TaskManager.isTaskRegisteredAsync(BACKGROUND_NOTIFICATION_TASK);
         if (isRegistered) {
             await BackgroundFetch.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
-            console.log('[Background Fetch] Unregistered successfully.');
         }
     } catch (err) {
         console.warn('[Background Fetch] Unregistration failed:', err);

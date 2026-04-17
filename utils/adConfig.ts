@@ -36,7 +36,6 @@ export const INTERSTITIAL_COUNT_KEY = '@niyyah_369_interstitial_count';
 export async function initializeAds(): Promise<void> {
     try {
         await mobileAds().initialize();
-        console.log('AdMob SDK initialized successfully');
     } catch (error) {
         console.warn('AdMob SDK initialization failed:', error);
     }

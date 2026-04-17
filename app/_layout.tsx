@@ -60,7 +60,6 @@ export default function RootLayout() {
                 router.push('/(tabs)');
             } else if (actionIdentifier === 'snooze') {
                 // Rescheduling feature
-                console.log('User snoozed the notification');
             }
         });
 
