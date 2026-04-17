@@ -44,3 +44,4 @@ export async function unregisterBackgroundFetchAsync() {
         console.warn('[Background Fetch] Unregistration failed:', err);
     }
 }
+//
