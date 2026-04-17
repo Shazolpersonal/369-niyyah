@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DailyProgress, TimeSlot } from '../types';
+import { logger } from '../utils/logger';
 import {
     getEffectiveDateKey,
     getEffectiveStartDateFromTime,
@@ -154,7 +155,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
         try {
             await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         } catch (error) {
-            console.error('Failed to persist progress:', error);
+            logger.error('Failed to persist progress:', error);
         }
     }, []);
 
@@ -184,7 +185,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
                         setStartDate(normalizedStartDate);
                         setDailyProgress(parsed.dailyProgress || {});
                     } catch (parseError) {
-                        console.error('Failed to parse saved progress, data might be corrupted:', parseError);
+                        logger.error('Failed to parse saved progress, data might be corrupted:', parseError);
                         // Fallback: reset corrupted data to start fresh immediately behind the scenes
                         const referenceTime = new Date();
                         const effectiveStart = getEffectiveStartDateFromTime(referenceTime);
@@ -206,7 +207,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
                     await persistData(newData);
                 }
             } catch (error) {
-                console.error('Failed to load progress:', error);
+                logger.error('Failed to load progress:', error);
             } finally {
                 setIsLoading(false);
             }
@@ -232,7 +233,7 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
             };
             await persistData(newData);
         } catch (error) {
-            console.error('Failed to complete onboarding:', error);
+            logger.error('Failed to complete onboarding:', error);
         }
     }, [persistData]);
 
