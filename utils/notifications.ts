@@ -100,6 +100,97 @@ const calculateOptimalHour = (slot: TimeSlot, statsHour: number | null): number 
     return statsHour;
 };
 
+const getOptimalHourForSlot = (
+    slot: TimeSlot,
+    stats: Awaited<ReturnType<typeof getNotificationInteractionStats>>,
+): number => {
+    switch (slot) {
+        case 'morning':
+            return calculateOptimalHour(slot, stats.morningLastInteractHour);
+        case 'noon':
+            return calculateOptimalHour(slot, stats.noonLastInteractHour);
+        case 'night':
+            return calculateOptimalHour(slot, stats.nightLastInteractHour);
+        default:
+            return BASE_NOTIFICATION_HOURS[slot];
+    }
+};
+
+const schedulePrimaryNotification = (
+    slot: TimeSlot,
+    language: Language,
+    targetDate: Date,
+    optimalHour: number,
+    schedulingPromises: Promise<string>[],
+) => {
+    const { title, body } = getDynamicNotificationMessage(slot, language, targetDate);
+
+    // Target scheduling date/time
+    const scheduleTime = new Date(targetDate);
+
+    // 🔥 The $10k Architecture Fix: Shift midnight hours to the next true calendar day
+    if (slot === 'night' && optimalHour < 5) {
+        scheduleTime.setDate(scheduleTime.getDate() + 1);
+    }
+
+    scheduleTime.setHours(optimalHour, 0, 0, 0);
+
+    // Don't schedule in the past
+    if (scheduleTime.getTime() > new Date().getTime()) {
+        schedulingPromises.push(
+            Notifications.scheduleNotificationAsync({
+                content: {
+                    title,
+                    body,
+                    sound: 'default',
+                    categoryIdentifier: 'niyyah_action',
+                    data: { slot, type: 'primary' },
+                    ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
+                },
+                trigger: {
+                    type: Notifications.SchedulableTriggerInputTypes.DATE,
+                    date: scheduleTime,
+                },
+            }),
+        );
+    }
+};
+
+const scheduleNudgeNotification = (
+    slot: TimeSlot,
+    language: Language,
+    targetDate: Date,
+    schedulingPromises: Promise<string>[],
+) => {
+    // Gentle Nudge (Last chance) scheduling - 1 hour before the slot ends
+    let nudgeHour = 12; // Morning ends at 13
+    if (slot === 'noon') nudgeHour = 17; // Noon ends at 18
+    if (slot === 'night') nudgeHour = 4; // Night ends at 5 next day
+
+    const nudgeTime = new Date(targetDate);
+    if (slot === 'night') nudgeTime.setDate(nudgeTime.getDate() + 1);
+    nudgeTime.setHours(nudgeHour, 30, 0, 0); // Give 30 mins buffer
+
+    if (nudgeTime.getTime() > new Date().getTime()) {
+        const nudgeContent = getGentleNudgeMessage(slot, language);
+        schedulingPromises.push(
+            Notifications.scheduleNotificationAsync({
+                content: {
+                    title: nudgeContent.title,
+                    body: nudgeContent.body,
+                    sound: 'default',
+                    data: { slot, type: 'nudge' },
+                    ...(Platform.OS === 'android' && { channelId: 'niyyah-nudges' }),
+                },
+                trigger: {
+                    type: Notifications.SchedulableTriggerInputTypes.DATE,
+                    date: nudgeTime,
+                },
+            }),
+        );
+    }
+};
+
 /**
  * Schedule dynamic notifications for the next `daysAhead` days
  * Defaulting to 14 days to stay well within iOS 64 scheduled notifications limit
@@ -118,78 +209,16 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
         targetDate.setDate(targetDate.getDate() + i);
 
         for (const slot of slots) {
-            const { title, body } = getDynamicNotificationMessage(slot, language, targetDate);
+            const optimalHour = getOptimalHourForSlot(slot, stats);
 
-            let optimalHour = BASE_NOTIFICATION_HOURS[slot];
-            switch (slot) {
-                case 'morning':
-                    optimalHour = calculateOptimalHour(slot, stats.morningLastInteractHour);
-                    break;
-                case 'noon':
-                    optimalHour = calculateOptimalHour(slot, stats.noonLastInteractHour);
-                    break;
-                case 'night':
-                    optimalHour = calculateOptimalHour(slot, stats.nightLastInteractHour);
-                    break;
-            }
-
-            // Target scheduling date/time
-            const scheduleTime = new Date(targetDate);
-
-            // 🔥 The $10k Architecture Fix: Shift midnight hours to the next true calendar day
-            if (slot === 'night' && optimalHour < 5) {
-                scheduleTime.setDate(scheduleTime.getDate() + 1);
-            }
-
-            scheduleTime.setHours(optimalHour, 0, 0, 0);
-
-            // Don't schedule in the past
-            if (scheduleTime.getTime() > new Date().getTime()) {
-                schedulingPromises.push(
-                    Notifications.scheduleNotificationAsync({
-                        content: {
-                            title,
-                            body,
-                            sound: 'default',
-                            categoryIdentifier: 'niyyah_action',
-                            data: { slot, type: 'primary' },
-                            ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
-                        },
-                        trigger: {
-                            type: Notifications.SchedulableTriggerInputTypes.DATE,
-                            date: scheduleTime,
-                        },
-                    }),
-                );
-            }
-
-            // Gentle Nudge (Last chance) scheduling - 1 hour before the slot ends
-            let nudgeHour = 12; // Morning ends at 13
-            if (slot === 'noon') nudgeHour = 17; // Noon ends at 18
-            if (slot === 'night') nudgeHour = 4; // Night ends at 5 next day
-
-            const nudgeTime = new Date(targetDate);
-            if (slot === 'night') nudgeTime.setDate(nudgeTime.getDate() + 1);
-            nudgeTime.setHours(nudgeHour, 30, 0, 0); // Give 30 mins buffer
-
-            if (nudgeTime.getTime() > new Date().getTime()) {
-                const nudgeContent = getGentleNudgeMessage(slot, language);
-                schedulingPromises.push(
-                    Notifications.scheduleNotificationAsync({
-                        content: {
-                            title: nudgeContent.title,
-                            body: nudgeContent.body,
-                            sound: 'default',
-                            data: { slot, type: 'nudge' },
-                            ...(Platform.OS === 'android' && { channelId: 'niyyah-nudges' }),
-                        },
-                        trigger: {
-                            type: Notifications.SchedulableTriggerInputTypes.DATE,
-                            date: nudgeTime,
-                        },
-                    }),
-                );
-            }
+            schedulePrimaryNotification(
+                slot,
+                language,
+                targetDate,
+                optimalHour,
+                schedulingPromises,
+            );
+            scheduleNudgeNotification(slot, language, targetDate, schedulingPromises);
         }
     }
 
