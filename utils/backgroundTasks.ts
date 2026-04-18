@@ -24,7 +24,7 @@ export async function registerBackgroundFetchAsync() {
         await BackgroundFetch.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK, {
             minimumInterval: 60 * 60 * 24, // Once a day
             stopOnTerminate: false, // Android only: Keep running after app close
-            startOnBoot: true, // Android only: Restart on device boot
+            startOnBoot: true,     // Android only: Restart on device boot
         });
     } catch (err) {
         console.warn('[Background Fetch] Registration failed:', err);

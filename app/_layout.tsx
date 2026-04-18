@@ -46,7 +46,7 @@ export default function RootLayout() {
         registerBackgroundFetchAsync();
 
         // Listen to notification interactions (taps and quick actions)
-        const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+        const subscription = Notifications.addNotificationResponseReceivedListener(response => {
             const data = response.notification.request.content.data;
             const actionIdentifier = response.actionIdentifier;
 
@@ -55,10 +55,7 @@ export default function RootLayout() {
                 recordNotificationInteraction(data.slot as any);
             }
 
-            if (
-                actionIdentifier === 'write_niyyah' ||
-                actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
-            ) {
+            if (actionIdentifier === 'write_niyyah' || actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
                 // Navigate user straight into the app dashboard/tabs
                 router.push('/(tabs)');
             } else if (actionIdentifier === 'snooze') {

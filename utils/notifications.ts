@@ -58,7 +58,7 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
             options: {
                 opensAppToForeground: false,
             },
-        }
+        },
     ]);
 
     if (Platform.OS === 'android') {
@@ -94,7 +94,7 @@ const calculateOptimalHour = (slot: TimeSlot, statsHour: number | null): number 
     // Safety check ensuring we don't schedule outside valid boundaries for the slot
     if (slot === 'morning' && (statsHour < 8 || statsHour >= 13)) return baseHour;
     if (slot === 'noon' && (statsHour < 13 || statsHour >= 18)) return baseHour;
-    if (slot === 'night' && (statsHour >= 5 && statsHour < 18)) return baseHour;
+    if (slot === 'night' && statsHour >= 5 && statsHour < 18) return baseHour;
 
     // Shift exactly to the hour the user recently interacted, ensuring maximum open rates
     return statsHour;
@@ -111,6 +111,7 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
     const stats = await getNotificationInteractionStats();
 
     const slots: TimeSlot[] = ['morning', 'noon', 'night'];
+    const schedulingPromises: Promise<string>[] = [];
 
     for (let i = 0; i < daysAhead; i++) {
         const targetDate = new Date();
@@ -121,9 +122,15 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
 
             let optimalHour = BASE_NOTIFICATION_HOURS[slot];
             switch (slot) {
-                case 'morning': optimalHour = calculateOptimalHour(slot, stats.morningLastInteractHour); break;
-                case 'noon': optimalHour = calculateOptimalHour(slot, stats.noonLastInteractHour); break;
-                case 'night': optimalHour = calculateOptimalHour(slot, stats.nightLastInteractHour); break;
+                case 'morning':
+                    optimalHour = calculateOptimalHour(slot, stats.morningLastInteractHour);
+                    break;
+                case 'noon':
+                    optimalHour = calculateOptimalHour(slot, stats.noonLastInteractHour);
+                    break;
+                case 'night':
+                    optimalHour = calculateOptimalHour(slot, stats.nightLastInteractHour);
+                    break;
             }
 
             // Target scheduling date/time
@@ -138,20 +145,22 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
 
             // Don't schedule in the past
             if (scheduleTime.getTime() > new Date().getTime()) {
-                await Notifications.scheduleNotificationAsync({
-                    content: {
-                        title,
-                        body,
-                        sound: 'default',
-                        categoryIdentifier: 'niyyah_action',
-                        data: { slot, type: 'primary' },
-                        ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
-                    },
-                    trigger: {
-                        type: Notifications.SchedulableTriggerInputTypes.DATE,
-                        date: scheduleTime,
-                    },
-                });
+                schedulingPromises.push(
+                    Notifications.scheduleNotificationAsync({
+                        content: {
+                            title,
+                            body,
+                            sound: 'default',
+                            categoryIdentifier: 'niyyah_action',
+                            data: { slot, type: 'primary' },
+                            ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
+                        },
+                        trigger: {
+                            type: Notifications.SchedulableTriggerInputTypes.DATE,
+                            date: scheduleTime,
+                        },
+                    }),
+                );
             }
 
             // Gentle Nudge (Last chance) scheduling - 1 hour before the slot ends
@@ -165,22 +174,26 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
 
             if (nudgeTime.getTime() > new Date().getTime()) {
                 const nudgeContent = getGentleNudgeMessage(slot, language);
-                await Notifications.scheduleNotificationAsync({
-                    content: {
-                        title: nudgeContent.title,
-                        body: nudgeContent.body,
-                        sound: 'default',
-                        data: { slot, type: 'nudge' },
-                        ...(Platform.OS === 'android' && { channelId: 'niyyah-nudges' }),
-                    },
-                    trigger: {
-                        type: Notifications.SchedulableTriggerInputTypes.DATE,
-                        date: nudgeTime,
-                    },
-                });
+                schedulingPromises.push(
+                    Notifications.scheduleNotificationAsync({
+                        content: {
+                            title: nudgeContent.title,
+                            body: nudgeContent.body,
+                            sound: 'default',
+                            data: { slot, type: 'nudge' },
+                            ...(Platform.OS === 'android' && { channelId: 'niyyah-nudges' }),
+                        },
+                        trigger: {
+                            type: Notifications.SchedulableTriggerInputTypes.DATE,
+                            date: nudgeTime,
+                        },
+                    }),
+                );
             }
         }
     }
+
+    await Promise.all(schedulingPromises);
 };
 
 /**
