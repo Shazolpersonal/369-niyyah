@@ -1,6 +1,7 @@
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import { scheduleAllNotifications } from './notifications';
+import { logger } from './logger';
 
 export const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND_NOTIFICATION_TASK';
 
@@ -11,7 +12,7 @@ TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
         await scheduleAllNotifications(14);
         return BackgroundFetch.BackgroundFetchResult.NewData;
     } catch (error) {
-        console.error(`[Background Fetch] Error:`, error);
+        logger.error(`[Background Fetch] Error:`, error);
         return BackgroundFetch.BackgroundFetchResult.Failed;
     }
 });
@@ -44,3 +45,4 @@ export async function unregisterBackgroundFetchAsync() {
         console.warn('[Background Fetch] Unregistration failed:', err);
     }
 }
+//

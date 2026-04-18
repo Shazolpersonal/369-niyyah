@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { translate, Language } from '../i18n';
+import { logger } from '../utils/logger';
 
 const LANGUAGE_STORAGE_KEY = '@niyyah_369_language';
 
@@ -37,7 +38,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
                     setLanguageState(saved);
                 }
             } catch (error) {
-                console.error('Failed to load language preference:', error);
+                logger.error('Failed to load language preference:', error);
             } finally {
                 setIsLoaded(true);
             }
@@ -50,7 +51,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
         try {
             await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
         } catch (error) {
-            console.error('Failed to save language preference:', error);
+            logger.error('Failed to save language preference:', error);
         }
     }, []);
 

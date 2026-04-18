@@ -2,6 +2,7 @@ import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Updates from 'expo-updates';
+import { logger } from '../utils/logger';
 
 interface Props {
     children: ReactNode;
@@ -23,7 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.error('ErrorBoundary caught an error:', error, errorInfo);
+        logger.error('ErrorBoundary caught an error:', error, errorInfo);
     }
 
     handleRetry = async () => {
@@ -40,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
             await AsyncStorage.multiRemove(keys);
             await Updates.reloadAsync();
         } catch (e) {
-            console.error('Failed to reset app:', e);
+            logger.error('Failed to reset app:', e);
             this.setState({ hasError: false, error: null });
         }
     };
