@@ -72,7 +72,7 @@ describe("validate", () => {
 
     it("handles empty strings", () => {
         expect(validate("", "")).toBe(true);
-        // Since normalize uses s+ to replace multiple spaces with ' ' and then trims leading space.
+        // Since normalize uses \s+ to replace multiple spaces with ' ' and then trims leading space.
         // If string is only spaces, it becomes ''
         expect(validate("   ", "")).toBe(true);
         expect(validate("", "   ")).toBe(true);
