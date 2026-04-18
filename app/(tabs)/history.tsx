@@ -38,27 +38,40 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const MONTH_KEYS = [
-    'history.month.january', 'history.month.february', 'history.month.march',
-    'history.month.april', 'history.month.may', 'history.month.june',
-    'history.month.july', 'history.month.august', 'history.month.september',
-    'history.month.october', 'history.month.november', 'history.month.december',
+    'history.month.january',
+    'history.month.february',
+    'history.month.march',
+    'history.month.april',
+    'history.month.may',
+    'history.month.june',
+    'history.month.july',
+    'history.month.august',
+    'history.month.september',
+    'history.month.october',
+    'history.month.november',
+    'history.month.december',
 ];
 
 const WEEKDAY_KEYS = [
-    'history.weekday.sun', 'history.weekday.mon', 'history.weekday.tue',
-    'history.weekday.wed', 'history.weekday.thu', 'history.weekday.fri',
+    'history.weekday.sun',
+    'history.weekday.mon',
+    'history.weekday.tue',
+    'history.weekday.wed',
+    'history.weekday.thu',
+    'history.weekday.fri',
     'history.weekday.sat',
 ];
 
 function getDayStatus(
     progress: DailyProgress | null,
     isToday: boolean,
-    isFuture: boolean
+    isFuture: boolean,
 ): DayStatus {
     if (isFuture) return 'future';
     if (!progress) return isToday ? 'pending' : 'missed';
 
-    const completed = [progress.morning, progress.noon, progress.night].filter(Boolean).length;
+    const completed =
+        (progress.morning ? 1 : 0) + (progress.noon ? 1 : 0) + (progress.night ? 1 : 0);
     if (completed === 3) return 'complete';
     if (completed > 0) return isToday ? 'pending' : 'partial';
     return isToday ? 'pending' : 'missed';
@@ -129,7 +142,12 @@ function MiniProgressRing({
 
     return (
         <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-            <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: [{ rotate: '-90deg' }] }}>
+            <Svg
+                width={size}
+                height={size}
+                viewBox={`0 0 ${size} ${size}`}
+                style={{ transform: [{ rotate: '-90deg' }] }}
+            >
                 <Circle
                     cx={size / 2}
                     cy={size / 2}
@@ -176,7 +194,10 @@ function StatCard({
 }) {
     return (
         <Animated.View
-            entering={FadeInDown.delay(index * 120).duration(600).springify().damping(14)}
+            entering={FadeInDown.delay(index * 120)
+                .duration(600)
+                .springify()
+                .damping(14)}
             style={styles.statCard}
         >
             <LinearGradient
@@ -208,7 +229,8 @@ export default function HistoryScreen() {
     const router = useRouter();
     const { dailyProgress, startDate, trueStreak } = useProgress();
     const { t, language } = useLanguage();
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     const effectiveToday = getEffectiveTodayDate();
     const todayKey = formatLocalDateKey(effectiveToday);
@@ -278,7 +300,8 @@ export default function HistoryScreen() {
             total++;
             const progress = dailyProgress[dateKey];
             if (progress) {
-                const count = [progress.morning, progress.noon, progress.night].filter(Boolean).length;
+                const count =
+                    (progress.morning ? 1 : 0) + (progress.noon ? 1 : 0) + (progress.night ? 1 : 0);
                 if (count === 3) complete++;
                 else if (count > 0) partial++;
             }
@@ -357,7 +380,9 @@ export default function HistoryScreen() {
                             color="#10B981"
                             gradientColors={['rgba(16, 185, 129, 0.25)', 'rgba(6, 78, 59, 0.4)']}
                             icon={<TrendingUp size={18} color="#10B981" />}
-                            progress={monthStats.total > 0 ? monthStats.complete / monthStats.total : 0}
+                            progress={
+                                monthStats.total > 0 ? monthStats.complete / monthStats.total : 0
+                            }
                             index={0}
                             fontFamily={f}
                         />
@@ -367,7 +392,9 @@ export default function HistoryScreen() {
                             color="#F59E0B"
                             gradientColors={['rgba(245, 158, 11, 0.2)', 'rgba(120, 53, 15, 0.35)']}
                             icon={<Calendar size={18} color="#F59E0B" />}
-                            progress={monthStats.total > 0 ? monthStats.partial / monthStats.total : 0}
+                            progress={
+                                monthStats.total > 0 ? monthStats.partial / monthStats.total : 0
+                            }
                             index={1}
                             fontFamily={f}
                         />
@@ -395,7 +422,11 @@ export default function HistoryScreen() {
                     >
                         {/* Month Navigation */}
                         <View style={styles.monthNav}>
-                            <TouchableOpacity onPress={handlePrevMonth} style={styles.navButton} activeOpacity={0.6}>
+                            <TouchableOpacity
+                                onPress={handlePrevMonth}
+                                style={styles.navButton}
+                                activeOpacity={0.6}
+                            >
                                 <ChevronLeft size={22} color="#D4A847" />
                             </TouchableOpacity>
                             <View style={styles.monthTitleContainer}>
@@ -430,20 +461,29 @@ export default function HistoryScreen() {
                         {/* Calendar Grid */}
                         <Animated.View
                             key={monthKey}
-                            entering={direction === 'right' ? SlideInRight.duration(350) : SlideInLeft.duration(350)}
+                            entering={
+                                direction === 'right'
+                                    ? SlideInRight.duration(350)
+                                    : SlideInLeft.duration(350)
+                            }
                             style={styles.calendarGrid}
                         >
                             {calendarDays.map((cell, index) => (
                                 <View key={index} style={styles.calendarCell}>
                                     {cell ? (
-                                        <Animated.View entering={FadeIn.delay(index * 12).duration(300)}>
+                                        <Animated.View
+                                            entering={FadeIn.delay(index * 12).duration(300)}
+                                        >
                                             <CalendarDay
                                                 day={cell.day}
                                                 status={getDayStatus(
                                                     dailyProgress[cell.dateKey] || null,
                                                     cell.dateKey === todayKey,
-                                                    new Date(viewYear, viewMonth, cell.day) > effectiveToday ||
-                                                    (startDate ? cell.dateKey < startDate : false)
+                                                    new Date(viewYear, viewMonth, cell.day) >
+                                                        effectiveToday ||
+                                                        (startDate
+                                                            ? cell.dateKey < startDate
+                                                            : false),
                                                 )}
                                                 isToday={cell.dateKey === todayKey}
                                                 onPress={() => handleDayPress(cell.dateKey)}
@@ -485,27 +525,51 @@ export default function HistoryScreen() {
                     {selectedProgress ? (
                         <View style={styles.modalSlots}>
                             {[
-                                { key: 'morning', label: t('history.morningNiyyah'), done: selectedProgress.morning, emoji: '🌅' },
-                                { key: 'noon', label: t('history.afternoonNiyyah'), done: selectedProgress.noon, emoji: '☀️' },
-                                { key: 'night', label: t('history.eveningNiyyah'), done: selectedProgress.night, emoji: '🌙' },
+                                {
+                                    key: 'morning',
+                                    label: t('history.morningNiyyah'),
+                                    done: selectedProgress.morning,
+                                    emoji: '🌅',
+                                },
+                                {
+                                    key: 'noon',
+                                    label: t('history.afternoonNiyyah'),
+                                    done: selectedProgress.noon,
+                                    emoji: '☀️',
+                                },
+                                {
+                                    key: 'night',
+                                    label: t('history.eveningNiyyah'),
+                                    done: selectedProgress.night,
+                                    emoji: '🌙',
+                                },
                             ].map((slot, i) => (
                                 <Animated.View
                                     key={slot.key}
                                     entering={FadeInDown.delay(i * 100).duration(400)}
-                                    style={[
-                                        styles.modalSlotRow,
-                                        slot.done && styles.modalSlotDone,
-                                    ]}
+                                    style={[styles.modalSlotRow, slot.done && styles.modalSlotDone]}
                                 >
                                     <Text style={styles.modalSlotEmoji}>{slot.emoji}</Text>
-                                    <Text style={[styles.modalSlotLabel, { fontFamily: f('semibold') }]}>
+                                    <Text
+                                        style={[
+                                            styles.modalSlotLabel,
+                                            { fontFamily: f('semibold') },
+                                        ]}
+                                    >
                                         {slot.label}
                                     </Text>
-                                    <View style={[
-                                        styles.modalSlotBadge,
-                                        { backgroundColor: slot.done ? '#10B981' : '#334155' }
-                                    ]}>
-                                        <Text style={[styles.modalSlotBadgeText, { fontFamily: f('bold') }]}>
+                                    <View
+                                        style={[
+                                            styles.modalSlotBadge,
+                                            { backgroundColor: slot.done ? '#10B981' : '#334155' },
+                                        ]}
+                                    >
+                                        <Text
+                                            style={[
+                                                styles.modalSlotBadgeText,
+                                                { fontFamily: f('bold') },
+                                            ]}
+                                        >
                                             {slot.done ? '✓' : '—'}
                                         </Text>
                                     </View>

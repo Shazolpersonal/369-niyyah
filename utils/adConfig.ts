@@ -12,15 +12,14 @@ import { TestIds } from 'react-native-google-mobile-ads';
 //     swap USE_TEST_ADS to false and fill in your real IDs below.
 // ======================================================================
 
-const USE_TEST_ADS = true; // TODO: Set to false when enabling real ads
+const USE_TEST_ADS = process.env.EXPO_PUBLIC_USE_TEST_ADS !== 'false';
 
-// TODO: Replace with your actual Ad Unit IDs from the AdMob console
-const PRODUCTION_BANNER_ID = 'ca-app-pub-xxxxxxxx/yyyyyyyyyy';
-const PRODUCTION_INTERSTITIAL_ID = 'ca-app-pub-xxxxxxxx/zzzzzzzzzz';
+const PRODUCTION_BANNER_ID = process.env.EXPO_PUBLIC_AD_BANNER_ID || '';
+const PRODUCTION_INTERSTITIAL_ID = process.env.EXPO_PUBLIC_AD_INTERSTITIAL_ID || '';
 
 export const AD_UNIT_IDS = {
-    BANNER: USE_TEST_ADS ? TestIds.ADAPTIVE_BANNER : PRODUCTION_BANNER_ID,
-    INTERSTITIAL: USE_TEST_ADS ? TestIds.INTERSTITIAL : PRODUCTION_INTERSTITIAL_ID,
+    BANNER: USE_TEST_ADS || !PRODUCTION_BANNER_ID ? TestIds.ADAPTIVE_BANNER : PRODUCTION_BANNER_ID,
+    INTERSTITIAL: USE_TEST_ADS || !PRODUCTION_INTERSTITIAL_ID ? TestIds.INTERSTITIAL : PRODUCTION_INTERSTITIAL_ID,
 };
 
 // Maximum interstitial ads shown per day to avoid annoying users
