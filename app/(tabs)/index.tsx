@@ -131,7 +131,13 @@ export default function Dashboard() {
                                     </Text>
                                 </View>
                                 <View style={styles.headerRight}>
-                                    <TouchableOpacity onPress={toggleLanguage} activeOpacity={0.7}>
+                                    <TouchableOpacity
+                                        onPress={toggleLanguage}
+                                        activeOpacity={0.7}
+                                        accessibilityRole="button"
+                                        accessibilityLabel={language === 'en' ? 'Switch to Bengali' : 'Switch to English'}
+                                        accessibilityHint="Changes the app language"
+                                    >
                                         <View style={styles.langToggle}>
                                             <Globe size={15} color="#D4A847" />
                                             <Text style={[styles.langText, { fontFamily: f('semibold') }]}>
@@ -139,7 +145,14 @@ export default function Dashboard() {
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => router.push('/guide')} activeOpacity={0.7} style={styles.helpBtn}>
+                                    <TouchableOpacity
+                                        onPress={() => router.push('/guide')}
+                                        activeOpacity={0.7}
+                                        style={styles.helpBtn}
+                                        accessibilityRole="button"
+                                        accessibilityLabel={t('guide.title')}
+                                        accessibilityHint="Opens the guide to learn how to use the app"
+                                    >
                                         <HelpCircle size={20} color="#D4A847" />
                                     </TouchableOpacity>
                                 </View>
