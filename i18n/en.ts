@@ -2,6 +2,9 @@
  * English translations for 369 Niyyah
  */
 export const en: Record<string, string> = {
+    // ===== Common =====
+    'common.back': 'Go Back',
+
     // ===== App-wide =====
     'app.name': '369 Niyyah',
     'app.bismillah': 'Bismillahir Rahmanir Rahim',
@@ -70,6 +73,8 @@ export const en: Record<string, string> = {
     'history.pending': 'Pending',
     'history.noProgress': 'No progress recorded for this day.',
     'history.close': 'Close',
+    'history.prevMonth': 'Previous Month',
+    'history.nextMonth': 'Next Month',
     'history.month.january': 'January',
     'history.month.february': 'February',
     'history.month.march': 'March',
