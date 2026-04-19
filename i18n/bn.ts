@@ -2,6 +2,9 @@
  * Bengali (বাংলা) translations for 369 Niyyah / ৩৬৯ নিয়্যাহ
  */
 export const bn: Record<string, string> = {
+    // ===== Common =====
+    'common.back': 'ফিরে যান',
+
     // ===== অ্যাপ-ব্যাপী =====
     'app.name': '৩৬৯ নিয়্যাহ',
     'app.bismillah': 'বিসমিল্লাহির রাহমানির রাহিম',
@@ -69,6 +72,8 @@ export const bn: Record<string, string> = {
     'history.pending': 'বাকি',
     'history.noProgress': 'এই দিনের কোনো অগ্রগতি নেই।',
     'history.close': 'বন্ধ করুন',
+    'history.prevMonth': 'আগের মাস',
+    'history.nextMonth': 'পরের মাস',
     'history.month.january': 'জানুয়ারি',
     'history.month.february': 'ফেব্রুয়ারি',
     'history.month.march': 'মার্চ',
