@@ -22,14 +22,17 @@ interface JourneyProgressRingProps {
     strokeWidth?: number;
 }
 
-export function JourneyProgressRing({
+// ⚡ Bolt: Memoized JourneyProgressRing to prevent unnecessary re-renders when parent components re-render.
+// Impact: Reduces re-renders of this component since its props (currentDay, totalDays, size, strokeWidth) rarely change within a session.
+export const JourneyProgressRing = React.memo(function JourneyProgressRing({
     currentDay,
     totalDays = 33,
     size = 150,
     strokeWidth = 10,
 }: JourneyProgressRingProps) {
     const { t, language } = useLanguage();
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
@@ -49,7 +52,7 @@ export function JourneyProgressRing({
             progress.value,
             [0, 1],
             [circumference, 0],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
         );
         return { strokeDashoffset };
     });
@@ -59,7 +62,12 @@ export function JourneyProgressRing({
             {/* Dark background circle */}
             <View style={[StyleSheet.absoluteFillObject, styles.bgCircle]} />
 
-            <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: [{ rotate: '-90deg' }] }}>
+            <Svg
+                width={size}
+                height={size}
+                viewBox={`0 0 ${size} ${size}`}
+                style={{ transform: [{ rotate: '-90deg' }] }}
+            >
                 <Defs>
                     <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
                         <Stop offset="0%" stopColor="#0D9488" />
@@ -90,16 +98,12 @@ export function JourneyProgressRing({
             </Svg>
 
             <View style={styles.textContainer}>
-                <Text style={[{ fontFamily: f('bold') }, styles.dayText]}>
-                    {currentDay}
-                </Text>
-                <Text style={[{ fontFamily: f('medium') }, styles.totalText]}>
-                    / {totalDays}
-                </Text>
+                <Text style={[{ fontFamily: f('bold') }, styles.dayText]}>{currentDay}</Text>
+                <Text style={[{ fontFamily: f('medium') }, styles.totalText]}>/ {totalDays}</Text>
             </View>
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
