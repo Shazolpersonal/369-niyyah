@@ -22,7 +22,7 @@ interface JourneyProgressRingProps {
     strokeWidth?: number;
 }
 
-export function JourneyProgressRing({
+function JourneyProgressRingComponent({
     currentDay,
     totalDays = 33,
     size = 150,
@@ -100,6 +100,8 @@ export function JourneyProgressRing({
         </View>
     );
 }
+
+export const JourneyProgressRing = React.memo(JourneyProgressRingComponent);
 
 const styles = StyleSheet.create({
     container: {

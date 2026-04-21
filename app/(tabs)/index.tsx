@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, StatusBar, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Redirect } from 'expo-router';
@@ -23,6 +23,8 @@ import { COLORS, GRADIENTS, SHADOWS } from '../../utils/theme';
 import { useStaggeredEntry } from '../../utils/useStaggeredEntry';
 
 const { width } = Dimensions.get('window');
+
+const DEFAULT_PROGRESS = { morning: false, noon: false, night: false };
 
 function StaggeredView({ children, index, delay = 0 }: { children: React.ReactNode, index: number, delay?: number }) {
     const { animatedStyle } = useStaggeredEntry(index, delay, 100, 20);
@@ -60,9 +62,9 @@ export default function Dashboard() {
     }
 
     const todayKey = getTodayEffectiveDateKey();
-    const todayProgress = dailyProgress[todayKey] || { morning: false, noon: false, night: false };
+    const todayProgress = dailyProgress[todayKey] || DEFAULT_PROGRESS;
 
-    const handleTaskPress = (slot: TimeSlot) => {
+    const handleTaskPress = useCallback((slot: TimeSlot) => {
         if (todayProgress[slot]) {
             const affirmation = getAffirmationByLanguage(totalElapsedDays, slot, language);
             setSelectedAffirmation(affirmation);
@@ -70,16 +72,16 @@ export default function Dashboard() {
         } else {
             router.push(`/task/${slot}`);
         }
-    };
+    }, [todayProgress, totalElapsedDays, language, router]);
 
-    const toggleLanguage = () => {
+    const toggleLanguage = useCallback(() => {
         const newLang = language === 'en' ? 'bn' : 'en';
         setLanguage(newLang);
         showToast({
             message: newLang === 'en' ? 'Language switched to English' : 'ভাষা বাংলাতে পরিবর্তন করা হয়েছে',
             type: 'success',
         });
-    };
+    }, [language, setLanguage]);
 
     const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
 
