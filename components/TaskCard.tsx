@@ -40,7 +40,8 @@ interface TaskCardProps {
 
 function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: TaskCardProps) {
     const { t, language } = useLanguage();
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     const label = t(SLOT_LABEL_KEYS[slot]);
     const emoji = getSlotEmoji(slot);
@@ -56,10 +57,10 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
             glowOpacity.value = withRepeat(
                 withSequence(
                     withTiming(0.7, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
-                    withTiming(0.2, { duration: 1500, easing: Easing.inOut(Easing.ease) })
+                    withTiming(0.2, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
                 ),
                 -1,
-                true
+                true,
             );
         } else {
             glowOpacity.value = withTiming(0);
@@ -92,10 +93,13 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: false }}
+                    accessibilityLabel={`${label}. ${t('taskCard.completedTapToView')}`}
                     style={({ pressed }) => [
                         styles.card,
                         styles.completedCard,
-                        pressed && { opacity: 0.9 }
+                        pressed && { opacity: 0.9 },
                     ]}
                 >
                     <View style={styles.completedIconContainer}>
@@ -126,6 +130,9 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: false }}
+                    accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.write')} ${count} ${t('taskCard.times')}`}
                     style={[styles.card, styles.activeCard]}
                 >
                     {/* Animated Glow Border */}
@@ -167,14 +174,17 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
 
     // ─── Locked State ───
     return (
-        <View style={[styles.card, styles.lockedCard]}>
+        <View
+            style={[styles.card, styles.lockedCard]}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: true }}
+            accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.locked')}`}
+        >
             <View style={styles.lockedIconContainer}>
                 <Lock size={18} color="#475569" />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={[styles.lockedLabel, { fontFamily: f('bold') }]}>
-                    {label}
-                </Text>
+                <Text style={[styles.lockedLabel, { fontFamily: f('bold') }]}>{label}</Text>
                 <Text style={[styles.lockedSubtext, { fontFamily: f('regular') }]}>
                     {timeRange} · {t('taskCard.write')} ×{count}
                 </Text>

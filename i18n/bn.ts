@@ -157,6 +157,8 @@ export const bn: Record<string, string> = {
     // ===== টাস্ক কার্ড =====
     'taskCard.completedTapToView': 'সম্পন্ন — দেখতে ট্যাপ করুন',
     'taskCard.write': 'লিখুন',
+    'taskCard.times': 'বার',
+    'taskCard.locked': 'লক করা',
 
     // ===== স্লট লেবেল =====
     'slot.morning.label': 'সকালের নিয়্যাহ',
