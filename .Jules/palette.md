@@ -5,3 +5,6 @@
 ## 2026-04-19 - Adding accessibility attributes to Navigation Buttons
 **Learning:** Icon-only navigation buttons in React Native must utilize explicit `accessibilityRole="button"`, `accessibilityLabel`, and `accessibilityHint` props rather than standard web ARIA attributes. I added these across multiple screens (`history.tsx`, `guide.tsx`, and `task/[slot].tsx`) along with corresponding i18n values.
 **Action:** Verify that all icon-only buttons include comprehensive accessibility labels leveraging the application's translation functions.
+## 2026-04-19 - Adding accessibility attributes to TaskCards
+**Learning:** React Native's `Pressable` components don't inherently convey their interactive state or purpose to screen readers. For dynamic components like `TaskCard`, it's critical to explicitly define `accessibilityRole="button"`, `accessibilityState={{ disabled: boolean }}`, and a comprehensive `accessibilityLabel` that combines all relevant visual information (e.g., label, time range, repetition count) into a single, localized string.
+**Action:** When building interactive cards or lists, ensure all state variations (active, completed, locked) have appropriate `accessibilityRole`, `accessibilityState`, and descriptive `accessibilityLabel` props that utilize the app's `t()` translation function.

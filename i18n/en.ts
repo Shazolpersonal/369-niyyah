@@ -181,6 +181,8 @@ export const en: Record<string, string> = {
     // ===== Task Card =====
     'taskCard.completedTapToView': 'Completed — Tap to view',
     'taskCard.write': 'Write',
+    'taskCard.times': 'times',
+    'taskCard.locked': 'Locked',
 
     // ===== Slot Labels =====
     'slot.morning.label': 'Morning Niyyah',
