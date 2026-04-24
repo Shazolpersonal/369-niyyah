@@ -1,11 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-    AD_UNIT_IDS,
-    MAX_INTERSTITIALS_PER_DAY,
-    INTERSTITIAL_COUNT_KEY,
-} from './adConfig';
+import { AD_UNIT_IDS, MAX_INTERSTITIALS_PER_DAY, INTERSTITIAL_COUNT_KEY } from './adConfig';
+import { logger } from './logger';
 
 interface DailyAdCount {
     date: string; // YYYY-MM-DD
@@ -54,34 +51,23 @@ export function useInterstitialAd() {
     const interstitialRef = useRef<InterstitialAd | null>(null);
 
     useEffect(() => {
-        const interstitial = InterstitialAd.createForAdRequest(
-            AD_UNIT_IDS.INTERSTITIAL,
-        );
+        const interstitial = InterstitialAd.createForAdRequest(AD_UNIT_IDS.INTERSTITIAL);
         interstitialRef.current = interstitial;
 
-        const unsubscribeLoaded = interstitial.addAdEventListener(
-            AdEventType.LOADED,
-            () => {
-                setIsAdReady(true);
-            },
-        );
+        const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+            setIsAdReady(true);
+        });
 
-        const unsubscribeClosed = interstitial.addAdEventListener(
-            AdEventType.CLOSED,
-            () => {
-                setIsAdReady(false);
-                // Preload next ad
-                interstitial.load();
-            },
-        );
+        const unsubscribeClosed = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+            setIsAdReady(false);
+            // Preload next ad
+            interstitial.load();
+        });
 
-        const unsubscribeError = interstitial.addAdEventListener(
-            AdEventType.ERROR,
-            (error) => {
-                console.warn('Interstitial ad error:', error);
-                setIsAdReady(false);
-            },
-        );
+        const unsubscribeError = interstitial.addAdEventListener(AdEventType.ERROR, (error) => {
+            logger.warn('Interstitial ad error:', error);
+            setIsAdReady(false);
+        });
 
         // Start preloading
         interstitial.load();
@@ -107,7 +93,7 @@ export function useInterstitialAd() {
             }
             return false;
         } catch (error) {
-            console.warn('Failed to show interstitial:', error);
+            logger.warn('Failed to show interstitial:', error);
             return false;
         }
     }, [isAdReady]);
