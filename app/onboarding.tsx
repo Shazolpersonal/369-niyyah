@@ -101,7 +101,13 @@ export default function OnboardingScreen() {
             <SafeAreaView style={{ flex: 1 }}>
                 {/* Language Toggle */}
                 <View style={styles.langRow}>
-                    <TouchableOpacity onPress={toggleLanguage} activeOpacity={0.7}>
+                    <TouchableOpacity
+                        onPress={toggleLanguage}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel={language === 'en' ? 'Switch to Bengali' : 'Switch to English'}
+                        accessibilityHint="Changes the app language"
+                    >
                         <View style={styles.langToggle}>
                             <Globe size={15} color="#D4A847" />
                             <Text style={[styles.langText, { fontFamily: f('semibold') }]}>
