@@ -8,3 +8,6 @@
 ## 2026-04-19 - Adding accessibility attributes to TaskCards
 **Learning:** React Native's `Pressable` components don't inherently convey their interactive state or purpose to screen readers. For dynamic components like `TaskCard`, it's critical to explicitly define `accessibilityRole="button"`, `accessibilityState={{ disabled: boolean }}`, and a comprehensive `accessibilityLabel` that combines all relevant visual information (e.g., label, time range, repetition count) into a single, localized string.
 **Action:** When building interactive cards or lists, ensure all state variations (active, completed, locked) have appropriate `accessibilityRole`, `accessibilityState`, and descriptive `accessibilityLabel` props that utilize the app's `t()` translation function.
+## 2026-04-25 - Adding accessibility attributes to Expandable components
+**Learning:** Expandable/collapsible components like Accordion in React Native must convey their expanded state to screen readers. React Native provides the `accessibilityState={{ expanded: boolean }}` prop for this purpose, which is crucial for accessibility.
+**Action:** When building interactive components that toggle visibility of content, ensure to explicitly pass the expanded state via `accessibilityState` and provide helpful `accessibilityHint`s.
