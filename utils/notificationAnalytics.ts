@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TimeSlot } from '../types';
+import { logger } from './logger';
 
 const LAST_INTERACTION_KEY = '@niyyah_last_notification_interaction';
 
@@ -32,7 +33,7 @@ export const recordNotificationInteraction = async (slot: TimeSlot) => {
 
         await AsyncStorage.setItem(LAST_INTERACTION_KEY, JSON.stringify(stats));
     } catch (e) {
-        console.warn("Failed to record notification interaction:", e);
+        logger.warn('Failed to record notification interaction:', e);
     }
 };
 
@@ -46,7 +47,7 @@ export const getNotificationInteractionStats = async (): Promise<NotificationInt
             return JSON.parse(data) as NotificationInteractionStats;
         }
     } catch (e) {
-        console.warn("Failed to get notification interaction stats:", e);
+        logger.warn('Failed to get notification interaction stats:', e);
     }
 
     return {

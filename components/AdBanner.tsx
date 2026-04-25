@@ -1,11 +1,8 @@
 import React, { useRef } from 'react';
 import { View, Platform } from 'react-native';
-import {
-    BannerAd,
-    BannerAdSize,
-    useForeground,
-} from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, useForeground } from 'react-native-google-mobile-ads';
 import { AD_UNIT_IDS } from '../utils/adConfig';
+import { logger } from '../utils/logger';
 
 /**
  * Reusable Banner Ad component.
@@ -27,7 +24,7 @@ export default function AdBanner() {
                 unitId={AD_UNIT_IDS.BANNER}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 onAdFailedToLoad={(error) => {
-                    console.warn('Banner ad failed to load:', error);
+                    logger.warn('Banner ad failed to load:', error);
                 }}
             />
         </View>
