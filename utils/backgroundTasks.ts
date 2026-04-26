@@ -28,7 +28,7 @@ export async function registerBackgroundFetchAsync() {
             startOnBoot: true, // Android only: Restart on device boot
         });
     } catch (err) {
-        console.warn('[Background Fetch] Registration failed:', err);
+        logger.warn('[Background Fetch] Registration failed:', err);
     }
 }
 
@@ -42,7 +42,7 @@ export async function unregisterBackgroundFetchAsync() {
             await BackgroundFetch.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
         }
     } catch (err) {
-        console.warn('[Background Fetch] Unregistration failed:', err);
+        logger.warn('[Background Fetch] Unregistration failed:', err);
     }
 }
 //
