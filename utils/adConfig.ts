@@ -1,5 +1,6 @@
 import mobileAds from 'react-native-google-mobile-ads';
 import { TestIds } from 'react-native-google-mobile-ads';
+import { logger } from './logger';
 
 // ======================================================================
 // AdMob Configuration — CLOSED TESTING MODE
@@ -36,6 +37,6 @@ export async function initializeAds(): Promise<void> {
     try {
         await mobileAds().initialize();
     } catch (error) {
-        console.warn('AdMob SDK initialization failed:', error);
+        logger.warn('AdMob SDK initialization failed:', error);
     }
 }
