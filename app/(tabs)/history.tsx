@@ -70,10 +70,11 @@ function getDayStatus(
     if (isFuture) return 'future';
     if (!progress) return isToday ? 'pending' : 'missed';
 
-    const completed =
-        (progress.morning ? 1 : 0) + (progress.noon ? 1 : 0) + (progress.night ? 1 : 0);
-    if (completed === 3) return 'complete';
-    if (completed > 0) return isToday ? 'pending' : 'partial';
+    // ⚡ Bolt: Use direct boolean evaluation instead of numeric coercion ((progress.morning ? 1 : 0) + ...) for faster execution
+    const isComplete = progress.morning && progress.noon && progress.night;
+    if (isComplete) return 'complete';
+    const isPartial = progress.morning || progress.noon || progress.night;
+    if (isPartial) return isToday ? 'pending' : 'partial';
     return isToday ? 'pending' : 'missed';
 }
 
@@ -300,10 +301,12 @@ export default function HistoryScreen() {
             total++;
             const progress = dailyProgress[dateKey];
             if (progress) {
-                const count =
-                    (progress.morning ? 1 : 0) + (progress.noon ? 1 : 0) + (progress.night ? 1 : 0);
-                if (count === 3) complete++;
-                else if (count > 0) partial++;
+                // ⚡ Bolt: Fast path for complete days using short-circuit boolean logic
+                if (progress.morning && progress.noon && progress.night) {
+                    complete++;
+                } else if (progress.morning || progress.noon || progress.night) {
+                    partial++;
+                }
             }
         }
 
