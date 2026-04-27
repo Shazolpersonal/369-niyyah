@@ -1,6 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
-import Animated, { FadeInRight, useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+    FadeInRight,
+    useSharedValue,
+    useAnimatedStyle,
+    withSpring,
+} from 'react-native-reanimated';
 import { useProgress } from '../contexts/ProgressContext';
 import { getAchievements } from '../utils/achievements';
 import { COLORS, SHADOWS } from '../utils/theme';
@@ -14,7 +19,8 @@ export function Achievements() {
     const { dailyProgress, trueStreak, totalElapsedDays } = useProgress();
     const { t, language } = useLanguage();
     const [activeBadgeId, setActiveBadgeId] = useState<string | null>(null);
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     // ⚡ Bolt: Memoized expensive badges calculation to avoid recalculating on every render.
     // Impact: Avoids re-processing the entire `dailyProgress` dictionary unless progress actually changes.
@@ -29,9 +35,7 @@ export function Achievements() {
 
     return (
         <View style={styles.container}>
-            <Text style={[styles.title, { fontFamily: f('bold') }]}>
-                {t('achievements.title')}
-            </Text>
+            <Text style={[styles.title, { fontFamily: f('bold') }]}>{t('achievements.title')}</Text>
 
             <ScrollView
                 horizontal
@@ -50,6 +54,9 @@ export function Achievements() {
                             <Pressable
                                 style={styles.unlockedCard}
                                 onPress={() => handlePress(badge.id)}
+                                accessibilityRole="button"
+                                accessibilityState={{ disabled: false }}
+                                accessibilityLabel={`${t(badge.titleKey)}. ${t(badge.descriptionKey)}`}
                             >
                                 <LinearGradient
                                     colors={['#D4A847', '#F5D98C', '#C49B3A'] as any}
@@ -65,14 +72,22 @@ export function Achievements() {
                                 </View>
 
                                 <Text
-                                    style={[styles.badgeTitle, styles.unlockedTitle, { fontFamily: f('bold') }]}
+                                    style={[
+                                        styles.badgeTitle,
+                                        styles.unlockedTitle,
+                                        { fontFamily: f('bold') },
+                                    ]}
                                     numberOfLines={1}
                                 >
                                     {t(badge.titleKey)}
                                 </Text>
 
                                 <Text
-                                    style={[styles.badgeDesc, styles.unlockedDesc, { fontFamily: f('regular') }]}
+                                    style={[
+                                        styles.badgeDesc,
+                                        styles.unlockedDesc,
+                                        { fontFamily: f('regular') },
+                                    ]}
                                     numberOfLines={2}
                                 >
                                     {t(badge.descriptionKey)}
@@ -80,7 +95,10 @@ export function Achievements() {
 
                                 {activeBadgeId === badge.id && (
                                     <View style={StyleSheet.absoluteFill} pointerEvents="none">
-                                        <ConfettiBurst count={30} onComplete={() => setActiveBadgeId(null)} />
+                                        <ConfettiBurst
+                                            count={30}
+                                            onComplete={() => setActiveBadgeId(null)}
+                                        />
                                     </View>
                                 )}
                             </Pressable>
@@ -92,14 +110,22 @@ export function Achievements() {
                                 </View>
 
                                 <Text
-                                    style={[styles.badgeTitle, styles.lockedTitle, { fontFamily: f('semibold') }]}
+                                    style={[
+                                        styles.badgeTitle,
+                                        styles.lockedTitle,
+                                        { fontFamily: f('semibold') },
+                                    ]}
                                     numberOfLines={1}
                                 >
                                     {t(badge.titleKey)}
                                 </Text>
 
                                 <Text
-                                    style={[styles.badgeDesc, styles.lockedDesc, { fontFamily: f('regular') }]}
+                                    style={[
+                                        styles.badgeDesc,
+                                        styles.lockedDesc,
+                                        { fontFamily: f('regular') },
+                                    ]}
                                     numberOfLines={2}
                                 >
                                     {t(badge.descriptionKey)}
