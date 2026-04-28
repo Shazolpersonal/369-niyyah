@@ -6,6 +6,7 @@ import {
     MAX_INTERSTITIALS_PER_DAY,
     INTERSTITIAL_COUNT_KEY,
 } from './adConfig';
+import { logger } from './logger';
 
 interface DailyAdCount {
     date: string; // YYYY-MM-DD
@@ -78,7 +79,7 @@ export function useInterstitialAd() {
         const unsubscribeError = interstitial.addAdEventListener(
             AdEventType.ERROR,
             (error) => {
-                console.warn('Interstitial ad error:', error);
+                logger.warn('Interstitial ad error:', error);
                 setIsAdReady(false);
             },
         );
@@ -107,7 +108,7 @@ export function useInterstitialAd() {
             }
             return false;
         } catch (error) {
-            console.warn('Failed to show interstitial:', error);
+            logger.warn('Failed to show interstitial:', error);
             return false;
         }
     }, [isAdReady]);
