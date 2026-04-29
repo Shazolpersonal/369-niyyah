@@ -18,6 +18,7 @@ import Svg, { Path } from 'react-native-svg';
 import * as SplashScreen from 'expo-splash-screen';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SPRING_CONFIG, SPRING_CONFIG_BOUNCY, TIMING_CONFIG_SMOOTH, TIMING_CONFIG_SLOW } from '../utils/animations';
+import { secureRandom } from '../utils/crypto';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,10 +33,10 @@ interface AnimatedSplashProps {
 // Generate random particles once
 const particles = Array.from({ length: NUM_PARTICLES }).map((_, i) => ({
     id: i,
-    x: (Math.random() - 0.5) * width * 1.5,
-    y: (Math.random() - 0.5) * height * 1.5,
-    size: Math.random() * 4 + 2,
-    delay: Math.random() * 1000,
+    x: (secureRandom() - 0.5) * width * 1.5,
+    y: (secureRandom() - 0.5) * height * 1.5,
+    size: secureRandom() * 4 + 2,
+    delay: secureRandom() * 1000,
 }));
 
 export default function AnimatedSplash({ onAnimationComplete, isAppReady }: AnimatedSplashProps) {
