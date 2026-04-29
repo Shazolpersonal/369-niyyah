@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
+import { secureRandom } from '../utils/crypto';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -72,11 +73,11 @@ export function ConfettiBurst({ count = 40, duration = 1500, onComplete }: Confe
     useEffect(() => {
         const newPieces = Array.from({ length: count }).map((_, i) => ({
             id: i,
-            x: (Math.random() - 0.5) * width * 0.8,
-            y: (Math.random() - 0.5) * height * 0.5 - 20, // Start slightly higher
-            color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-            size: Math.random() * 8 + 5, // Slightly larger
-            delay: Math.random() * 150, // Faster burst sequence
+            x: (secureRandom() - 0.5) * width * 0.8,
+            y: (secureRandom() - 0.5) * height * 0.5 - 20, // Start slightly higher
+            color: CONFETTI_COLORS[Math.floor(secureRandom() * CONFETTI_COLORS.length)],
+            size: secureRandom() * 8 + 5, // Slightly larger
+            delay: secureRandom() * 150, // Faster burst sequence
         }));
         setPieces(newPieces);
 
