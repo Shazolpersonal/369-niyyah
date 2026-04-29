@@ -239,7 +239,14 @@ export default function Dashboard() {
                             "{selectedAffirmation}"
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={() => setModalVisible(false)} activeOpacity={0.8} style={styles.modalCloseBtn}>
+                    <TouchableOpacity
+                        onPress={() => setModalVisible(false)}
+                        activeOpacity={0.8}
+                        style={styles.modalCloseBtn}
+                        accessibilityRole="button"
+                        accessibilityLabel={t('dashboard.close')}
+                        accessibilityHint="Closes the completion modal"
+                    >
                         <LinearGradient colors={GRADIENTS.emerald as any} style={[StyleSheet.absoluteFill, { borderRadius: 14 }]} />
                         <Text style={[styles.modalCloseBtnText, { fontFamily: f('bold') }]}>
                             {t('dashboard.close')}
