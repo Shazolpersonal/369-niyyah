@@ -35,19 +35,17 @@ export function Accordion({ title, children, initiallyExpanded = false }: Accord
     });
 
     const rIconStyle = useAnimatedStyle(() => ({
-        transform: [
-            { rotate: `${interpolate(progress.value, [0, 1], [0, 180])}deg` },
-        ],
+        transform: [{ rotate: `${interpolate(progress.value, [0, 1], [0, 180])}deg` }],
     }));
 
     return (
         <View style={styles.container}>
             <Pressable
                 onPress={toggle}
-                style={({ pressed }) => [
-                    styles.header,
-                    pressed && styles.headerPressed,
-                ]}
+                accessibilityRole="button"
+                accessibilityState={{ expanded }}
+                accessibilityLabel={title}
+                style={({ pressed }) => [styles.header, pressed && styles.headerPressed]}
             >
                 <Text style={styles.titleText}>{title}</Text>
                 <Animated.View style={rIconStyle}>
@@ -57,9 +55,7 @@ export function Accordion({ title, children, initiallyExpanded = false }: Accord
 
             {expanded && (
                 <Animated.View style={rStyle}>
-                    <View style={styles.content}>
-                        {children}
-                    </View>
+                    <View style={styles.content}>{children}</View>
                 </Animated.View>
             )}
         </View>
