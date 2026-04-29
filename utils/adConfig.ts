@@ -1,5 +1,6 @@
 import mobileAds from 'react-native-google-mobile-ads';
 import { TestIds } from 'react-native-google-mobile-ads';
+import { logger } from './logger';
 
 // ======================================================================
 // AdMob Configuration — CLOSED TESTING MODE
@@ -19,7 +20,10 @@ const PRODUCTION_INTERSTITIAL_ID = process.env.EXPO_PUBLIC_AD_INTERSTITIAL_ID ||
 
 export const AD_UNIT_IDS = {
     BANNER: USE_TEST_ADS || !PRODUCTION_BANNER_ID ? TestIds.ADAPTIVE_BANNER : PRODUCTION_BANNER_ID,
-    INTERSTITIAL: USE_TEST_ADS || !PRODUCTION_INTERSTITIAL_ID ? TestIds.INTERSTITIAL : PRODUCTION_INTERSTITIAL_ID,
+    INTERSTITIAL:
+        USE_TEST_ADS || !PRODUCTION_INTERSTITIAL_ID
+            ? TestIds.INTERSTITIAL
+            : PRODUCTION_INTERSTITIAL_ID,
 };
 
 // Maximum interstitial ads shown per day to avoid annoying users
@@ -36,6 +40,6 @@ export async function initializeAds(): Promise<void> {
     try {
         await mobileAds().initialize();
     } catch (error) {
-        console.warn('AdMob SDK initialization failed:', error);
+        logger.warn('AdMob SDK initialization failed:', error);
     }
 }
