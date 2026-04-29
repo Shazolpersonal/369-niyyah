@@ -12,28 +12,80 @@ describe("normalize", () => {
         expect(normalize("HELLO")).toBe("hello");
     });
 
-    it("should remove punctuation", () => {
-        expect(normalize("hello, world!")).toBe("hello world");
-        expect(normalize("it's a test-case.")).toBe("its a testcase");
-        expect(normalize("“smart quotes”")).toBe("smart quotes");
+    it("should remove all specified punctuation marks", () => {
+        // Individual punctuation from regex: [.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]
+        expect(normalize("period.")).toBe("period");
+        expect(normalize("comma,")).toBe("comma");
+        expect(normalize("semicolon;")).toBe("semicolon");
+        expect(normalize("colon:")).toBe("colon");
+        expect(normalize("exclamation!")).toBe("exclamation");
+        expect(normalize("question?")).toBe("question");
+        expect(normalize("single'quote")).toBe("singlequote");
+        expect(normalize('double"quote')).toBe("doublequote");
+        expect(normalize("(parentheses)")).toBe("parentheses");
+        expect(normalize("hyphen-ated")).toBe("hyphenated");
+        expect(normalize("em—dash")).toBe("emdash");
+        expect(normalize("en–dash")).toBe("endash");
+        expect(normalize("“smart double quotes”")).toBe("smart double quotes");
+        expect(normalize("‘smart single quotes’")).toBe("smart single quotes");
     });
 
-    it("should collapse multiple spaces", () => {
+    it("should handle mixed punctuation and alphanumeric characters", () => {
+        expect(normalize("Hello, World! (123)-456...")).toBe("hello world 123456");
+    });
+
+    it("should collapse multiple spaces into one", () => {
         expect(normalize("hello   world")).toBe("hello world");
+        expect(normalize("too    many      spaces")).toBe("too many spaces");
     });
 
-    it("should trim leading but preserve trailing whitespace", () => {
+    it("should handle various whitespace characters (tabs, newlines)", () => {
+        expect(normalize("hello\tworld")).toBe("hello world");
+        expect(normalize("hello\nworld")).toBe("hello world");
+        expect(normalize("hello  \t  \n  world")).toBe("hello world");
+    });
+
+    it("should trim leading but preserve trailing whitespace (collapsed to single space)", () => {
         expect(normalize("  hello ")).toBe("hello ");
+        expect(normalize("\t\n  padded  ")).toBe("padded ");
+    });
+
+    it("should handle empty strings", () => {
+        expect(normalize("")).toBe("");
+    });
+
+    it("should handle strings with only whitespace", () => {
+        expect(normalize("   ")).toBe("");
+        expect(normalize("\t\n ")).toBe("");
+    });
+
+    it("should handle strings with only punctuation", () => {
+        expect(normalize(".,;:!?")).toBe("");
+        expect(normalize("()---")).toBe("");
     });
 });
 
 describe("getDisplayText", () => {
     it("should remove punctuation but preserve case", () => {
         expect(getDisplayText("Hello, World!")).toBe("Hello World");
+        expect(getDisplayText("I'm Happy")).toBe("Im Happy");
+    });
+
+    it("should remove all specified punctuation marks", () => {
+        expect(getDisplayText("period.")).toBe("period");
+        expect(getDisplayText("comma,")).toBe("comma");
+        expect(getDisplayText("“smart quotes”")).toBe("smart quotes");
+        expect(getDisplayText("(parentheses) and dashes —–")).toBe("parentheses and dashes ");
     });
 
     it("should collapse spaces and trim leading whitespace", () => {
         expect(getDisplayText("  Hello   World ")).toBe("Hello World ");
+        expect(getDisplayText("\t\tTabs  and\nNewlines")).toBe("Tabs and Newlines");
+    });
+
+    it("should handle empty strings and whitespace-only strings", () => {
+        expect(getDisplayText("")).toBe("");
+        expect(getDisplayText("   ")).toBe("");
     });
 });
 
