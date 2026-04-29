@@ -16,12 +16,12 @@ import {
     NotoSansBengali_700Bold,
 } from '@expo-google-fonts/noto-sans-bengali';
 import * as SplashScreen from 'expo-splash-screen';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { ProgressProvider } from '../contexts/ProgressContext';
-import { configureNotificationHandler } from '../utils/notifications';
+import { configureNotificationHandler, snoozeNotification } from '../utils/notifications';
 import AnimatedSplash from '../components/AnimatedSplash';
 import { ErrorBoundary } from '../components/ErrorBoundary';
-import { ToastProvider } from '../components/Toast';
+import { ToastProvider, showToast } from '../components/Toast';
 import { initializeAds } from '../utils/adConfig';
 import * as Notifications from 'expo-notifications';
 import { registerBackgroundFetchAsync } from '../utils/backgroundTasks';
@@ -37,16 +37,13 @@ configureNotificationHandler();
 // Initialize AdMob SDK
 initializeAds();
 
-export default function RootLayout() {
-    const [splashComplete, setSplashComplete] = useState(false);
+function NotificationHandler() {
     const router = useRouter();
+    const { t } = useLanguage();
 
     useEffect(() => {
-        // Register background tasks purely outside of React lifecycle.
-        registerBackgroundFetchAsync();
-
         // Listen to notification interactions (taps and quick actions)
-        const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+        const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
             const data = response.notification.request.content.data;
             const actionIdentifier = response.actionIdentifier;
 
@@ -55,16 +52,32 @@ export default function RootLayout() {
                 recordNotificationInteraction(data.slot as any);
             }
 
-            if (actionIdentifier === 'write_niyyah' || actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
+            if (
+                actionIdentifier === 'write_niyyah' ||
+                actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
+            ) {
                 // Navigate user straight into the app dashboard/tabs
                 router.push('/(tabs)');
             } else if (actionIdentifier === 'snooze') {
                 // Rescheduling feature
+                snoozeNotification(response.notification);
+                showToast(t('notification.snoozed'));
             }
         });
 
         return () => subscription.remove();
-    }, [router]);
+    }, [router, t]);
+
+    return null;
+}
+
+export default function RootLayout() {
+    const [splashComplete, setSplashComplete] = useState(false);
+
+    useEffect(() => {
+        // Register background tasks purely outside of React lifecycle.
+        registerBackgroundFetchAsync();
+    }, []);
 
     const [fontsLoaded] = useFonts({
         Inter_400Regular,
@@ -84,6 +97,7 @@ export default function RootLayout() {
     return (
         <ErrorBoundary>
             <LanguageProvider>
+                <NotificationHandler />
                 <ProgressProvider>
                     <View style={{ flex: 1 }}>
                         <StatusBar style="dark" />

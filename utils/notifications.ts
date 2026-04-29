@@ -233,6 +233,30 @@ export const cancelAllNotifications = async (): Promise<void> => {
 };
 
 /**
+ * Reschedule a notification for 15 minutes later (Snooze)
+ */
+export const snoozeNotification = async (
+    notification: Notifications.Notification,
+): Promise<string> => {
+    const { title, body, data, categoryIdentifier } = notification.request.content;
+
+    return await Notifications.scheduleNotificationAsync({
+        content: {
+            title: title || undefined,
+            body: body || undefined,
+            data,
+            categoryIdentifier,
+            sound: 'default',
+            ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
+        },
+        trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.DATE,
+            date: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes from now
+        },
+    });
+};
+
+/**
  * Configure notification handler setup for the app runtime
  */
 export const configureNotificationHandler = (): void => {
