@@ -6,13 +6,7 @@ import { Language } from '../i18n';
 import { LANGUAGE_STORAGE_KEY } from '../contexts/LanguageContext';
 import { getDynamicNotificationMessage, getGentleNudgeMessage } from './notificationContent';
 import { getNotificationInteractionStats } from './notificationAnalytics';
-
-// Base static hours
-const BASE_NOTIFICATION_HOURS: Record<TimeSlot, number> = {
-    morning: 8,
-    noon: 13,
-    night: 18,
-};
+import { DAY_BOUNDARY_HOUR, getEffectiveTodayDate, SLOT_START_HOURS } from './timeSlotManager';
 
 /**
  * Get saved language from AsyncStorage
@@ -88,13 +82,13 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
  * Calculate optimal hour based on past interactions
  */
 const calculateOptimalHour = (slot: TimeSlot, statsHour: number | null): number => {
-    const baseHour = BASE_NOTIFICATION_HOURS[slot];
+    const baseHour = SLOT_START_HOURS[slot];
     if (statsHour === null) return baseHour;
 
     // Safety check ensuring we don't schedule outside valid boundaries for the slot
-    if (slot === 'morning' && (statsHour < 8 || statsHour >= 13)) return baseHour;
-    if (slot === 'noon' && (statsHour < 13 || statsHour >= 18)) return baseHour;
-    if (slot === 'night' && statsHour >= 5 && statsHour < 18) return baseHour;
+    if (slot === 'morning' && (statsHour < SLOT_START_HOURS.morning || statsHour >= SLOT_START_HOURS.noon)) return baseHour;
+    if (slot === 'noon' && (statsHour < SLOT_START_HOURS.noon || statsHour >= SLOT_START_HOURS.night)) return baseHour;
+    if (slot === 'night' && statsHour >= DAY_BOUNDARY_HOUR && statsHour < SLOT_START_HOURS.night) return baseHour;
 
     // Shift exactly to the hour the user recently interacted, ensuring maximum open rates
     return statsHour;
@@ -112,7 +106,7 @@ const getOptimalHourForSlot = (
         case 'night':
             return calculateOptimalHour(slot, stats.nightLastInteractHour);
         default:
-            return BASE_NOTIFICATION_HOURS[slot];
+            return SLOT_START_HOURS[slot];
     }
 };
 
@@ -128,8 +122,8 @@ const schedulePrimaryNotification = (
     // Target scheduling date/time
     const scheduleTime = new Date(targetDate);
 
-    // 🔥 The $10k Architecture Fix: Shift midnight hours to the next true calendar day
-    if (slot === 'night' && optimalHour < 5) {
+    // Architecture: Shift midnight hours to the next true calendar day
+    if (slot === 'night' && optimalHour < DAY_BOUNDARY_HOUR) {
         scheduleTime.setDate(scheduleTime.getDate() + 1);
     }
 
@@ -163,9 +157,9 @@ const scheduleNudgeNotification = (
     schedulingPromises: Promise<string>[],
 ) => {
     // Gentle Nudge (Last chance) scheduling - 1 hour before the slot ends
-    let nudgeHour = 12; // Morning ends at 13
-    if (slot === 'noon') nudgeHour = 17; // Noon ends at 18
-    if (slot === 'night') nudgeHour = 4; // Night ends at 5 next day
+    let nudgeHour = SLOT_START_HOURS.noon - 1;
+    if (slot === 'noon') nudgeHour = SLOT_START_HOURS.night - 1;
+    if (slot === 'night') nudgeHour = DAY_BOUNDARY_HOUR - 1;
 
     const nudgeTime = new Date(targetDate);
     if (slot === 'night') nudgeTime.setDate(nudgeTime.getDate() + 1);
@@ -205,7 +199,7 @@ export const scheduleAllNotifications = async (daysAhead: number = 14): Promise<
     const schedulingPromises: Promise<string>[] = [];
 
     for (let i = 0; i < daysAhead; i++) {
-        const targetDate = new Date();
+        const targetDate = getEffectiveTodayDate();
         targetDate.setDate(targetDate.getDate() + i);
 
         for (const slot of slots) {

@@ -22,7 +22,7 @@ export const formatLocalDateKey = (date: Date): string => {
 };
 
 // Slot start hours for reference
-const SLOT_START_HOURS: Record<TimeSlot, number> = {
+export const SLOT_START_HOURS: Record<TimeSlot, number> = {
     morning: 8,
     noon: 13,
     night: 18,
