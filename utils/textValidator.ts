@@ -4,6 +4,10 @@
  * Simplified for English text (no grapheme-splitter needed).
  */
 
+// Pre-compiled regexes for performance
+const PUNCTUATION_REGEX = /[.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]/g;
+const MULTI_SPACE_REGEX = /\s+/g;
+
 /**
  * Normalizes text for comparison:
  * - Lowercase
@@ -14,19 +18,16 @@
 export const normalize = (text: string): string => {
     return text
         .toLowerCase()
-        .replace(/[.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]/g, '') // Remove common punctuation + smart quotes
-        .replace(/\s+/g, ' ')
-        .replace(/^\s+/, ''); // Only trim leading whitespace, preserve trailing
+        .replace(PUNCTUATION_REGEX, '')
+        .replace(MULTI_SPACE_REGEX, ' ')
+        .trimStart(); // Only trim leading whitespace, preserve trailing
 };
 
 /**
  * Creates display-ready text by removing punctuation but preserving case and spacing.
  */
 export const getDisplayText = (text: string): string => {
-    return text
-        .replace(/[.,;:!?'"()\-—–\u201c\u201d\u2018\u2019]/g, '') // Include smart quotes
-        .replace(/\s+/g, ' ')
-        .replace(/^\s+/, ''); // Only trim leading whitespace
+    return text.replace(PUNCTUATION_REGEX, '').replace(MULTI_SPACE_REGEX, ' ').trimStart();
 };
 
 /**
@@ -70,9 +71,10 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     }
 
     // Calculate progress percentage
-    const percent = targetChars.length > 0
-        ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
-        : 0;
+    const percent =
+        targetChars.length > 0
+            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
+            : 0;
 
     // Complete match requires correct prefix AND same length
     const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
@@ -97,9 +99,9 @@ export interface HighlightSegments {
 
 /**
  * Gets highlight segments for display text based on user input.
- * 
+ *
  * Strategy: Normalize both input and displayTarget as full strings,
- * then compare character-by-character. Map the match count back 
+ * then compare character-by-character. Map the match count back
  * to the original displayTarget to determine highlight boundaries.
  */
 export const getHighlightSegments = (input: string, displayTarget: string): HighlightSegments => {
