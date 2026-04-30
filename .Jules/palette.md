@@ -19,3 +19,7 @@
 
 **Learning:** Screen readers cannot inherently determine if an expandable view (like an Accordion) is open or closed based purely on visual animations. It is crucial to utilize the `accessibilityState={{ expanded: boolean }}` prop on the wrapper `Pressable` or `TouchableOpacity` to explicitly announce the state toggle.
 **Action:** Always include `accessibilityRole="button"`, `accessibilityLabel`, and `accessibilityState={{ expanded: boolean }}` on custom expandable UI components.
+
+## 2025-05-19 - Adding accessibility attributes to Custom Achievement Badges and BottomSheet
+**Learning:** Complex visual elements like achievement badges or overlay backdrops often combine distinct visual parts (e.g., emojis + text for locks, transparent backgrounds) that screen readers interpret confusingly or completely ignore.
+**Action:** Always wrap complex non-interactive states (like a locked badge) in a container with `accessible={true}` and a descriptive `accessibilityLabel`, whilst setting decorative children to `importantForAccessibility="no"`. Additionally, transparent overlay `Pressable`s (like a bottom sheet backdrop) MUST include explicit `accessibilityRole="button"` and `accessibilityLabel` so visually impaired users know they can interact with the empty space to dismiss the view.
