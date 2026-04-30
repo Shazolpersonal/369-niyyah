@@ -270,7 +270,7 @@ export default function HistoryScreen() {
 
     const handleNextMonth = () => {
         const nextMonth = new Date(viewYear, viewMonth + 1, 1);
-        if (nextMonth <= effectiveToday) {
+        if (formatLocalDateKey(nextMonth) <= todayKey) {
             setDirection('right');
             setViewDate(nextMonth);
             setMonthKey(nextMonth.getTime());
@@ -283,7 +283,7 @@ export default function HistoryScreen() {
     };
 
     const selectedProgress = selectedDay ? dailyProgress[selectedDay] : null;
-    const canGoNext = new Date(viewYear, viewMonth + 1, 1) <= effectiveToday;
+    const canGoNext = formatLocalDateKey(new Date(viewYear, viewMonth + 1, 1)) <= todayKey;
 
     // Stats for current month
     const monthStats = useMemo(() => {
@@ -294,8 +294,7 @@ export default function HistoryScreen() {
         for (const cell of calendarDays) {
             if (!cell) continue;
             const { dateKey } = cell;
-            const date = new Date(viewYear, viewMonth, cell.day);
-            if (date > effectiveToday) continue;
+            if (dateKey > todayKey) continue;
             if (startDate && dateKey < startDate) continue;
 
             total++;
@@ -309,7 +308,7 @@ export default function HistoryScreen() {
         }
 
         return { complete, partial, total };
-    }, [calendarDays, dailyProgress, startDate, effectiveToday]);
+    }, [calendarDays, dailyProgress, startDate, todayKey]);
 
     // Legend items
     const legendItems = [
@@ -486,8 +485,7 @@ export default function HistoryScreen() {
                                                 status={getDayStatus(
                                                     dailyProgress[cell.dateKey] || null,
                                                     cell.dateKey === todayKey,
-                                                    new Date(viewYear, viewMonth, cell.day) >
-                                                        effectiveToday ||
+                                                    cell.dateKey > todayKey ||
                                                         (startDate
                                                             ? cell.dateKey < startDate
                                                             : false),
