@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Modal, Pressable, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Modal,
+    Pressable,
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -20,7 +28,12 @@ interface BottomSheetProps {
     snapPoint?: number;
 }
 
-export function BottomSheet({ visible, onClose, children, snapPoint = height * 0.5 }: BottomSheetProps) {
+export function BottomSheet({
+    visible,
+    onClose,
+    children,
+    snapPoint = height * 0.5,
+}: BottomSheetProps) {
     const [renderModal, setRenderModal] = useState(visible);
 
     // Animation states
@@ -58,7 +71,13 @@ export function BottomSheet({ visible, onClose, children, snapPoint = height * 0
             >
                 {/* Blur Backdrop (simulated with semi-transparent dark view) */}
                 <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, rBackdropStyle]}>
-                    <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+                    <Pressable
+                        style={StyleSheet.absoluteFill}
+                        onPress={onClose}
+                        accessibilityRole="button"
+                        accessibilityLabel="Close"
+                        accessibilityHint="Closes the bottom sheet"
+                    />
                 </Animated.View>
 
                 {/* Bottom Sheet Content */}
@@ -66,9 +85,7 @@ export function BottomSheet({ visible, onClose, children, snapPoint = height * 0
                     <View style={styles.dragHandleContainer} pointerEvents="none">
                         <View style={styles.dragHandle} />
                     </View>
-                    <View style={styles.contentContainer}>
-                        {children}
-                    </View>
+                    <View style={styles.contentContainer}>{children}</View>
                 </Animated.View>
             </KeyboardAvoidingView>
         </Modal>
@@ -106,5 +123,5 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingHorizontal: 24,
-    }
+    },
 });
