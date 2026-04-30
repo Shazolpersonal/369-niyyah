@@ -323,6 +323,7 @@ export default function TaskInputScreen() {
                                         placeholderTextColor="#475569"
                                         multiline
                                         autoFocus
+                                        maxLength={500} // Security: Prevent extreme input lengths (DoS protection)
                                         style={[s.textInput, { fontFamily: f('regular') }]}
                                     />
                                 </Animated.View>
