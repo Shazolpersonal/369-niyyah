@@ -6,3 +6,7 @@
 ## 2024-04-29 - Boolean Logic vs Numeric Coercion in Hot Loops
 **Learning:** In the `history.tsx` file, progress evaluation in hot loops (e.g. iterating over calendar days) used numeric coercion `(cond ? 1 : 0) + ...`. Testing indicated that using direct boolean logic `cond1 && cond2 && cond3` instead of numeric summation improves performance for this specific evaluation.
 **Action:** When evaluating multiple conditions in loops, avoid unnecessary numeric coercion and summation if simple boolean operators can achieve the same check faster.
+
+## 2024-04-30 - Lexicographical Date String Comparisons in Hot Loops
+**Learning:** Instantiating `Date` objects in hot loops (e.g., iterating through calendar days) or using newly instantiated `Date` objects in `useMemo` dependency arrays breaks memoization and adds garbage collection overhead. React's strict equality checks will always fail for new object instances, causing unnecessary re-renders.
+**Action:** When comparing dates in hot loops or hooks, prefer using primitive string keys (`YYYY-MM-DD`) and performing lexicographical string comparisons (e.g., `dateKey > todayKey`) instead of heavy object-based checks. This reduces garbage collection overhead and render times, and is safe because ISO 8601-like date strings compare correctly lexicographically.
