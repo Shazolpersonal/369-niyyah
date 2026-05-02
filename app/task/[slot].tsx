@@ -233,6 +233,8 @@ export default function TaskInputScreen() {
                                 <Pressable
                                     onPress={() => router.back()}
                                     style={{ marginTop: 48, width: '100%' }}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={t('task.backToDashboard')}
                                 >
                                     <View style={s.backDashBtn}>
                                         <LinearGradient
@@ -325,6 +327,7 @@ export default function TaskInputScreen() {
                                         autoFocus
                                         maxLength={500} // Security: Prevent extreme input lengths (DoS protection)
                                         style={[s.textInput, { fontFamily: f('regular') }]}
+                                        accessibilityLabel={t('task.placeholder')}
                                     />
                                 </Animated.View>
 
@@ -362,6 +365,9 @@ export default function TaskInputScreen() {
                                             onPressIn={handlePressIn}
                                             onPressOut={handlePressOut}
                                             disabled={!canSubmit}
+                                            accessibilityRole="button"
+                                            accessibilityState={{ disabled: !canSubmit }}
+                                            accessibilityLabel={t('task.submit')}
                                         >
                                             <View
                                                 style={[
