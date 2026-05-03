@@ -10,3 +10,7 @@
 ## 2024-04-30 - Lexicographical Date String Comparisons in Hot Loops
 **Learning:** Instantiating `Date` objects in hot loops (e.g., iterating through calendar days) or using newly instantiated `Date` objects in `useMemo` dependency arrays breaks memoization and adds garbage collection overhead. React's strict equality checks will always fail for new object instances, causing unnecessary re-renders.
 **Action:** When comparing dates in hot loops or hooks, prefer using primitive string keys (`YYYY-MM-DD`) and performing lexicographical string comparisons (e.g., `dateKey > todayKey`) instead of heavy object-based checks. This reduces garbage collection overhead and render times, and is safe because ISO 8601-like date strings compare correctly lexicographically.
+
+## 2024-05-03 - Dictionary Iteration Optimization
+**Learning:** Using multiple `Object.keys` and `Object.values().some()` calls to evaluate boolean flags across a dictionary (e.g., `dailyProgress`) creates unnecessary intermediate arrays and iterates the object multiple times. This degrades performance, especially if the dictionary is large or the check is frequent.
+**Action:** Use a single `for...in` loop with early `break` conditions to evaluate multiple boolean flags across a dictionary simultaneously. This avoids array allocations and reduces iterations (O(3n) to worst-case O(n)).
