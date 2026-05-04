@@ -321,6 +321,7 @@ export default function TaskInputScreen() {
                                         onChangeText={setInput}
                                         placeholder={t('task.placeholder')}
                                         placeholderTextColor="#475569"
+                                        accessibilityLabel={t('task.placeholder')}
                                         multiline
                                         autoFocus
                                         maxLength={500} // Security: Prevent extreme input lengths (DoS protection)
