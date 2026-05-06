@@ -23,3 +23,8 @@
 ## 2025-05-19 - Adding accessibility attributes to Custom Achievement Badges and BottomSheet
 **Learning:** Complex visual elements like achievement badges or overlay backdrops often combine distinct visual parts (e.g., emojis + text for locks, transparent backgrounds) that screen readers interpret confusingly or completely ignore.
 **Action:** Always wrap complex non-interactive states (like a locked badge) in a container with `accessible={true}` and a descriptive `accessibilityLabel`, whilst setting decorative children to `importantForAccessibility="no"`. Additionally, transparent overlay `Pressable`s (like a bottom sheet backdrop) MUST include explicit `accessibilityRole="button"` and `accessibilityLabel` so visually impaired users know they can interact with the empty space to dismiss the view.
+
+## 2026-05-06 - Adding accessibility attributes to TextInput and Forms
+
+**Learning:** React Native's `TextInput` components do not automatically read their `placeholder` props correctly on all screen readers. Additionally, main CTA buttons or secondary actions on form screens often lack explicit labels.
+**Action:** Always provide an explicit `accessibilityLabel` on `TextInput` components, even if a placeholder is present, using the existing i18n functions. Ensure form submit buttons explicitly define `accessibilityRole="button"`, `accessibilityLabel`, and dynamic `accessibilityState={{ disabled: boolean }}` when validation requires them to be disabled.

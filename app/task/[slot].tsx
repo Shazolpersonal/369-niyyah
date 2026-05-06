@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import {
     View,
     Text,
@@ -233,6 +233,8 @@ export default function TaskInputScreen() {
                                 <Pressable
                                     onPress={() => router.back()}
                                     style={{ marginTop: 48, width: '100%' }}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={t('task.backToDashboard')}
                                 >
                                     <View style={s.backDashBtn}>
                                         <LinearGradient
@@ -324,6 +326,7 @@ export default function TaskInputScreen() {
                                         multiline
                                         autoFocus
                                         maxLength={500} // Security: Prevent extreme input lengths (DoS protection)
+                                        accessibilityLabel={t('task.placeholder')}
                                         style={[s.textInput, { fontFamily: f('regular') }]}
                                     />
                                 </Animated.View>
@@ -362,6 +365,8 @@ export default function TaskInputScreen() {
                                             onPressIn={handlePressIn}
                                             onPressOut={handlePressOut}
                                             disabled={!canSubmit}
+                                            accessibilityRole="button"
+                                            accessibilityLabel={t('task.submit')}
                                         >
                                             <View
                                                 style={[
