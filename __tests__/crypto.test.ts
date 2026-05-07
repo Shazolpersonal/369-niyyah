@@ -15,6 +15,27 @@ describe('secureRandom', () => {
         const val2 = secureRandom();
         expect(val1).not.toBe(val2);
     });
+
+    it('should throw an error if crypto.getRandomValues is unavailable', () => {
+        // Backup original crypto
+        const originalCrypto = global.crypto;
+
+        // Mock crypto to be undefined
+        Object.defineProperty(global, 'crypto', {
+            value: undefined,
+            writable: true,
+        });
+
+        try {
+            expect(() => secureRandom()).toThrow('Web Crypto API is not available in this environment.');
+        } finally {
+            // Restore original crypto
+            Object.defineProperty(global, 'crypto', {
+                value: originalCrypto,
+                writable: true,
+            });
+        }
+    });
 });
 
 describe('getSecureRandomInt', () => {

@@ -12,9 +12,9 @@ export const secureRandom = (): number => {
     return array[0] / 0x100000000;
   }
 
-  // Fallback to Math.random() only if crypto is not available.
+  // No fallback to Math.random() to strictly enforce secure randomness.
   // In a production React Native environment (0.72+), crypto.getRandomValues should be available.
-  return Math.random();
+  throw new Error('Web Crypto API is not available in this environment.');
 };
 
 /**
