@@ -322,6 +322,7 @@ export default function TaskInputScreen() {
                                         placeholder={t('task.placeholder')}
                                         accessibilityLabel={t('task.inputAccessibilityLabel')}
                                         placeholderTextColor="#475569"
+                                        accessibilityLabel={t('task.placeholder')}
                                         multiline
                                         autoFocus
                                         maxLength={500} // Security: Prevent extreme input lengths (DoS protection)
