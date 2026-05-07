@@ -153,6 +153,7 @@ export const en: Record<string, string> = {
     'task.eveningNiyyah': 'Evening Niyyah',
     'task.todaysNiyyah': "Today's Niyyah",
     'task.placeholder': 'Type the affirmation here...',
+    'task.inputAccessibilityLabel': 'Type the affirmation exactly as shown',
     'task.accuracy': 'Accuracy:',
     'task.autoSubmitting': 'Auto-submitting...',
     'task.readyToSubmit': 'Ready to submit!',

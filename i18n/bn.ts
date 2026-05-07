@@ -153,6 +153,7 @@ export const bn: Record<string, string> = {
     'task.eveningNiyyah': 'রাতের নিয়্যাহ',
     'task.todaysNiyyah': 'আজকের নিয়্যাহ',
     'task.placeholder': 'এখানে অ্যাফার্মেশন টাইপ করুন...',
+    'task.inputAccessibilityLabel': 'অ্যাফার্মেশনটি হুবহু টাইপ করুন',
     'task.accuracy': 'সঠিকতা:',
     'task.autoSubmitting': 'অটো-সাবমিট হচ্ছে...',
     'task.readyToSubmit': 'সাবমিট করতে প্রস্তুত!',

@@ -320,6 +320,7 @@ export default function TaskInputScreen() {
                                         value={input}
                                         onChangeText={setInput}
                                         placeholder={t('task.placeholder')}
+                                        accessibilityLabel={t('task.inputAccessibilityLabel')}
                                         placeholderTextColor="#475569"
                                         multiline
                                         autoFocus
