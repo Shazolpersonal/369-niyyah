@@ -11,11 +11,23 @@ export interface Badge {
 export function getAchievements(
     dailyProgress: Record<string, DailyProgress>,
     trueStreak: number,
-    totalElapsedDays: number
+    totalElapsedDays: number,
 ): Badge[] {
-    const hasAnyProgress = Object.keys(dailyProgress).length > 0;
-    const hasMorning = Object.values(dailyProgress).some(p => p.morning);
-    const hasNight = Object.values(dailyProgress).some(p => p.night);
+    let hasAnyProgress = false;
+    let hasMorning = false;
+    let hasNight = false;
+
+    // Optimize iteration by combining flag evaluation into a single loop with early breaks,
+    // avoiding multiple Object.keys/values array allocations and iterations.
+    for (const key in dailyProgress) {
+        hasAnyProgress = true;
+        const p = dailyProgress[key];
+        if (!hasMorning && p.morning) hasMorning = true;
+        if (!hasNight && p.night) hasNight = true;
+
+        // Early break if all flags are found
+        if (hasMorning && hasNight) break;
+    }
 
     return [
         {
