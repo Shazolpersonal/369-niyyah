@@ -254,9 +254,13 @@ export default function HistoryScreen() {
 
         const days: Array<{ day: number; dateKey: string } | null> = [];
         for (let i = 0; i < startDow; i++) days.push(null);
+
+        // ⚡ Bolt Optimization: Manually construct dateKey strings instead of instantiating
+        // a new Date object for every single day in the month view
+        const monthStr = String(viewMonth + 1).padStart(2, '0');
         for (let d = 1; d <= totalDays; d++) {
-            const date = new Date(viewYear, viewMonth, d);
-            days.push({ day: d, dateKey: formatLocalDateKey(date) });
+            const dayStr = String(d).padStart(2, '0');
+            days.push({ day: d, dateKey: `${viewYear}-${monthStr}-${dayStr}` });
         }
         return days;
     }, [viewYear, viewMonth]);
