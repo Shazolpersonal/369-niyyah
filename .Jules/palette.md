@@ -27,3 +27,7 @@
 ## 2025-05-19 - Adding accessibility attributes to TextInput
 **Learning:** In React Native, `TextInput` components often lack sufficient context for screen readers when relying solely on the `placeholder` prop. A placeholder may not always be read correctly or sufficiently describe the field's purpose or expected input format.
 **Action:** Always ensure `TextInput` components include an explicit `accessibilityLabel` that leverages the application's translation functions to accurately describe the field to visually impaired users.
+
+## 2025-05-19 - Adding accessibility attributes to Navigation Buttons and Input Components
+**Learning:** In React Native, `Pressable` components with complex child views (like `LinearGradient` combined with `Text`) often fail to be grouped properly by screen readers, leading to confusing or incomplete announcements. They must be explicitly marked with `accessibilityRole="button"` and a clear `accessibilityLabel`. Additionally, ensuring input components don't have duplicated or overridden accessibility props is essential for accurate descriptions.
+**Action:** Always include `accessibilityRole="button"` and a corresponding translation-powered `accessibilityLabel` on interactive wrapper elements like `Pressable`. Double-check component props for accidental duplications that might mask accessibility labels.

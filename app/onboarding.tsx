@@ -36,9 +36,24 @@ interface Slide {
 }
 
 const slides: Slide[] = [
-    { id: '1', emoji: '🕌', titleKey: 'onboarding.slide1.title', descriptionKey: 'onboarding.slide1.description' },
-    { id: '2', emoji: '✨', titleKey: 'onboarding.slide2.title', descriptionKey: 'onboarding.slide2.description' },
-    { id: '3', emoji: '🚀', titleKey: 'onboarding.slide3.title', descriptionKey: 'onboarding.slide3.description' },
+    {
+        id: '1',
+        emoji: '🕌',
+        titleKey: 'onboarding.slide1.title',
+        descriptionKey: 'onboarding.slide1.description',
+    },
+    {
+        id: '2',
+        emoji: '✨',
+        titleKey: 'onboarding.slide2.title',
+        descriptionKey: 'onboarding.slide2.description',
+    },
+    {
+        id: '3',
+        emoji: '🚀',
+        titleKey: 'onboarding.slide3.title',
+        descriptionKey: 'onboarding.slide3.description',
+    },
 ];
 
 export default function OnboardingScreen() {
@@ -51,7 +66,8 @@ export default function OnboardingScreen() {
     const flatListRef = useRef<Animated.FlatList<Slide>>(null);
     const scrollX = useSharedValue(0);
 
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     const toggleLanguage = () => {
         setLanguage(language === 'en' ? 'bn' : 'en');
@@ -63,13 +79,11 @@ export default function OnboardingScreen() {
         },
     });
 
-    const onViewableItemsChanged = useRef(
-        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-                setCurrentIndex(viewableItems[0].index);
-            }
+    const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        if (viewableItems.length > 0 && viewableItems[0].index !== null) {
+            setCurrentIndex(viewableItems[0].index);
         }
-    ).current;
+    }).current;
 
     const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
@@ -105,7 +119,9 @@ export default function OnboardingScreen() {
                         onPress={toggleLanguage}
                         activeOpacity={0.7}
                         accessibilityRole="button"
-                        accessibilityLabel={language === 'en' ? 'Switch to Bengali' : 'Switch to English'}
+                        accessibilityLabel={
+                            language === 'en' ? 'Switch to Bengali' : 'Switch to English'
+                        }
                         accessibilityHint="Changes the app language"
                     >
                         <View style={styles.langToggle}>
@@ -122,7 +138,14 @@ export default function OnboardingScreen() {
                         ref={flatListRef}
                         data={slides}
                         renderItem={({ item, index }) => (
-                            <SlideItem item={item} index={index} scrollX={scrollX} t={t} f={f} width={width} />
+                            <SlideItem
+                                item={item}
+                                index={index}
+                                scrollX={scrollX}
+                                t={t}
+                                f={f}
+                                width={width}
+                            />
                         )}
                         keyExtractor={(item) => item.id}
                         horizontal
@@ -149,8 +172,22 @@ export default function OnboardingScreen() {
                 </View>
 
                 {/* Buttons */}
-                <Animated.View entering={FadeInDown.delay(300).duration(600)} style={styles.buttonArea}>
-                    <Pressable onPress={isLastSlide ? handleStart : handleNext}>
+                <Animated.View
+                    entering={FadeInDown.delay(300).duration(600)}
+                    style={styles.buttonArea}
+                >
+                    <Pressable
+                        onPress={isLastSlide ? handleStart : handleNext}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                            isLastSlide ? t('onboarding.getStarted') : t('onboarding.next')
+                        }
+                        accessibilityHint={
+                            isLastSlide
+                                ? 'Finishes onboarding and starts the app'
+                                : 'Moves to the next slide'
+                        }
+                    >
                         <View style={styles.ctaButton}>
                             <LinearGradient
                                 colors={['#10B981', '#059669'] as any}
@@ -163,7 +200,13 @@ export default function OnboardingScreen() {
                     </Pressable>
 
                     {!isLastSlide && (
-                        <Pressable onPress={handleStart} style={styles.skipBtn}>
+                        <Pressable
+                            onPress={handleStart}
+                            style={styles.skipBtn}
+                            accessibilityRole="button"
+                            accessibilityLabel={t('onboarding.skip')}
+                            accessibilityHint="Skips onboarding and starts the app"
+                        >
                             <Text style={[styles.skipText, { fontFamily: f('regular') }]}>
                                 {t('onboarding.skip')}
                             </Text>
@@ -177,9 +220,16 @@ export default function OnboardingScreen() {
 
 // ─── Slide Item ─────────────────────────────────────────────────
 function SlideItem({
-    item, index, scrollX, t, f, width,
+    item,
+    index,
+    scrollX,
+    t,
+    f,
+    width,
 }: {
-    item: Slide; index: number; scrollX: SharedValue<number>;
+    item: Slide;
+    index: number;
+    scrollX: SharedValue<number>;
     t: (key: string) => string;
     f: (weight: 'regular' | 'medium' | 'semibold' | 'bold') => string;
     width: number;
@@ -187,19 +237,39 @@ function SlideItem({
     const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
 
     const rEmojiStyle = useAnimatedStyle(() => {
-        const translateX = interpolate(scrollX.value, inputRange, [width * 0.6, 0, -width * 0.6], Extrapolation.CLAMP);
+        const translateX = interpolate(
+            scrollX.value,
+            inputRange,
+            [width * 0.6, 0, -width * 0.6],
+            Extrapolation.CLAMP,
+        );
         const scale = interpolate(scrollX.value, inputRange, [0.5, 1, 0.5], Extrapolation.CLAMP);
-        const rotate = interpolate(scrollX.value, inputRange, [Math.PI / 5, 0, -Math.PI / 5], Extrapolation.CLAMP);
+        const rotate = interpolate(
+            scrollX.value,
+            inputRange,
+            [Math.PI / 5, 0, -Math.PI / 5],
+            Extrapolation.CLAMP,
+        );
         return { transform: [{ translateX }, { scale }, { rotate: `${rotate}rad` }] };
     });
 
     const rTitleStyle = useAnimatedStyle(() => {
-        const translateX = interpolate(scrollX.value, inputRange, [width * 0.3, 0, -width * 0.3], Extrapolation.CLAMP);
+        const translateX = interpolate(
+            scrollX.value,
+            inputRange,
+            [width * 0.3, 0, -width * 0.3],
+            Extrapolation.CLAMP,
+        );
         return { transform: [{ translateX }] };
     });
 
     const rDescStyle = useAnimatedStyle(() => {
-        const translateX = interpolate(scrollX.value, inputRange, [width * 0.15, 0, -width * 0.15], Extrapolation.CLAMP);
+        const translateX = interpolate(
+            scrollX.value,
+            inputRange,
+            [width * 0.15, 0, -width * 0.15],
+            Extrapolation.CLAMP,
+        );
         return { transform: [{ translateX }] };
     });
 
@@ -207,9 +277,7 @@ function SlideItem({
         <View style={[styles.slide, { width }]}>
             {/* Emoji with glow ring */}
             <View style={styles.emojiGlow}>
-                <Animated.Text style={[rEmojiStyle, styles.emoji]}>
-                    {item.emoji}
-                </Animated.Text>
+                <Animated.Text style={[rEmojiStyle, styles.emoji]}>{item.emoji}</Animated.Text>
             </View>
             <Animated.Text style={[rTitleStyle, styles.slideTitle, { fontFamily: f('bold') }]}>
                 {t(item.titleKey)}
@@ -222,24 +290,32 @@ function SlideItem({
 }
 
 // ─── Pagination Dot ──────────────────────────────────────────────
-function PaginationDot({ index, scrollX, width }: { index: number; scrollX: SharedValue<number>; width: number }) {
+function PaginationDot({
+    index,
+    scrollX,
+    width,
+}: {
+    index: number;
+    scrollX: SharedValue<number>;
+    width: number;
+}) {
     const rDotStyle = useAnimatedStyle(() => {
         const dotWidth = interpolate(
             scrollX.value,
             [(index - 1) * width, index * width, (index + 1) * width],
-            [8, 24, 8], Extrapolation.CLAMP
+            [8, 24, 8],
+            Extrapolation.CLAMP,
         );
         const opacity = interpolate(
             scrollX.value,
             [(index - 1) * width, index * width, (index + 1) * width],
-            [0.3, 1, 0.3], Extrapolation.CLAMP
+            [0.3, 1, 0.3],
+            Extrapolation.CLAMP,
         );
         return { width: dotWidth, opacity };
     });
 
-    return (
-        <Animated.View style={[styles.dot, rDotStyle]} />
-    );
+    return <Animated.View style={[styles.dot, rDotStyle]} />;
 }
 
 const styles = StyleSheet.create({
