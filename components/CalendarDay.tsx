@@ -33,7 +33,7 @@ const HEATMAP_STYLES: Record<DayStatus, { bg: string; text: string }> = {
 
 function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProps) {
     const { bg, text } = HEATMAP_STYLES[status];
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
 
     // Animations
     const scale = useSharedValue(1);
@@ -106,6 +106,9 @@ function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProp
         </Animated.View>
     );
 
+    // Accessibility Label setup
+    const a11yLabel = `${day}. ${t('history.' + status)}${isToday ? '. ' + t('dashboard.todayComplete').replace('✅ ', '') : ''}`;
+
     if (onPress) {
         return (
             <Pressable
@@ -113,13 +116,20 @@ function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProp
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
                 style={styles.pressable}
+                accessibilityRole="button"
+                accessibilityLabel={a11yLabel}
+                accessibilityHint={t('history.title')}
             >
                 {content}
             </Pressable>
         );
     }
 
-    return content;
+    return (
+        <View accessible={true} accessibilityLabel={a11yLabel}>
+            {content}
+        </View>
+    );
 }
 
 export const CalendarDay = React.memo(CalendarDayComponent, (prevProps, nextProps) => {
