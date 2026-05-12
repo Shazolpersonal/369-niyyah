@@ -31,3 +31,7 @@
 ## 2025-05-19 - Adding accessibility attributes to Navigation Buttons and Input Components
 **Learning:** In React Native, `Pressable` components with complex child views (like `LinearGradient` combined with `Text`) often fail to be grouped properly by screen readers, leading to confusing or incomplete announcements. They must be explicitly marked with `accessibilityRole="button"` and a clear `accessibilityLabel`. Additionally, ensuring input components don't have duplicated or overridden accessibility props is essential for accurate descriptions.
 **Action:** Always include `accessibilityRole="button"` and a corresponding translation-powered `accessibilityLabel` on interactive wrapper elements like `Pressable`. Double-check component props for accidental duplications that might mask accessibility labels.
+
+## 2025-05-19 - Added accessibility attributes to CalendarDay
+**Learning:** For custom React Native UI components that convey status purely through visual state (like background colors in a calendar day), screen readers might only announce the core text (e.g., the day number) and ignore the status meaning.
+**Action:** Always combine the core text with a translated status in the `accessibilityLabel`. If an interactive element like `Pressable` is conditionally rendered based on an `onPress` prop, ensure the non-interactive fallback container specifies `accessible={true}` and the same `accessibilityLabel` so screen readers still announce the state.
