@@ -77,6 +77,7 @@ export const bn: Record<string, string> = {
     'history.totalDays': 'মোট দিন',
     'history.missed': 'মিস',
     'history.pending': 'বাকি',
+    'history.future': 'ভবিষ্যৎ',
     'history.noProgress': 'এই দিনের কোনো অগ্রগতি নেই।',
     'history.close': 'বন্ধ করুন',
     'history.prevMonth': 'আগের মাস',

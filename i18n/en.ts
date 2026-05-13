@@ -79,6 +79,7 @@ export const en: Record<string, string> = {
     'history.totalDays': 'Total Days',
     'history.missed': 'Missed',
     'history.pending': 'Pending',
+    'history.future': 'Future',
     'history.noProgress': 'No progress recorded for this day.',
     'history.close': 'Close',
     'history.prevMonth': 'Previous Month',
