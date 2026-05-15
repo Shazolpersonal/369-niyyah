@@ -70,11 +70,11 @@ function getDayStatus(
     if (isFuture) return 'future';
     if (!progress) return isToday ? 'pending' : 'missed';
 
-    const allCompleted = progress.morning && progress.noon && progress.night;
-    const anyCompleted = progress.morning || progress.noon || progress.night;
-
-    if (allCompleted) return 'complete';
-    if (anyCompleted) return isToday ? 'pending' : 'partial';
+    if (progress.morning && progress.noon && progress.night) {
+        return 'complete';
+    } else if (progress.morning || progress.noon || progress.night) {
+        return isToday ? 'pending' : 'partial';
+    }
     return isToday ? 'pending' : 'missed';
 }
 
@@ -304,10 +304,11 @@ export default function HistoryScreen() {
             total++;
             const progress = dailyProgress[dateKey];
             if (progress) {
-                const allCompleted = progress.morning && progress.noon && progress.night;
-                const anyCompleted = progress.morning || progress.noon || progress.night;
-                if (allCompleted) complete++;
-                else if (anyCompleted) partial++;
+                if (progress.morning && progress.noon && progress.night) {
+                    complete++;
+                } else if (progress.morning || progress.noon || progress.night) {
+                    partial++;
+                }
             }
         }
 
