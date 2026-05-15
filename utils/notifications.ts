@@ -242,10 +242,10 @@ export const snoozeNotification = async (
 
     return await Notifications.scheduleNotificationAsync({
         content: {
-            title: title || undefined,
-            body: body || undefined,
+            title: title ?? undefined,
+            body: body ?? undefined,
             data,
-            categoryIdentifier,
+            categoryIdentifier: categoryIdentifier ?? undefined,
             sound: 'default',
             ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
         },

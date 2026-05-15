@@ -24,16 +24,19 @@ interface CalendarDayProps {
 
 // Vibrant heatmap colors optimized for dark calendar background
 const HEATMAP_STYLES: Record<DayStatus, { bg: string; text: string }> = {
-    complete: { bg: '#10B981', text: '#FFFFFF' },         // bright emerald
-    partial: { bg: '#F59E0B', text: '#FFFFFF' },         // warm amber
+    complete: { bg: '#10B981', text: '#FFFFFF' }, // bright emerald
+    partial: { bg: '#F59E0B', text: '#FFFFFF' }, // warm amber
     missed: { bg: 'rgba(244, 63, 94, 0.7)', text: '#FFF1F2' }, // rose
-    future: { bg: 'rgba(30, 41, 59, 0.5)', text: '#475569' },  // dark slate
-    pending: { bg: 'rgba(51, 65, 85, 0.6)', text: '#94A3B8' },  // mid slate
+    future: { bg: 'rgba(30, 41, 59, 0.5)', text: '#475569' }, // dark slate
+    pending: { bg: 'rgba(51, 65, 85, 0.6)', text: '#94A3B8' }, // mid slate
 };
 
 function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProps) {
     const { bg, text } = HEATMAP_STYLES[status];
-    const { language } = useLanguage();
+    const { t, language } = useLanguage();
+
+    const translatedStatus = t(`history.${status}`);
+    const accessibilityLabel = `${isToday ? 'Today, ' : ''}Day ${day}, ${translatedStatus}`;
 
     // Animations
     const scale = useSharedValue(1);
@@ -44,10 +47,10 @@ function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProp
             glowPulse.value = withRepeat(
                 withSequence(
                     withTiming(1, { duration: 1800, easing: Easing.inOut(Easing.ease) }),
-                    withTiming(0.3, { duration: 1800, easing: Easing.inOut(Easing.ease) })
+                    withTiming(0.3, { duration: 1800, easing: Easing.inOut(Easing.ease) }),
                 ),
                 -1,
-                true
+                true,
             );
         } else {
             glowPulse.value = 0;
@@ -88,18 +91,25 @@ function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProp
     };
 
     const content = (
-        <Animated.View style={[styles.container, rStyle]}>
+        <Animated.View
+            style={[styles.container, rStyle]}
+            accessible={!onPress}
+            accessibilityLabel={!onPress ? accessibilityLabel : undefined}
+        >
             <View style={[styles.circle, { backgroundColor: bg }]}>
                 {isToday && <Animated.View style={rGlowStyle} />}
                 {isToday && <Animated.View style={rOuterGlowStyle} />}
-                <Text style={[
-                    styles.dayText,
-                    {
-                        color: text,
-                        fontWeight: isToday ? '800' : '600',
-                        fontFamily: getFontFamily(language, isToday ? 'bold' : 'semibold'),
-                    }
-                ]}>
+                <Text
+                    style={[
+                        styles.dayText,
+                        {
+                            color: text,
+                            fontWeight: isToday ? '800' : '600',
+                            fontFamily: getFontFamily(language, isToday ? 'bold' : 'semibold'),
+                        },
+                    ]}
+                    importantForAccessibility="no"
+                >
                     {day}
                 </Text>
             </View>
@@ -113,6 +123,8 @@ function CalendarDayComponent({ day, status, isToday, onPress }: CalendarDayProp
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
                 style={styles.pressable}
+                accessibilityRole="button"
+                accessibilityLabel={accessibilityLabel}
             >
                 {content}
             </Pressable>
@@ -149,5 +161,5 @@ const styles = StyleSheet.create({
     },
     dayText: {
         fontSize: 14,
-    }
+    },
 });
