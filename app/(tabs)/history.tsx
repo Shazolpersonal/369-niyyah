@@ -272,9 +272,16 @@ export default function HistoryScreen() {
         setMonthKey(prev.getTime());
     };
 
+    // ⚡ Bolt Optimization: Calculate canGoNext using string manipulation instead of new Date()
+    // Doing this outside of handlers avoids re-instantiating date objects every render
+    const nextY = viewMonth === 11 ? viewYear + 1 : viewYear;
+    const nextM = viewMonth === 11 ? '01' : String(viewMonth + 2).padStart(2, '0');
+    const nextMonthKey = `${nextY}-${nextM}-01`;
+    const canGoNext = nextMonthKey <= todayKey;
+
     const handleNextMonth = () => {
-        const nextMonth = new Date(viewYear, viewMonth + 1, 1);
-        if (formatLocalDateKey(nextMonth) <= todayKey) {
+        if (canGoNext) {
+            const nextMonth = new Date(viewYear, viewMonth + 1, 1);
             setDirection('right');
             setViewDate(nextMonth);
             setMonthKey(nextMonth.getTime());
@@ -287,7 +294,6 @@ export default function HistoryScreen() {
     };
 
     const selectedProgress = selectedDay ? dailyProgress[selectedDay] : null;
-    const canGoNext = formatLocalDateKey(new Date(viewYear, viewMonth + 1, 1)) <= todayKey;
 
     // Stats for current month
     const monthStats = useMemo(() => {

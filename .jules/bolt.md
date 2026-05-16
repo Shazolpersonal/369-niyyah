@@ -17,3 +17,6 @@
 ## 2024-06-26 - Inline Boolean Short-Circuiting in Hot Loops
 **Learning:** In hot loops, evaluating multiple logical conditions and storing them in intermediate variables (e.g., `const allCompleted = a && b && c; const anyCompleted = a || b || c;`) causes all conditions to be evaluated eagerly on every iteration.
 **Action:** Use inline boolean short-circuiting (`if (a && b && c) else if (a || b || c)`) rather than eagerly evaluating all boolean conditions into intermediate variables to save redundant operations.
+## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
+**Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
+**Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
