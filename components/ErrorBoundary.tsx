@@ -54,16 +54,29 @@ export class ErrorBoundary extends Component<Props, State> {
                         <Text style={styles.emoji}>😔</Text>
                         <Text style={styles.title}>কিছু একটা সমস্যা হয়েছে</Text>
                         <Text style={styles.description}>
-                            Something went wrong. This might be a temporary glitch or corrupted local data.
+                            Something went wrong. This might be a temporary glitch or corrupted
+                            local data.
                         </Text>
 
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={this.handleRetry} style={styles.primaryButton}>
-                                <Text style={styles.primaryButtonText}>আবার চেষ্টা করুন (Reload)</Text>
+                            <TouchableOpacity
+                                onPress={this.handleRetry}
+                                style={styles.primaryButton}
+                                accessibilityRole="button"
+                            >
+                                <Text style={styles.primaryButtonText}>
+                                    আবার চেষ্টা করুন (Reload)
+                                </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={this.handleFactoryReset} style={styles.secondaryButton}>
-                                <Text style={styles.secondaryButtonText}>ডেটা রিসেট করুন (Reset Data)</Text>
+                            <TouchableOpacity
+                                onPress={this.handleFactoryReset}
+                                style={styles.secondaryButton}
+                                accessibilityRole="button"
+                            >
+                                <Text style={styles.secondaryButtonText}>
+                                    ডেটা রিসেট করুন (Reset Data)
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -79,11 +92,35 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#020617' },
     content: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
     emoji: { fontSize: 48, marginBottom: 16 },
-    title: { fontSize: 24, fontWeight: '700', color: '#FFFFFF', textAlign: 'center', marginBottom: 12 },
-    description: { fontSize: 16, color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center', marginBottom: 32, lineHeight: 24 },
+    title: {
+        fontSize: 24,
+        fontWeight: '700',
+        color: '#FFFFFF',
+        textAlign: 'center',
+        marginBottom: 12,
+    },
+    description: {
+        fontSize: 16,
+        color: 'rgba(255, 255, 255, 0.7)',
+        textAlign: 'center',
+        marginBottom: 32,
+        lineHeight: 24,
+    },
     buttonContainer: { width: '100%', gap: 16 },
-    primaryButton: { backgroundColor: '#10B981', paddingVertical: 16, borderRadius: 16, alignItems: 'center' },
+    primaryButton: {
+        backgroundColor: '#10B981',
+        paddingVertical: 16,
+        borderRadius: 16,
+        alignItems: 'center',
+    },
     primaryButtonText: { color: '#FFFFFF', fontWeight: '600', fontSize: 16 },
-    secondaryButton: { paddingVertical: 16, borderRadius: 16, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.05)' },
+    secondaryButton: {
+        paddingVertical: 16,
+        borderRadius: 16,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'rgba(239, 68, 68, 0.3)',
+        backgroundColor: 'rgba(239, 68, 68, 0.05)',
+    },
     secondaryButtonText: { color: '#EF4444', fontWeight: '600', fontSize: 16 },
 });
