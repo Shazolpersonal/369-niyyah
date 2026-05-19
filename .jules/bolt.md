@@ -17,3 +17,7 @@
 ## 2024-06-26 - Inline Boolean Short-Circuiting in Hot Loops
 **Learning:** In hot loops, evaluating multiple logical conditions and storing them in intermediate variables (e.g., `const allCompleted = a && b && c; const anyCompleted = a || b || c;`) causes all conditions to be evaluated eagerly on every iteration.
 **Action:** Use inline boolean short-circuiting (`if (a && b && c) else if (a || b || c)`) rather than eagerly evaluating all boolean conditions into intermediate variables to save redundant operations.
+
+## 2024-07-02 - Cache Date-Dependent Function Calls in Render Loops
+**Learning:** In `app/(tabs)/index.tsx`, calling `isSlotActive('morning')`, `isSlotActive('noon')`, and `isSlotActive('night')` inline during rendering caused multiple `new Date()` instantiations because `isSlotActive` calls `getCurrentSlot` which instantiates a `Date`. This adds unnecessary garbage collection overhead during every render cycle.
+**Action:** Cache repeated expensive function calls that instantiate `Date` objects (like `getCurrentSlot()`) in local variables instead of calling them multiple times inline.
