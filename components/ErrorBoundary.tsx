@@ -58,12 +58,26 @@ export class ErrorBoundary extends Component<Props, State> {
                         </Text>
 
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={this.handleRetry} style={styles.primaryButton}>
-                                <Text style={styles.primaryButtonText}>আবার চেষ্টা করুন (Reload)</Text>
+                            <TouchableOpacity
+                                onPress={this.handleRetry}
+                                style={styles.primaryButton}
+                                accessibilityRole="button"
+                                accessibilityLabel="Reload app"
+                            >
+                                <Text style={styles.primaryButtonText} importantForAccessibility="no">
+                                    আবার চেষ্টা করুন (Reload)
+                                </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={this.handleFactoryReset} style={styles.secondaryButton}>
-                                <Text style={styles.secondaryButtonText}>ডেটা রিসেট করুন (Reset Data)</Text>
+                            <TouchableOpacity
+                                onPress={this.handleFactoryReset}
+                                style={styles.secondaryButton}
+                                accessibilityRole="button"
+                                accessibilityLabel="Reset app data"
+                            >
+                                <Text style={styles.secondaryButtonText} importantForAccessibility="no">
+                                    ডেটা রিসেট করুন (Reset Data)
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>

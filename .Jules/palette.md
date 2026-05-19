@@ -35,3 +35,7 @@
 ## 2026-05-20 - Fix Duplicate Screen Reader Announcements on Interactive Cards
 **Learning:** When conditionally rendering a React Native `Pressable` (where it acts as a button when active, and a generic `View` when inactive), screen readers may announce the content twice if both the inner `View` and outer `Pressable` try to manage the accessible state simultaneously, or if inner `Text` nodes are not explicitly hidden.
 **Action:** Always conditionally attach the `accessibilityRole` and `accessibilityLabel` exclusively to the outermost active element (e.g., `Pressable` if `onPress` exists, otherwise the container `View`). Crucially, apply `importantForAccessibility="no"` to any child `Text` nodes to prevent screen readers from redundantly reading the text after already reading the custom `accessibilityLabel` from the parent.
+
+## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
+**Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
+**Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
