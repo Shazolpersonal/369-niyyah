@@ -1,4 +1,13 @@
-1. **Memoize `DailyQuote.tsx`**: Update `components/DailyQuote.tsx` to wrap `DailyQuote` component in `React.memo`. This will prevent unnecessary re-renders of the component when its parent (`app/(tabs)/index.tsx`) re-renders, as its only dependency is `language` which doesn't change often. The `dayOfYear` logic and the returned component can stay the same, but the default export/export strategy will need to be adjusted slightly for `React.memo`.
-2. **Memoize `getAchievements` in `Achievements.tsx`**: Update `components/Achievements.tsx` to wrap `getAchievements(dailyProgress, trueStreak, totalElapsedDays)` in a `useMemo` hook. The `dailyProgress`, `trueStreak`, and `totalElapsedDays` will be the dependencies. This will prevent recalculating the achievements badges array on every render of the `Achievements` component.
-3. **Pre-commit**: I will run `pre_commit_instructions` and follow them to verify tests and formatting.
-4. **Submit**: I'll create a PR using `submit` with title "⚡ Bolt: [performance improvement]".
+1. **Optimize `canGoNext` and `handleNextMonth` in `app/(tabs)/history.tsx` to prevent unnecessary `Date` instantiations.**
+   - By calculating `nextMonthKey` without using `new Date()` and `formatLocalDateKey`, we can significantly speed up the `canGoNext` check. This optimization addresses the hot path inside the React render cycle where `canGoNext` is evaluated on every re-render.
+   - Example optimization:
+     ```javascript
+     const nextY = viewMonth === 11 ? viewYear + 1 : viewYear;
+     const nextM = viewMonth === 11 ? '01' : String(viewMonth + 2).padStart(2, '0');
+     const nextMonthKey = `${nextY}-${nextM}-01`;
+     const canGoNext = nextMonthKey <= todayKey;
+     ```
+
+2. **Run tests & verification.**
+   - Ensure the `bun test` passes.
+   - `pre_commit_instructions` will be executed to make sure proper testing, verification, review, and reflection are done before committing.
