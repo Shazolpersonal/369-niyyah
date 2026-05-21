@@ -454,6 +454,7 @@ export default function HistoryScreen() {
                                 disabled={!canGoNext}
                                 activeOpacity={0.6}
                                 accessibilityRole="button"
+                                accessibilityState={{ disabled: !canGoNext }}
                                 accessibilityLabel={t('history.nextMonth')}
                                 accessibilityHint={t('history.nextMonth')}
                             >
