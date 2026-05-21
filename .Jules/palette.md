@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-05-21 - Adding accessibilityState to Disabled Navigation Buttons
+**Learning:** React Native's `disabled` prop on `TouchableOpacity` prevents interactions but doesn't explicitly inform screen readers that the button is functionally disabled. This can lead to confusion for voice control users.
+**Action:** When using the `disabled={boolean}` prop on interactive elements, always pair it with `accessibilityState={{ disabled: boolean }}` to ensure accurate screen reader announcements.
