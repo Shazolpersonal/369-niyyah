@@ -456,6 +456,7 @@ export default function HistoryScreen() {
                                 accessibilityRole="button"
                                 accessibilityLabel={t('history.nextMonth')}
                                 accessibilityHint={t('history.nextMonth')}
+                                accessibilityState={{ disabled: !canGoNext }}
                             >
                                 <ChevronRight size={22} color={canGoNext ? '#D4A847' : '#334155'} />
                             </TouchableOpacity>
