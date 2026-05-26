@@ -15,7 +15,7 @@ import { BottomSheet } from '../../components/BottomSheet';
 import { JourneyProgressRing } from '../../components/JourneyProgressRing';
 import { showToast } from '../../components/Toast';
 
-import { isSlotActive, getTodayEffectiveDateKey, getDisplayDay, isJourneyComplete } from '../../utils/timeSlotManager';
+import { getCurrentSlot, getTodayEffectiveDateKey, getDisplayDay, isJourneyComplete } from '../../utils/timeSlotManager';
 import { getAffirmationByLanguage } from '../../utils/contentCycler';
 import { TimeSlot } from '../../types';
 import { getFontFamily } from '../../utils/fonts';
@@ -38,6 +38,11 @@ export default function Dashboard() {
     const [selectedAffirmation, setSelectedAffirmation] = useState('');
 
     const fireScale = useSharedValue(1);
+
+    // ⚡ Bolt Optimization: Cache the current slot instead of calling it 3 times inline
+    // Each call to getCurrentSlot creates a new Date() object. By caching it, we save
+    // 2 Date instantiations per render loop, reducing garbage collection overhead.
+    const currentSlot = getCurrentSlot();
 
     useEffect(() => {
         if (trueStreak > 0) {
@@ -217,13 +222,13 @@ export default function Dashboard() {
                 {/* ─── Task Cards ─── */}
                 <View style={{ paddingHorizontal: 24 }}>
                     <StaggeredView index={2}>
-                        <TaskCard slot="morning" isActive={isSlotActive('morning')} isCompleted={todayProgress.morning} onPress={() => handleTaskPress('morning')} />
+                        <TaskCard slot="morning" isActive={currentSlot === 'morning'} isCompleted={todayProgress.morning} onPress={() => handleTaskPress('morning')} />
                     </StaggeredView>
                     <StaggeredView index={3}>
-                        <TaskCard slot="noon" isActive={isSlotActive('noon')} isCompleted={todayProgress.noon} onPress={() => handleTaskPress('noon')} />
+                        <TaskCard slot="noon" isActive={currentSlot === 'noon'} isCompleted={todayProgress.noon} onPress={() => handleTaskPress('noon')} />
                     </StaggeredView>
                     <StaggeredView index={4}>
-                        <TaskCard slot="night" isActive={isSlotActive('night')} isCompleted={todayProgress.night} onPress={() => handleTaskPress('night')} />
+                        <TaskCard slot="night" isActive={currentSlot === 'night'} isCompleted={todayProgress.night} onPress={() => handleTaskPress('night')} />
                     </StaggeredView>
                 </View>
             </ScrollView>
