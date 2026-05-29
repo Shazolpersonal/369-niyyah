@@ -40,6 +40,33 @@ export const validate = (input: string, target: string): boolean => {
 };
 
 /**
+ * Helper to get actual length of a string in code points (handling surrogate pairs like emojis).
+ */
+function getCodePointCount(str: string): number {
+    let count = 0;
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        if (code >= 0xd800 && code <= 0xdbff) i++;
+        count++;
+    }
+    return count;
+}
+
+/**
+ * Helper to find the string index corresponding to a specific code point count.
+ */
+function getCodePointIndex(str: string, codePointIndex: number): number {
+    let currentCodePoint = 0;
+    for (let i = 0; i < str.length; i++) {
+        if (currentCodePoint === codePointIndex) return i;
+        const code = str.charCodeAt(i);
+        if (code >= 0xd800 && code <= 0xdbff) i++;
+        currentCodePoint++;
+    }
+    return str.length;
+}
+
+/**
  * Validation result interface
  */
 export interface ValidationInfo {
@@ -59,32 +86,25 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     const normalizedTarget = normalize(target);
 
     // Check if input is a valid prefix of target
-    let isCorrectSoFar = true;
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    const isCorrectSoFar = normalizedTarget.startsWith(normalizedInput);
 
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            isCorrectSoFar = false;
-            break;
-        }
-    }
+    // Length calculation handling emojis (surrogate pairs) without array allocation
+    const inputLength = getCodePointCount(normalizedInput);
+    const targetLength = getCodePointCount(normalizedTarget);
 
     // Calculate progress percentage
     const percent =
-        targetChars.length > 0
-            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
-            : 0;
+        targetLength > 0 ? Math.min(100, Math.floor((inputLength / targetLength) * 100)) : 0;
 
     // Complete match requires correct prefix AND same length
-    const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
+    const isCompleteMatch = isCorrectSoFar && inputLength === targetLength;
 
     return {
         isCorrectSoFar,
         isCompleteMatch,
         percent,
-        inputLength: inputChars.length,
-        targetLength: targetChars.length,
+        inputLength,
+        targetLength,
     };
 };
 
@@ -112,30 +132,36 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(displayTarget);
 
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
-
     // Find how many normalized characters match
     let matchedNormalizedCount = 0;
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            break;
-        }
+    let i = 0;
+    let j = 0;
+
+    // Direct iteration of code points
+    while (i < normalizedInput.length && j < normalizedTarget.length) {
+        const c1 = normalizedInput.codePointAt(i);
+        const c2 = normalizedTarget.codePointAt(j);
+
+        if (c1 !== c2) break;
+
         matchedNormalizedCount++;
+        i += c1! > 0xffff ? 2 : 1;
+        j += c2! > 0xffff ? 2 : 1;
     }
 
-    // Map matchedNormalizedCount back to position in the original displayTarget.
-    // normalizedTarget was produced by: lowercase → remove punctuation → collapse spaces → trim
-    // displayTarget was produced by: remove punctuation → collapse spaces → trim (preserves case)
-    // So they differ only in case — same length, same character positions!
-    // Thus matchedNormalizedCount maps directly to displayTarget positions.
-    const correctEnd = matchedNormalizedCount;
-    const inputEnd = Math.min(inputChars.length, targetChars.length);
+    const inputLen = getCodePointCount(normalizedInput);
+    const targetLen = getCodePointCount(normalizedTarget);
 
-    const displayChars = [...displayTarget];
-    const correct = displayChars.slice(0, correctEnd).join('');
-    const incorrect = displayChars.slice(correctEnd, inputEnd).join('');
-    const remaining = displayChars.slice(inputEnd).join('');
+    const correctEnd = matchedNormalizedCount;
+    const inputEnd = Math.min(inputLen, targetLen);
+
+    // Map the matched counts back to string indices on the original target text
+    const displayCorrectEndIndex = getCodePointIndex(displayTarget, correctEnd);
+    const displayInputEndIndex = getCodePointIndex(displayTarget, inputEnd);
+
+    const correct = displayTarget.substring(0, displayCorrectEndIndex);
+    const incorrect = displayTarget.substring(displayCorrectEndIndex, displayInputEndIndex);
+    const remaining = displayTarget.substring(displayInputEndIndex);
 
     return { correct, incorrect, remaining };
 };
