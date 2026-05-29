@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2025-05-29 - Ephemeral Toast Notification Accessibility
+**Learning:** Ephemeral and automatically dismissing notifications (like Toasts) will often be missed by visually impaired users because they do not interrupt the screen reader's flow or require manual interaction. Using standard React Native accessibility labels on the Toast is insufficient because the element might disappear before the user navigates to it.
+**Action:** Always add `accessibilityRole="alert"` and `accessibilityLiveRegion="polite"` to the outermost container of Toast or Notification components. This combination ensures screen readers automatically announce the message upon rendering without interrupting the user's current reading/focus state.
