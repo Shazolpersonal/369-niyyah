@@ -47,9 +47,10 @@ function NotificationHandler() {
             const data = response.notification.request.content.data;
             const actionIdentifier = response.actionIdentifier;
 
-            if (data?.slot) {
+            if (data?.slot && ['morning', 'noon', 'night'].includes(data.slot as string)) {
                 // Record the hour to adapt future push times
-                recordNotificationInteraction(data.slot as any);
+                // We validate the slot to ensure untrusted push payloads cannot spoof our analytics
+                recordNotificationInteraction(data.slot as 'morning' | 'noon' | 'night');
             }
 
             if (
