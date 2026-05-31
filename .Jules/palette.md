@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-05-20 - Adding Loading States to Async Buttons in ErrorBoundary
+**Learning:** During critical error recovery actions like "Factory Reset" or "Reload App" in `ErrorBoundary.tsx`, lacking a visual loading state leaves users uncertain if their tap registered, often leading to duplicate taps. Using `ActivityIndicator` provides immediate visual feedback.
+**Action:** When implementing async recovery actions, explicitly disable the button, update `accessibilityState={{ disabled: true }}`, and swap the button text for an `ActivityIndicator` to provide clear visual feedback to the user while the async process is ongoing.
