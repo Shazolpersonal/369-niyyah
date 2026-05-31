@@ -14,3 +14,7 @@
 **Vulnerability:** The static `privacy-policy.html` served via Vercel lacked basic HTTP security headers like `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Strict-Transport-Security`, and `Referrer-Policy`.
 **Learning:** Even static HTML pages on domains associated with a mobile application can be targets for attacks like clickjacking or MIME sniffing if appropriate headers are missing, and missing them violates defense-in-depth principles.
 **Prevention:** Always ensure hosting configurations (like `vercel.json` or `netlify.toml`) enforce standard HTTP security headers for all web routes, even if the application is predominantly a mobile app offline client.
+## 2025-05-31 - Untrusted Notification Payload Injection
+**Vulnerability:** The notification response handler in `app/_layout.tsx` accessed `response.notification.request.content.data.slot` and cast it to `any` before passing it to `recordNotificationInteraction`, without validating the input.
+**Learning:** Push notification payloads are external inputs and should be treated as untrusted data. Malicious or malformed payloads could spoof application analytics or internal state by bypassing type safety and injecting unexpected values into local storage or analytics pipelines.
+**Prevention:** Always explicitly validate payload data from push notifications (e.g., using allowlists for specific types like `TimeSlot`) before passing it into application logic to prevent unexpected behavior and data corruption.
