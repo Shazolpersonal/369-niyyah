@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-07-28 - Cache Expensive Functions in Render
+**Learning:** Calling functions multiple times inline that instantiate `Date` objects (like `getCurrentSlot()`) inside React render cycles causes multiple redundant object allocations, breaking strict equality checks if passed down, and increasing garbage collection overhead.
+**Action:** When a function computes a value using new Date() and its result is used multiple times in a render function, cache the result in a local constant (`const currentSlot = getCurrentSlot()`) rather than evaluating it separately for each child component.
