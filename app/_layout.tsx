@@ -25,6 +25,7 @@ import { ToastProvider, showToast } from '../components/Toast';
 import { initializeAds } from '../utils/adConfig';
 import * as Notifications from 'expo-notifications';
 import { registerBackgroundFetchAsync } from '../utils/backgroundTasks';
+import { logger } from '../utils/logger';
 import { recordNotificationInteraction } from '../utils/notificationAnalytics';
 import '../global.css';
 
@@ -48,8 +49,13 @@ function NotificationHandler() {
             const actionIdentifier = response.actionIdentifier;
 
             if (data?.slot) {
-                // Record the hour to adapt future push times
-                recordNotificationInteraction(data.slot as any);
+                // Security: Validate untrusted external input (Push Notification Payload)
+                if (typeof data.slot === 'string' && ['morning', 'noon', 'night'].includes(data.slot)) {
+                    // Record the hour to adapt future push times
+                    recordNotificationInteraction(data.slot as 'morning' | 'noon' | 'night');
+                } else {
+                    logger.warn('Invalid notification slot received:', String(data.slot));
+                }
             }
 
             if (
