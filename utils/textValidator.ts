@@ -58,33 +58,25 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(target);
 
-    // Check if input is a valid prefix of target
-    let isCorrectSoFar = true;
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    // ⚡ Bolt Optimization: Use startsWith instead of array spread to prevent O(N) allocations
+    const isCorrectSoFar = normalizedTarget.startsWith(normalizedInput);
 
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            isCorrectSoFar = false;
-            break;
-        }
-    }
+    const inputLength = normalizedInput.length;
+    const targetLength = normalizedTarget.length;
 
     // Calculate progress percentage
     const percent =
-        targetChars.length > 0
-            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
-            : 0;
+        targetLength > 0 ? Math.min(100, Math.floor((inputLength / targetLength) * 100)) : 0;
 
     // Complete match requires correct prefix AND same length
-    const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
+    const isCompleteMatch = isCorrectSoFar && inputLength === targetLength;
 
     return {
         isCorrectSoFar,
         isCompleteMatch,
         percent,
-        inputLength: inputChars.length,
-        targetLength: targetChars.length,
+        inputLength,
+        targetLength,
     };
 };
 
@@ -112,13 +104,17 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(displayTarget);
 
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
-
+    // ⚡ Bolt Optimization: Use charCodeAt instead of array spread to prevent O(N) allocations
     // Find how many normalized characters match
     let matchedNormalizedCount = 0;
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
+    while (
+        matchedNormalizedCount < normalizedInput.length &&
+        matchedNormalizedCount < normalizedTarget.length
+    ) {
+        if (
+            normalizedInput.charCodeAt(matchedNormalizedCount) !==
+            normalizedTarget.charCodeAt(matchedNormalizedCount)
+        ) {
             break;
         }
         matchedNormalizedCount++;
@@ -130,12 +126,12 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     // So they differ only in case — same length, same character positions!
     // Thus matchedNormalizedCount maps directly to displayTarget positions.
     const correctEnd = matchedNormalizedCount;
-    const inputEnd = Math.min(inputChars.length, targetChars.length);
+    const inputEnd = Math.min(normalizedInput.length, normalizedTarget.length);
 
-    const displayChars = [...displayTarget];
-    const correct = displayChars.slice(0, correctEnd).join('');
-    const incorrect = displayChars.slice(correctEnd, inputEnd).join('');
-    const remaining = displayChars.slice(inputEnd).join('');
+    // ⚡ Bolt Optimization: Use substring instead of array slicing and joining
+    const correct = displayTarget.substring(0, correctEnd);
+    const incorrect = displayTarget.substring(correctEnd, inputEnd);
+    const remaining = displayTarget.substring(inputEnd);
 
     return { correct, incorrect, remaining };
 };
