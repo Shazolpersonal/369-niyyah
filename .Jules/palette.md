@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-06-06 - Adding accessibility attributes to Progress Visualizers
+**Learning:** Purely visual components that convey progress or status, such as a circular progress ring, are completely ignored or read incoherently by screen readers unless explicitly marked. For components representing a range or percentage, standard text reading is not enough.
+**Action:** Always wrap visual progress components in a container with `accessible={true}`, `accessibilityRole="progressbar"`, `accessibilityValue={{ min, max, now }}`, and a clear localized `accessibilityLabel`. Crucially, set `importantForAccessibility="no"` on any inner text nodes to prevent screen readers from reading raw, fragmented text after announcing the proper label.
