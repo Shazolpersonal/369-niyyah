@@ -26,6 +26,8 @@ import { initializeAds } from '../utils/adConfig';
 import * as Notifications from 'expo-notifications';
 import { registerBackgroundFetchAsync } from '../utils/backgroundTasks';
 import { recordNotificationInteraction } from '../utils/notificationAnalytics';
+import { logger } from '../utils/logger';
+import { TimeSlot } from '../types';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -48,8 +50,14 @@ function NotificationHandler() {
             const actionIdentifier = response.actionIdentifier;
 
             if (data?.slot) {
-                // Record the hour to adapt future push times
-                recordNotificationInteraction(data.slot as any);
+                // Security: Validate untrusted notification payload data
+                const allowedSlots: TimeSlot[] = ['morning', 'noon', 'night'];
+                if (allowedSlots.includes(data.slot as TimeSlot)) {
+                    // Record the hour to adapt future push times
+                    recordNotificationInteraction(data.slot as TimeSlot);
+                } else {
+                    logger.warn(`Invalid slot received in notification payload: ${data.slot}`);
+                }
             }
 
             if (
