@@ -1,5 +1,5 @@
 import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Updates from 'expo-updates';
 import { logger } from '../utils/logger';
@@ -11,16 +11,18 @@ interface Props {
 interface State {
     hasError: boolean;
     error: Error | null;
+    isReloading: boolean;
+    isResetting: boolean;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = { hasError: false, error: null };
+        this.state = { hasError: false, error: null, isReloading: false, isResetting: false };
     }
 
     static getDerivedStateFromError(error: Error): State {
-        return { hasError: true, error };
+        return { hasError: true, error, isReloading: false, isResetting: false };
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -28,21 +30,23 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     handleRetry = async () => {
+        this.setState({ isReloading: true });
         try {
             await Updates.reloadAsync();
         } catch (e) {
-            this.setState({ hasError: false, error: null });
+            this.setState({ hasError: false, error: null, isReloading: false });
         }
     };
 
     handleFactoryReset = async () => {
+        this.setState({ isResetting: true });
         try {
             const keys = await AsyncStorage.getAllKeys();
             await AsyncStorage.multiRemove(keys);
             await Updates.reloadAsync();
         } catch (e) {
             logger.error('Failed to reset app:', e);
-            this.setState({ hasError: false, error: null });
+            this.setState({ hasError: false, error: null, isResetting: false });
         }
     };
 
@@ -60,24 +64,36 @@ export class ErrorBoundary extends Component<Props, State> {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 onPress={this.handleRetry}
-                                style={styles.primaryButton}
+                                style={[styles.primaryButton, (this.state.isReloading || this.state.isResetting) && { opacity: 0.7 }]}
                                 accessibilityRole="button"
                                 accessibilityLabel="Reload app"
+                                accessibilityState={{ disabled: this.state.isReloading || this.state.isResetting }}
+                                disabled={this.state.isReloading || this.state.isResetting}
                             >
-                                <Text style={styles.primaryButtonText} importantForAccessibility="no">
-                                    আবার চেষ্টা করুন (Reload)
-                                </Text>
+                                {this.state.isReloading ? (
+                                    <ActivityIndicator color="#FFFFFF" />
+                                ) : (
+                                    <Text style={styles.primaryButtonText} importantForAccessibility="no">
+                                        আবার চেষ্টা করুন (Reload)
+                                    </Text>
+                                )}
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 onPress={this.handleFactoryReset}
-                                style={styles.secondaryButton}
+                                style={[styles.secondaryButton, (this.state.isReloading || this.state.isResetting) && { opacity: 0.7 }]}
                                 accessibilityRole="button"
                                 accessibilityLabel="Reset app data"
+                                accessibilityState={{ disabled: this.state.isReloading || this.state.isResetting }}
+                                disabled={this.state.isReloading || this.state.isResetting}
                             >
-                                <Text style={styles.secondaryButtonText} importantForAccessibility="no">
-                                    ডেটা রিসেট করুন (Reset Data)
-                                </Text>
+                                {this.state.isResetting ? (
+                                    <ActivityIndicator color="#EF4444" />
+                                ) : (
+                                    <Text style={styles.secondaryButtonText} importantForAccessibility="no">
+                                        ডেটা রিসেট করুন (Reset Data)
+                                    </Text>
+                                )}
                             </TouchableOpacity>
                         </View>
                     </View>
