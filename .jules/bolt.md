@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-10-31 - Avoid Array Spread Allocations for Text Parsing
+**Learning:** Text parsing and evaluation functions running on every keystroke (like `getValidationInfo` and `getHighlightSegments`) were unnecessarily allocating O(N) arrays using the spread operator (`[...str]`). This adds high garbage collection overhead and negatively impacts rendering times in React Native during active typing.
+**Action:** Use native string methods like `startsWith()`, `substring()`, and string indexing to avoid creating intermediate arrays. For Unicode correctness (e.g. counting emojis as 1), manually iterate over the string using `charCodeAt()` and skip the low surrogate instead of spreading the string into an array of code points.

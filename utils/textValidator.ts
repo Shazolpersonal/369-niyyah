@@ -51,6 +51,21 @@ export interface ValidationInfo {
 }
 
 /**
+ * Helper to get length of string in code points (safely counting surrogate pairs like emojis as 1).
+ */
+const getCodePointLength = (str: string): number => {
+    let count = 0;
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        if (code >= 0xd800 && code <= 0xdbff) {
+            i++; // Skip low surrogate
+        }
+        count++;
+    }
+    return count;
+};
+
+/**
  * Performs character-aware validation of input against target.
  * This is the single source of truth for all validation states.
  */
@@ -58,33 +73,28 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(target);
 
-    // Check if input is a valid prefix of target
-    let isCorrectSoFar = true;
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    // ⚡ Bolt: Using native string `startsWith` instead of allocating and iterating arrays O(N)
+    const isCorrectSoFar = normalizedTarget.startsWith(normalizedInput);
 
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            isCorrectSoFar = false;
-            break;
-        }
-    }
+    // ⚡ Bolt: Getting code point lengths manually avoiding array spreading `[...str]`
+    const inputLength = getCodePointLength(normalizedInput);
+    const targetLength = getCodePointLength(normalizedTarget);
 
     // Calculate progress percentage
     const percent =
-        targetChars.length > 0
-            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
+        targetLength > 0
+            ? Math.min(100, Math.floor((inputLength / targetLength) * 100))
             : 0;
 
     // Complete match requires correct prefix AND same length
-    const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
+    const isCompleteMatch = isCorrectSoFar && inputLength === targetLength;
 
     return {
         isCorrectSoFar,
         isCompleteMatch,
         percent,
-        inputLength: inputChars.length,
-        targetLength: targetChars.length,
+        inputLength,
+        targetLength,
     };
 };
 
@@ -112,30 +122,48 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(displayTarget);
 
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    // ⚡ Bolt: Iterate through strings using native index to avoid O(N) array allocation via spreading
+    // We must match full code points to avoid slicing an emoji in half!
+    let i = 0;
+    while (i < normalizedInput.length && i < normalizedTarget.length) {
+        const codePointInput = normalizedInput.codePointAt(i);
+        const codePointTarget = normalizedTarget.codePointAt(i);
 
-    // Find how many normalized characters match
-    let matchedNormalizedCount = 0;
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
+        if (codePointInput !== codePointTarget) {
             break;
         }
-        matchedNormalizedCount++;
+
+        // Advance by 2 if it's a surrogate pair (code point > 0xFFFF), otherwise 1
+        i += codePointInput! > 0xFFFF ? 2 : 1;
     }
 
-    // Map matchedNormalizedCount back to position in the original displayTarget.
-    // normalizedTarget was produced by: lowercase → remove punctuation → collapse spaces → trim
-    // displayTarget was produced by: remove punctuation → collapse spaces → trim (preserves case)
-    // So they differ only in case — same length, same character positions!
-    // Thus matchedNormalizedCount maps directly to displayTarget positions.
-    const correctEnd = matchedNormalizedCount;
-    const inputEnd = Math.min(inputChars.length, targetChars.length);
+    const correctEnd = i;
 
-    const displayChars = [...displayTarget];
-    const correct = displayChars.slice(0, correctEnd).join('');
-    const incorrect = displayChars.slice(correctEnd, inputEnd).join('');
-    const remaining = displayChars.slice(inputEnd).join('');
+    // We need to find where the input ends in the target string.
+    // Instead of using code unit length which fails when input and target have different
+    // numbers of surrogate pairs in their remaining unmatched portions, we advance a pointer
+    // in the target string by the number of code points remaining in the input.
+    let remainingInputCodePoints = 0;
+    let inputPtr = i;
+    while (inputPtr < normalizedInput.length) {
+        remainingInputCodePoints++;
+        const code = normalizedInput.charCodeAt(inputPtr);
+        inputPtr += (code >= 0xd800 && code <= 0xdbff) ? 2 : 1;
+    }
+
+    let targetPtr = i;
+    let counted = 0;
+    while (targetPtr < normalizedTarget.length && counted < remainingInputCodePoints) {
+        counted++;
+        const code = normalizedTarget.charCodeAt(targetPtr);
+        targetPtr += (code >= 0xd800 && code <= 0xdbff) ? 2 : 1;
+    }
+    const inputEnd = targetPtr;
+
+    // ⚡ Bolt: Use native `substring` to slice strings instead of mapping array back to string
+    const correct = displayTarget.substring(0, correctEnd);
+    const incorrect = displayTarget.substring(correctEnd, inputEnd);
+    const remaining = displayTarget.substring(inputEnd);
 
     return { correct, incorrect, remaining };
 };
