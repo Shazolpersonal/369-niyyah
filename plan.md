@@ -1,13 +1,14 @@
-1. **Optimize `canGoNext` and `handleNextMonth` in `app/(tabs)/history.tsx` to prevent unnecessary `Date` instantiations.**
-   - By calculating `nextMonthKey` without using `new Date()` and `formatLocalDateKey`, we can significantly speed up the `canGoNext` check. This optimization addresses the hot path inside the React render cycle where `canGoNext` is evaluated on every re-render.
-   - Example optimization:
-     ```javascript
-     const nextY = viewMonth === 11 ? viewYear + 1 : viewYear;
-     const nextM = viewMonth === 11 ? '01' : String(viewMonth + 2).padStart(2, '0');
-     const nextMonthKey = `${nextY}-${nextM}-01`;
-     const canGoNext = nextMonthKey <= todayKey;
-     ```
+1. **Refactor `getValidationInfo` to avoid array spread operations.**
+   - Change `[...normalizedInput]` and `[...normalizedTarget]` to use native string methods (e.g. `startsWith()`) and `while`/`for` loops checking `charCodeAt()` to avoid O(N) array allocation, correctly skipping surrogate pairs for emojis.
 
-2. **Run tests & verification.**
-   - Ensure the `bun test` passes.
-   - `pre_commit_instructions` will be executed to make sure proper testing, verification, review, and reflection are done before committing.
+2. **Refactor `getHighlightSegments` to avoid array spread operations.**
+   - Similarly, avoid spreading the strings into arrays (`[...normalizedInput]`, etc.). Traverse both input and target strings by code point using `charCodeAt()`, keeping track of string indices so we can accurately `substring()` the final display string based on matched code points. This eliminates array allocations in the hot typing loop.
+
+3. **Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.**
+   - Run lints, types, and the test suite (`bun test`).
+
+4. **Add journal entry.**
+   - Add a journal entry to `.jules/bolt.md` reflecting on the optimization: avoiding `[...str]` spread allocations for string iterations and using native string loops correctly.
+
+5. **Submit.**
+   - Commit and submit changes with PR formatted for Bolt.
