@@ -32,7 +32,7 @@ export function RepetitionCounter({
     size = 120,
     strokeWidth = 12,
 }: RepetitionCounterProps) {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
 
@@ -53,7 +53,7 @@ export function RepetitionCounter({
         if (completed > 0 && completed <= total) {
             scale.value = withSequence(
                 withTiming(1.08, { duration: 100 }),
-                withSpring(1, { damping: 10, stiffness: 150 })
+                withSpring(1, { damping: 10, stiffness: 150 }),
             );
         }
     }, [completed, total]);
@@ -63,7 +63,7 @@ export function RepetitionCounter({
             progress.value,
             [0, 1],
             [circumference, 0],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
         );
         return {
             strokeDashoffset,
@@ -77,7 +77,15 @@ export function RepetitionCounter({
     });
 
     return (
-        <Animated.View style={[styles.container, animatedStyle, { width: size, height: size }]}>
+        <Animated.View
+            style={[styles.container, animatedStyle, { width: size, height: size }]}
+            accessible={true}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: total, now: completed }}
+            accessibilityLabel={t('write.progress')
+                .replace('{current}', completed.toString())
+                .replace('{total}', total.toString())}
+        >
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                 {/* Background Track */}
                 <Circle
@@ -106,9 +114,20 @@ export function RepetitionCounter({
             </Svg>
 
             <View style={styles.textContainer}>
-                <Text style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}>
+                <Text
+                    importantForAccessibility="no"
+                    style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}
+                >
                     {completed}
-                    <Text style={[styles.totalText, { fontFamily: getFontFamily(language, 'regular') }]}>/{total}</Text>
+                    <Text
+                        importantForAccessibility="no"
+                        style={[
+                            styles.totalText,
+                            { fontFamily: getFontFamily(language, 'regular') },
+                        ]}
+                    >
+                        /{total}
+                    </Text>
                 </Text>
             </View>
         </Animated.View>
