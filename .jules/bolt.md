@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-08-01 - Avoid Array Spread for O(N) String Processing
+**Learning:** Using the array spread syntax `[...string]` to safely iterate characters (including Unicode surrogate pairs) creates an intermediate array, resulting in unnecessary memory allocations (`O(N)` space and time complexity) in hot loops.
+**Action:** When working on text processing functions called frequently (e.g., character-by-character text validation on every keystroke), replace array spreading with native string operations (`startsWith`, `substring`) combined with a fast loop using `charCodeAt()` to detect and step over Unicode surrogate pairs without extra memory allocation.
