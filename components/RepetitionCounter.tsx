@@ -32,7 +32,7 @@ export function RepetitionCounter({
     size = 120,
     strokeWidth = 12,
 }: RepetitionCounterProps) {
-    const { language } = useLanguage();
+    const { t, language } = useLanguage();
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
 
@@ -77,7 +77,13 @@ export function RepetitionCounter({
     });
 
     return (
-        <Animated.View style={[styles.container, animatedStyle, { width: size, height: size }]}>
+        <Animated.View
+            style={[styles.container, animatedStyle, { width: size, height: size }]}
+            accessible={true}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: total, now: completed }}
+            accessibilityLabel={t('write.progress').replace('{current}', String(completed)).replace('{total}', String(total))}
+        >
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                 {/* Background Track */}
                 <Circle
@@ -106,9 +112,9 @@ export function RepetitionCounter({
             </Svg>
 
             <View style={styles.textContainer}>
-                <Text style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}>
+                <Text importantForAccessibility="no" style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}>
                     {completed}
-                    <Text style={[styles.totalText, { fontFamily: getFontFamily(language, 'regular') }]}>/{total}</Text>
+                    <Text importantForAccessibility="no" style={[styles.totalText, { fontFamily: getFontFamily(language, 'regular') }]}>/{total}</Text>
                 </Text>
             </View>
         </Animated.View>
