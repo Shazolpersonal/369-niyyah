@@ -120,7 +120,7 @@ export const en: Record<string, string> = {
 
     'write.instruction': 'Internalize this truth by writing it exactly:',
     'write.placeholder': 'Start writing here...',
-    'write.progress': '{current} / {total} written',
+    'write.progress': '{{current}} / {{total}} written',
     'write.button.save': 'Seal Intention',
 
     'write.success.title': 'Alhamdulillah',

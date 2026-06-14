@@ -137,7 +137,7 @@ export const bn: Record<string, string> = {
 
     'write.instruction': 'স্ক্রিনের লেখাগুলো অবিকল টাইপ করে নিজের অন্তরে ধারণ করুন:',
     'write.placeholder': 'এখানে টাইপ করা শুরু করুন...',
-    'write.progress': '{total} বারের মধ্যে {current} বার লেখা হয়েছে',
+    'write.progress': '{{total}} বারের মধ্যে {{current}} বার লেখা হয়েছে',
     'write.button.save': 'নিয়ত সীলমোহর করুন',
 
     'write.success.title': 'আলহামদুলিল্লাহ',
