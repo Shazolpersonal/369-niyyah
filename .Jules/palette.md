@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+## 2026-06-14 - Adding Accessibility attributes to Progress Rings
+
+**Learning:** Custom visual progress indicators (like SVGs) in React Native are completely invisible to screen readers without explicit accessibility attributes. The `t` hook strictly requires double curly braces `{{param}}` for parameter interpolation, so single `{param}` templates won't work dynamically.
+**Action:** Always wrap custom progress components in a parent `View` with `accessible={true}`, `accessibilityRole="progressbar"`, `accessibilityValue={{ min, max, now }}`, and an `accessibilityLabel`. Ensure text inside the progress bar has `importantForAccessibility="no"` to avoid redundant screen reader announcements. Finally, ensure translation strings correctly use `{{}}` double brace interpolation format when using the project's `t` function.
