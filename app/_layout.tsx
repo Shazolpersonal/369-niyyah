@@ -47,8 +47,9 @@ function NotificationHandler() {
             const data = response.notification.request.content.data;
             const actionIdentifier = response.actionIdentifier;
 
-            if (data?.slot) {
+            if (data?.slot && ['morning', 'noon', 'night'].includes(data.slot)) {
                 // Record the hour to adapt future push times
+                // Security: Validate external input from notification payloads against allowed values
                 recordNotificationInteraction(data.slot as any);
             }
 
