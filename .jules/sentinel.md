@@ -14,3 +14,7 @@
 **Vulnerability:** The static `privacy-policy.html` served via Vercel lacked basic HTTP security headers like `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Strict-Transport-Security`, and `Referrer-Policy`.
 **Learning:** Even static HTML pages on domains associated with a mobile application can be targets for attacks like clickjacking or MIME sniffing if appropriate headers are missing, and missing them violates defense-in-depth principles.
 **Prevention:** Always ensure hosting configurations (like `vercel.json` or `netlify.toml`) enforce standard HTTP security headers for all web routes, even if the application is predominantly a mobile app offline client.
+## 2025-05-19 - Untrusted Push Notification Payload Validation
+**Vulnerability:** Push notification payload data (`response.notification.request.content.data`) in Expo/React Native was processed directly in `app/_layout.tsx` without validation.
+**Learning:** Any data originating from outside the application runtime (like push notification payloads or deep links) should be treated as untrusted input. Directly acting on unvalidated payload fields can lead to unexpected application behavior or spoofing.
+**Prevention:** Always validate external inputs against an allowlist of expected types (e.g., verifying `data?.slot` is a valid `TimeSlot` before processing) before using them in application logic.
