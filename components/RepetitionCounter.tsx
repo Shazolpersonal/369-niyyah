@@ -53,7 +53,7 @@ export function RepetitionCounter({
         if (completed > 0 && completed <= total) {
             scale.value = withSequence(
                 withTiming(1.08, { duration: 100 }),
-                withSpring(1, { damping: 10, stiffness: 150 })
+                withSpring(1, { damping: 10, stiffness: 150 }),
             );
         }
     }, [completed, total]);
@@ -63,7 +63,7 @@ export function RepetitionCounter({
             progress.value,
             [0, 1],
             [circumference, 0],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
         );
         return {
             strokeDashoffset,
@@ -77,7 +77,13 @@ export function RepetitionCounter({
     });
 
     return (
-        <Animated.View style={[styles.container, animatedStyle, { width: size, height: size }]}>
+        <Animated.View
+            accessible={true}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: total, now: completed }}
+            accessibilityLabel={`${completed} out of ${total} repetitions completed`}
+            style={[styles.container, animatedStyle, { width: size, height: size }]}
+        >
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                 {/* Background Track */}
                 <Circle
@@ -106,9 +112,20 @@ export function RepetitionCounter({
             </Svg>
 
             <View style={styles.textContainer}>
-                <Text style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}>
+                <Text
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                    style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}
+                >
                     {completed}
-                    <Text style={[styles.totalText, { fontFamily: getFontFamily(language, 'regular') }]}>/{total}</Text>
+                    <Text
+                        style={[
+                            styles.totalText,
+                            { fontFamily: getFontFamily(language, 'regular') },
+                        ]}
+                    >
+                        /{total}
+                    </Text>
                 </Text>
             </View>
         </Animated.View>
