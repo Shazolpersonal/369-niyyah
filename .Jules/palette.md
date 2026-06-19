@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-06-19 - Grouping Static Text for Screen Readers
+**Learning:** In React Native, disjointed text components within a single logical block (like a quote and its author) are read separately by screen readers, resulting in a fragmented and frustrating UX. Grouping them on a parent accessible container is necessary, but child `Text` components must be explicitly hidden to avoid duplicate announcements.
+**Action:** Always apply `accessible={true}` and a comprehensive `accessibilityLabel` to the parent container of a logical text group, and ensure all child `Text` components include `importantForAccessibility="no"` (for Android) and `accessibilityElementsHidden={true}` (for iOS).

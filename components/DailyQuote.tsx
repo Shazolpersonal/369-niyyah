@@ -17,9 +17,16 @@ import { SPRING_CONFIG_BOUNCY } from '../utils/animations';
 // Impact: Reduces re-renders of this component by ~50% since its only true dependency is the language context.
 export const DailyQuote = React.memo(function DailyQuote() {
     const { language } = useLanguage();
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
-    const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
+    const dayOfYear = Math.floor(
+        (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
+            1000 /
+            60 /
+            60 /
+            24,
+    );
     const quoteList = language === 'bn' ? quotes_bn : quotes;
     const quote = quoteList[dayOfYear % quoteList.length];
 
@@ -33,19 +40,37 @@ export const DailyQuote = React.memo(function DailyQuote() {
 
     const rStyle = useAnimatedStyle(() => ({
         opacity: opacity.value,
-        transform: [{ translateY: translateY.value }]
+        transform: [{ translateY: translateY.value }],
     }));
 
     return (
-        <Animated.View style={[styles.container, rStyle]}>
+        <Animated.View
+            style={[styles.container, rStyle]}
+            accessible={true}
+            accessibilityLabel={`${quote.text} — ${quote.source}`}
+        >
             {/* Gold quote icon */}
             <View style={styles.iconContainer}>
-                <Text style={styles.quoteIcon}>❝</Text>
+                <Text
+                    style={styles.quoteIcon}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                >
+                    ❝
+                </Text>
             </View>
-            <Text style={[styles.quoteText, { fontFamily: f('medium') }]}>
+            <Text
+                style={[styles.quoteText, { fontFamily: f('medium') }]}
+                importantForAccessibility="no"
+                accessibilityElementsHidden={true}
+            >
                 "{quote.text}"
             </Text>
-            <Text style={[styles.sourceText, { fontFamily: f('semibold') }]}>
+            <Text
+                style={[styles.sourceText, { fontFamily: f('semibold') }]}
+                importantForAccessibility="no"
+                accessibilityElementsHidden={true}
+            >
                 — {quote.source}
             </Text>
         </Animated.View>
@@ -95,5 +120,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         letterSpacing: 1,
-    }
+    },
 });
