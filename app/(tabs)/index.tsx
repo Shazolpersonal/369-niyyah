@@ -1,10 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StatusBar, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    ScrollView,
+    StatusBar,
+    TouchableOpacity,
+    Dimensions,
+    StyleSheet,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Redirect } from 'expo-router';
 import { HelpCircle, Globe, Flame } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withSpring, withRepeat, withSequence, withTiming, Easing } from 'react-native-reanimated';
+import Animated, {
+    FadeIn,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+    withRepeat,
+    withSequence,
+    withTiming,
+    Easing,
+} from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
 
 import { useProgress } from '../../contexts/ProgressContext';
@@ -15,7 +32,12 @@ import { BottomSheet } from '../../components/BottomSheet';
 import { JourneyProgressRing } from '../../components/JourneyProgressRing';
 import { showToast } from '../../components/Toast';
 
-import { isSlotActive, getTodayEffectiveDateKey, getDisplayDay, isJourneyComplete } from '../../utils/timeSlotManager';
+import {
+    getCurrentSlot,
+    getTodayEffectiveDateKey,
+    getDisplayDay,
+    isJourneyComplete,
+} from '../../utils/timeSlotManager';
 import { getAffirmationByLanguage } from '../../utils/contentCycler';
 import { TimeSlot } from '../../types';
 import { getFontFamily } from '../../utils/fonts';
@@ -24,14 +46,30 @@ import { useStaggeredEntry } from '../../utils/useStaggeredEntry';
 
 const { width } = Dimensions.get('window');
 
-function StaggeredView({ children, index, delay = 0 }: { children: React.ReactNode, index: number, delay?: number }) {
+function StaggeredView({
+    children,
+    index,
+    delay = 0,
+}: {
+    children: React.ReactNode;
+    index: number;
+    delay?: number;
+}) {
     const { animatedStyle } = useStaggeredEntry(index, delay, 100, 20);
     return <Animated.View style={animatedStyle}>{children}</Animated.View>;
 }
 
 export default function Dashboard() {
     const router = useRouter();
-    const { dailyProgress, totalElapsedDays, trueStreak, isTodayComplete, isLoading, isFirstLaunch } = useProgress();
+    const currentActiveSlot = getCurrentSlot();
+    const {
+        dailyProgress,
+        totalElapsedDays,
+        trueStreak,
+        isTodayComplete,
+        isLoading,
+        isFirstLaunch,
+    } = useProgress();
     const { t, language, setLanguage } = useLanguage();
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -44,15 +82,16 @@ export default function Dashboard() {
             fireScale.value = withRepeat(
                 withSequence(
                     withTiming(1.2, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
-                    withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.ease) })
+                    withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
                 ),
-                -1, true
+                -1,
+                true,
             );
         }
     }, [trueStreak]);
 
     const rFireStyle = useAnimatedStyle(() => ({
-        transform: [{ scale: fireScale.value }]
+        transform: [{ scale: fireScale.value }],
     }));
 
     if (!isLoading && isFirstLaunch) {
@@ -76,17 +115,24 @@ export default function Dashboard() {
         const newLang = language === 'en' ? 'bn' : 'en';
         setLanguage(newLang);
         showToast({
-            message: newLang === 'en' ? 'Language switched to English' : 'ভাষা বাংলাতে পরিবর্তন করা হয়েছে',
+            message:
+                newLang === 'en'
+                    ? 'Language switched to English'
+                    : 'ভাষা বাংলাতে পরিবর্তন করা হয়েছে',
             type: 'success',
         });
     };
 
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
-                <LinearGradient colors={['#064E3B', '#0F172A'] as any} style={StyleSheet.absoluteFill} />
+                <LinearGradient
+                    colors={['#064E3B', '#0F172A'] as any}
+                    style={StyleSheet.absoluteFill}
+                />
                 <Text style={[styles.loadingText, { fontFamily: f('regular') }]}>
                     {t('app.loading')}
                 </Text>
@@ -101,7 +147,7 @@ export default function Dashboard() {
             {/* Full-page gradient background */}
             <LinearGradient
                 colors={['#064E3B', '#0F766E', '#134E4A', '#1E293B', '#0F172A'] as any}
-                locations={[0, 0.12, 0.22, 0.40, 0.55]}
+                locations={[0, 0.12, 0.22, 0.4, 0.55]}
                 style={StyleSheet.absoluteFill}
             />
 
@@ -117,8 +163,14 @@ export default function Dashboard() {
                         {/* Islamic geometric pattern */}
                         <View style={styles.headerPattern}>
                             <Svg width={180} height={120} viewBox="0 0 200 80" opacity={0.06}>
-                                <Path d="M100 0 L105 35 L140 20 L115 45 L150 50 L115 55 L140 80 L105 65 L100 100 L95 65 L60 80 L85 55 L50 50 L85 45 L60 20 L95 35 Z" fill="#D4A847" />
-                                <Path d="M30 10 L33 30 L50 22 L38 38 L60 40 L38 42 L50 58 L33 50 L30 70 L27 50 L10 58 L22 42 L0 40 L22 38 L10 22 L27 30 Z" fill="#D4A847" />
+                                <Path
+                                    d="M100 0 L105 35 L140 20 L115 45 L150 50 L115 55 L140 80 L105 65 L100 100 L95 65 L60 80 L85 55 L50 50 L85 45 L60 20 L95 35 Z"
+                                    fill="#D4A847"
+                                />
+                                <Path
+                                    d="M30 10 L33 30 L50 22 L38 38 L60 40 L38 42 L50 58 L33 50 L30 70 L27 50 L10 58 L22 42 L0 40 L22 38 L10 22 L27 30 Z"
+                                    fill="#D4A847"
+                                />
                             </Svg>
                         </View>
 
@@ -135,12 +187,21 @@ export default function Dashboard() {
                                         onPress={toggleLanguage}
                                         activeOpacity={0.7}
                                         accessibilityRole="button"
-                                        accessibilityLabel={language === 'en' ? 'Switch to Bengali' : 'Switch to English'}
+                                        accessibilityLabel={
+                                            language === 'en'
+                                                ? 'Switch to Bengali'
+                                                : 'Switch to English'
+                                        }
                                         accessibilityHint="Changes the app language"
                                     >
                                         <View style={styles.langToggle}>
                                             <Globe size={15} color="#D4A847" />
-                                            <Text style={[styles.langText, { fontFamily: f('semibold') }]}>
+                                            <Text
+                                                style={[
+                                                    styles.langText,
+                                                    { fontFamily: f('semibold') },
+                                                ]}
+                                            >
                                                 {language === 'en' ? 'বা' : 'EN'}
                                             </Text>
                                         </View>
@@ -172,10 +233,20 @@ export default function Dashboard() {
                                 <Text style={[styles.mashaAllah, { fontFamily: f('bold') }]}>
                                     {t('dashboard.mashaAllah')}
                                 </Text>
-                                <Text style={[styles.journeyCompleteText, { fontFamily: f('semibold') }]}>
+                                <Text
+                                    style={[
+                                        styles.journeyCompleteText,
+                                        { fontFamily: f('semibold') },
+                                    ]}
+                                >
                                     {t('dashboard.journeyComplete')}
                                 </Text>
-                                <Text style={[styles.journeyCompleteMsg, { fontFamily: f('regular') }]}>
+                                <Text
+                                    style={[
+                                        styles.journeyCompleteMsg,
+                                        { fontFamily: f('regular') },
+                                    ]}
+                                >
                                     {t('dashboard.journeyCompleteMsg')}
                                 </Text>
                             </>
@@ -183,7 +254,9 @@ export default function Dashboard() {
                             <>
                                 {trueStreak > 0 ? (
                                     <View style={styles.streakRow}>
-                                        <Text style={[styles.streakText, { fontFamily: f('bold') }]}>
+                                        <Text
+                                            style={[styles.streakText, { fontFamily: f('bold') }]}
+                                        >
                                             {t('dashboard.streak')} {trueStreak}
                                         </Text>
                                         <Animated.View style={rFireStyle}>
@@ -192,17 +265,26 @@ export default function Dashboard() {
                                     </View>
                                 ) : isTodayComplete ? (
                                     <View style={styles.todayCompleteBadge}>
-                                        <Text style={[styles.todayCompleteText, { fontFamily: f('bold') }]}>
+                                        <Text
+                                            style={[
+                                                styles.todayCompleteText,
+                                                { fontFamily: f('bold') },
+                                            ]}
+                                        >
                                             {t('dashboard.todayComplete')} 🎉
                                         </Text>
                                     </View>
                                 ) : (
-                                    <Text style={[styles.startFresh, { fontFamily: f('semibold') }]}>
+                                    <Text
+                                        style={[styles.startFresh, { fontFamily: f('semibold') }]}
+                                    >
                                         {t('dashboard.startFresh')} ✨
                                     </Text>
                                 )}
                                 <View style={{ marginTop: 28, alignItems: 'center' }}>
-                                    <JourneyProgressRing currentDay={getDisplayDay(totalElapsedDays)} />
+                                    <JourneyProgressRing
+                                        currentDay={getDisplayDay(totalElapsedDays)}
+                                    />
                                 </View>
                             </>
                         )}
@@ -217,13 +299,28 @@ export default function Dashboard() {
                 {/* ─── Task Cards ─── */}
                 <View style={{ paddingHorizontal: 24 }}>
                     <StaggeredView index={2}>
-                        <TaskCard slot="morning" isActive={isSlotActive('morning')} isCompleted={todayProgress.morning} onPress={() => handleTaskPress('morning')} />
+                        <TaskCard
+                            slot="morning"
+                            isActive={currentActiveSlot === 'morning'}
+                            isCompleted={todayProgress.morning}
+                            onPress={() => handleTaskPress('morning')}
+                        />
                     </StaggeredView>
                     <StaggeredView index={3}>
-                        <TaskCard slot="noon" isActive={isSlotActive('noon')} isCompleted={todayProgress.noon} onPress={() => handleTaskPress('noon')} />
+                        <TaskCard
+                            slot="noon"
+                            isActive={currentActiveSlot === 'noon'}
+                            isCompleted={todayProgress.noon}
+                            onPress={() => handleTaskPress('noon')}
+                        />
                     </StaggeredView>
                     <StaggeredView index={4}>
-                        <TaskCard slot="night" isActive={isSlotActive('night')} isCompleted={todayProgress.night} onPress={() => handleTaskPress('night')} />
+                        <TaskCard
+                            slot="night"
+                            isActive={currentActiveSlot === 'night'}
+                            isCompleted={todayProgress.night}
+                            onPress={() => handleTaskPress('night')}
+                        />
                     </StaggeredView>
                 </View>
             </ScrollView>
@@ -247,7 +344,10 @@ export default function Dashboard() {
                         accessibilityLabel={t('dashboard.close')}
                         accessibilityHint="Closes the completion modal"
                     >
-                        <LinearGradient colors={GRADIENTS.emerald as any} style={[StyleSheet.absoluteFill, { borderRadius: 14 }]} />
+                        <LinearGradient
+                            colors={GRADIENTS.emerald as any}
+                            style={[StyleSheet.absoluteFill, { borderRadius: 14 }]}
+                        />
                         <Text style={[styles.modalCloseBtnText, { fontFamily: f('bold') }]}>
                             {t('dashboard.close')}
                         </Text>
