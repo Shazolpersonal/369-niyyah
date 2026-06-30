@@ -77,7 +77,13 @@ export function RepetitionCounter({
     });
 
     return (
-        <Animated.View style={[styles.container, animatedStyle, { width: size, height: size }]}>
+        <Animated.View
+            style={[styles.container, animatedStyle, { width: size, height: size }]}
+            accessible={true}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: total, now: completed }}
+            accessibilityLabel={`${completed} of ${total} completed`}
+        >
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                 {/* Background Track */}
                 <Circle
@@ -105,7 +111,7 @@ export function RepetitionCounter({
                 />
             </Svg>
 
-            <View style={styles.textContainer}>
+            <View style={styles.textContainer} importantForAccessibility="no" accessibilityElementsHidden={true}>
                 <Text style={[styles.numberText, { fontFamily: getFontFamily(language, 'bold') }]}>
                     {completed}
                     <Text style={[styles.totalText, { fontFamily: getFontFamily(language, 'regular') }]}>/{total}</Text>
