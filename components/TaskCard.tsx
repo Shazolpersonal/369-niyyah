@@ -93,6 +93,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessible={true}
                     accessibilityRole="button"
                     accessibilityState={{ disabled: false }}
                     accessibilityLabel={`${label}. ${t('taskCard.completedTapToView')}`}
@@ -110,10 +111,18 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                         <Check size={22} color="#FFFFFF" strokeWidth={3} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <Text style={[styles.completedLabel, { fontFamily: f('bold') }]}>
+                        <Text
+                            style={[styles.completedLabel, { fontFamily: f('bold') }]}
+                            importantForAccessibility="no"
+                            accessibilityElementsHidden={true}
+                        >
                             {emoji} {label}
                         </Text>
-                        <Text style={[styles.completedSubtext, { fontFamily: f('regular') }]}>
+                        <Text
+                            style={[styles.completedSubtext, { fontFamily: f('regular') }]}
+                            importantForAccessibility="no"
+                            accessibilityElementsHidden={true}
+                        >
                             {t('taskCard.completedTapToView')}
                         </Text>
                     </View>
@@ -130,6 +139,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessible={true}
                     accessibilityRole="button"
                     accessibilityState={{ disabled: false }}
                     accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.write')} ${count} ${t('taskCard.times')}`}
@@ -153,13 +163,27 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 1 }}
                         >
-                            <Text style={{ fontSize: 22 }}>{emoji}</Text>
+                            <Text
+                                style={{ fontSize: 22 }}
+                                importantForAccessibility="no"
+                                accessibilityElementsHidden={true}
+                            >
+                                {emoji}
+                            </Text>
                         </LinearGradient>
                         <View style={{ flex: 1 }}>
-                            <Text style={[styles.activeLabel, { fontFamily: f('bold') }]}>
+                            <Text
+                                style={[styles.activeLabel, { fontFamily: f('bold') }]}
+                                importantForAccessibility="no"
+                                accessibilityElementsHidden={true}
+                            >
                                 {label}
                             </Text>
-                            <Text style={[styles.activeSubtext, { fontFamily: f('regular') }]}>
+                            <Text
+                                style={[styles.activeSubtext, { fontFamily: f('regular') }]}
+                                importantForAccessibility="no"
+                                accessibilityElementsHidden={true}
+                            >
                                 {timeRange} · {t('taskCard.write')} ×{count}
                             </Text>
                         </View>
@@ -176,6 +200,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
     return (
         <View
             style={[styles.card, styles.lockedCard]}
+            accessible={true}
             accessibilityRole="button"
             accessibilityState={{ disabled: true }}
             accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.locked')}`}
@@ -184,8 +209,18 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                 <Lock size={18} color="#475569" />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={[styles.lockedLabel, { fontFamily: f('bold') }]}>{label}</Text>
-                <Text style={[styles.lockedSubtext, { fontFamily: f('regular') }]}>
+                <Text
+                    style={[styles.lockedLabel, { fontFamily: f('bold') }]}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                >
+                    {label}
+                </Text>
+                <Text
+                    style={[styles.lockedSubtext, { fontFamily: f('regular') }]}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                >
                     {timeRange} · {t('taskCard.write')} ×{count}
                 </Text>
             </View>
