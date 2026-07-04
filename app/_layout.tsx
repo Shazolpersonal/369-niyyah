@@ -48,8 +48,13 @@ function NotificationHandler() {
             const actionIdentifier = response.actionIdentifier;
 
             if (data?.slot) {
-                // Record the hour to adapt future push times
-                recordNotificationInteraction(data.slot as any);
+                // Security: Validate external push notification payload data
+                // before passing to internal application logic.
+                const validSlots = ['morning', 'noon', 'night'];
+                if (validSlots.includes(data.slot)) {
+                    // Record the hour to adapt future push times
+                    recordNotificationInteraction(data.slot as any);
+                }
             }
 
             if (
