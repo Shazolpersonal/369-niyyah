@@ -48,8 +48,12 @@ function NotificationHandler() {
             const actionIdentifier = response.actionIdentifier;
 
             if (data?.slot) {
-                // Record the hour to adapt future push times
-                recordNotificationInteraction(data.slot as any);
+                // Security: Validate untrusted notification payload data
+                const validSlots = ['morning', 'noon', 'night'];
+                if (typeof data.slot === 'string' && validSlots.includes(data.slot)) {
+                    // Record the hour to adapt future push times
+                    recordNotificationInteraction(data.slot as any);
+                }
             }
 
             if (

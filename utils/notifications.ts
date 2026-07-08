@@ -245,7 +245,7 @@ export const snoozeNotification = async (
             title: title || undefined,
             body: body || undefined,
             data,
-            categoryIdentifier,
+            categoryIdentifier: categoryIdentifier ?? undefined,
             sound: 'default',
             ...(Platform.OS === 'android' && { channelId: 'niyyah-reminders' }),
         },
