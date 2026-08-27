@@ -58,33 +58,26 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(target);
 
-    // Check if input is a valid prefix of target
-    let isCorrectSoFar = true;
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    // ⚡ Bolt Optimization: Use native startsWith instead of O(N) string spread allocations
+    const isCorrectSoFar = normalizedTarget.startsWith(normalizedInput);
 
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            isCorrectSoFar = false;
-            break;
-        }
-    }
+    // For English text, string length is safe as there are no complex graphemes
+    const inputLength = normalizedInput.length;
+    const targetLength = normalizedTarget.length;
 
     // Calculate progress percentage
     const percent =
-        targetChars.length > 0
-            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
-            : 0;
+        targetLength > 0 ? Math.min(100, Math.floor((inputLength / targetLength) * 100)) : 0;
 
     // Complete match requires correct prefix AND same length
-    const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
+    const isCompleteMatch = isCorrectSoFar && inputLength === targetLength;
 
     return {
         isCorrectSoFar,
         isCompleteMatch,
         percent,
-        inputLength: inputChars.length,
-        targetLength: targetChars.length,
+        inputLength,
+        targetLength,
     };
 };
 
@@ -112,15 +105,16 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(displayTarget);
 
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
-
-    // Find how many normalized characters match
+    // ⚡ Bolt Optimization: Avoid O(N) array allocations from spreading strings
+    // Find how many normalized characters match using charCodeAt
     let matchedNormalizedCount = 0;
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            break;
-        }
+    const minLen = Math.min(normalizedInput.length, normalizedTarget.length);
+
+    while (
+        matchedNormalizedCount < minLen &&
+        normalizedInput.charCodeAt(matchedNormalizedCount) ===
+            normalizedTarget.charCodeAt(matchedNormalizedCount)
+    ) {
         matchedNormalizedCount++;
     }
 
@@ -130,12 +124,12 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     // So they differ only in case — same length, same character positions!
     // Thus matchedNormalizedCount maps directly to displayTarget positions.
     const correctEnd = matchedNormalizedCount;
-    const inputEnd = Math.min(inputChars.length, targetChars.length);
+    const inputEnd = minLen;
 
-    const displayChars = [...displayTarget];
-    const correct = displayChars.slice(0, correctEnd).join('');
-    const incorrect = displayChars.slice(correctEnd, inputEnd).join('');
-    const remaining = displayChars.slice(inputEnd).join('');
+    // Use native substring instead of array slice and join
+    const correct = displayTarget.substring(0, correctEnd);
+    const incorrect = displayTarget.substring(correctEnd, inputEnd);
+    const remaining = displayTarget.substring(inputEnd);
 
     return { correct, incorrect, remaining };
 };
