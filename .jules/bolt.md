@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-08-28 - String spread performance in validation loops
+**Learning:** Using `[...str]` in a function that's called on every keystroke (`textValidator.ts`) causes O(N) array allocation which blocks the main thread in a React Native app.
+**Action:** Use native string methods like `.charCodeAt()` and `substring()` to handle Unicode characters efficiently while bypassing the array conversion entirely on text validation paths.
