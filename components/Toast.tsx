@@ -155,6 +155,8 @@ export function ToastProvider() {
                     borderWidth: 1,
                 },
             ]}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
         >
             <View style={styles.content}>
                 {getIcon()}
