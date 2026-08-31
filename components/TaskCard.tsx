@@ -93,6 +93,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessible={true}
                     accessibilityRole="button"
                     accessibilityState={{ disabled: false }}
                     accessibilityLabel={`${label}. ${t('taskCard.completedTapToView')}`}
@@ -110,10 +111,16 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                         <Check size={22} color="#FFFFFF" strokeWidth={3} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <Text style={[styles.completedLabel, { fontFamily: f('bold') }]}>
+                        <Text
+                            importantForAccessibility="no"
+                            style={[styles.completedLabel, { fontFamily: f('bold') }]}
+                        >
                             {emoji} {label}
                         </Text>
-                        <Text style={[styles.completedSubtext, { fontFamily: f('regular') }]}>
+                        <Text
+                            importantForAccessibility="no"
+                            style={[styles.completedSubtext, { fontFamily: f('regular') }]}
+                        >
                             {t('taskCard.completedTapToView')}
                         </Text>
                     </View>
@@ -130,6 +137,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                     onPress={onPress}
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
+                    accessible={true}
                     accessibilityRole="button"
                     accessibilityState={{ disabled: false }}
                     accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.write')} ${count} ${t('taskCard.times')}`}
@@ -156,10 +164,16 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                             <Text style={{ fontSize: 22 }}>{emoji}</Text>
                         </LinearGradient>
                         <View style={{ flex: 1 }}>
-                            <Text style={[styles.activeLabel, { fontFamily: f('bold') }]}>
+                            <Text
+                                importantForAccessibility="no"
+                                style={[styles.activeLabel, { fontFamily: f('bold') }]}
+                            >
                                 {label}
                             </Text>
-                            <Text style={[styles.activeSubtext, { fontFamily: f('regular') }]}>
+                            <Text
+                                importantForAccessibility="no"
+                                style={[styles.activeSubtext, { fontFamily: f('regular') }]}
+                            >
                                 {timeRange} · {t('taskCard.write')} ×{count}
                             </Text>
                         </View>
@@ -176,6 +190,7 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
     return (
         <View
             style={[styles.card, styles.lockedCard]}
+            accessible={true}
             accessibilityRole="button"
             accessibilityState={{ disabled: true }}
             accessibilityLabel={`${label}. ${timeRange}. ${t('taskCard.locked')}`}
@@ -184,8 +199,16 @@ function TaskCardComponent({ slot, isActive, isCompleted, onPress, index = 0 }: 
                 <Lock size={18} color="#475569" />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={[styles.lockedLabel, { fontFamily: f('bold') }]}>{label}</Text>
-                <Text style={[styles.lockedSubtext, { fontFamily: f('regular') }]}>
+                <Text
+                    importantForAccessibility="no"
+                    style={[styles.lockedLabel, { fontFamily: f('bold') }]}
+                >
+                    {label}
+                </Text>
+                <Text
+                    importantForAccessibility="no"
+                    style={[styles.lockedSubtext, { fontFamily: f('regular') }]}
+                >
                     {timeRange} · {t('taskCard.write')} ×{count}
                 </Text>
             </View>
