@@ -59,32 +59,39 @@ export const getValidationInfo = (input: string, target: string): ValidationInfo
     const normalizedTarget = normalize(target);
 
     // Check if input is a valid prefix of target
-    let isCorrectSoFar = true;
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
+    // ⚡ Bolt Optimization: Replace O(N) array allocation [...str] with native startsWith
+    const isCorrectSoFar = normalizedTarget.startsWith(normalizedInput);
 
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
-            isCorrectSoFar = false;
-            break;
+    let inputLength = 0;
+    for (let i = 0; i < normalizedInput.length; i++) {
+        inputLength++;
+        // ⚡ Bolt Optimization: explicit surrogate pair check avoids array spreading
+        if (normalizedInput.charCodeAt(i) >= 0xd800 && normalizedInput.charCodeAt(i) <= 0xdbff) {
+            i++;
+        }
+    }
+
+    let targetLength = 0;
+    for (let i = 0; i < normalizedTarget.length; i++) {
+        targetLength++;
+        if (normalizedTarget.charCodeAt(i) >= 0xd800 && normalizedTarget.charCodeAt(i) <= 0xdbff) {
+            i++;
         }
     }
 
     // Calculate progress percentage
     const percent =
-        targetChars.length > 0
-            ? Math.min(100, Math.floor((inputChars.length / targetChars.length) * 100))
-            : 0;
+        targetLength > 0 ? Math.min(100, Math.floor((inputLength / targetLength) * 100)) : 0;
 
     // Complete match requires correct prefix AND same length
-    const isCompleteMatch = isCorrectSoFar && inputChars.length === targetChars.length;
+    const isCompleteMatch = isCorrectSoFar && inputLength === targetLength;
 
     return {
         isCorrectSoFar,
         isCompleteMatch,
         percent,
-        inputLength: inputChars.length,
-        targetLength: targetChars.length,
+        inputLength,
+        targetLength,
     };
 };
 
@@ -112,30 +119,73 @@ export const getHighlightSegments = (input: string, displayTarget: string): High
     const normalizedInput = normalize(input);
     const normalizedTarget = normalize(displayTarget);
 
-    const inputChars = [...normalizedInput];
-    const targetChars = [...normalizedTarget];
-
-    // Find how many normalized characters match
+    // ⚡ Bolt Optimization: Replace O(N) array allocations with charCodeAt while loop
     let matchedNormalizedCount = 0;
-    for (let i = 0; i < inputChars.length; i++) {
-        if (i >= targetChars.length || inputChars[i] !== targetChars[i]) {
+    let idx = 0;
+    while (idx < normalizedInput.length) {
+        if (
+            idx >= normalizedTarget.length ||
+            normalizedInput.charCodeAt(idx) !== normalizedTarget.charCodeAt(idx)
+        ) {
             break;
         }
+        // Explicitly handle surrogate pairs to match unicode behavior
+        if (
+            normalizedInput.charCodeAt(idx) >= 0xd800 &&
+            normalizedInput.charCodeAt(idx) <= 0xdbff
+        ) {
+            idx++;
+            if (normalizedInput.charCodeAt(idx) !== normalizedTarget.charCodeAt(idx)) {
+                idx--;
+                break;
+            }
+        }
+        idx++;
         matchedNormalizedCount++;
     }
 
-    // Map matchedNormalizedCount back to position in the original displayTarget.
-    // normalizedTarget was produced by: lowercase → remove punctuation → collapse spaces → trim
-    // displayTarget was produced by: remove punctuation → collapse spaces → trim (preserves case)
-    // So they differ only in case — same length, same character positions!
-    // Thus matchedNormalizedCount maps directly to displayTarget positions.
-    const correctEnd = matchedNormalizedCount;
-    const inputEnd = Math.min(inputChars.length, targetChars.length);
+    let inputLen = 0;
+    for (let i = 0; i < normalizedInput.length; i++) {
+        inputLen++;
+        if (normalizedInput.charCodeAt(i) >= 0xd800 && normalizedInput.charCodeAt(i) <= 0xdbff) i++;
+    }
 
-    const displayChars = [...displayTarget];
-    const correct = displayChars.slice(0, correctEnd).join('');
-    const incorrect = displayChars.slice(correctEnd, inputEnd).join('');
-    const remaining = displayChars.slice(inputEnd).join('');
+    let targetLen = 0;
+    for (let i = 0; i < normalizedTarget.length; i++) {
+        targetLen++;
+        if (normalizedTarget.charCodeAt(i) >= 0xd800 && normalizedTarget.charCodeAt(i) <= 0xdbff)
+            i++;
+    }
+
+    const correctEnd = matchedNormalizedCount;
+    const inputEnd = Math.min(inputLen, targetLen);
+
+    let correctIdx = 0;
+    let charCount = 0;
+    while (charCount < correctEnd && correctIdx < displayTarget.length) {
+        if (
+            displayTarget.charCodeAt(correctIdx) >= 0xd800 &&
+            displayTarget.charCodeAt(correctIdx) <= 0xdbff
+        )
+            correctIdx++;
+        correctIdx++;
+        charCount++;
+    }
+
+    let inputEndIdx = correctIdx;
+    while (charCount < inputEnd && inputEndIdx < displayTarget.length) {
+        if (
+            displayTarget.charCodeAt(inputEndIdx) >= 0xd800 &&
+            displayTarget.charCodeAt(inputEndIdx) <= 0xdbff
+        )
+            inputEndIdx++;
+        inputEndIdx++;
+        charCount++;
+    }
+
+    const correct = displayTarget.substring(0, correctIdx);
+    const incorrect = displayTarget.substring(correctIdx, inputEndIdx);
+    const remaining = displayTarget.substring(inputEndIdx);
 
     return { correct, incorrect, remaining };
 };
