@@ -29,7 +29,8 @@ export function JourneyProgressRing({
     strokeWidth = 10,
 }: JourneyProgressRingProps) {
     const { t, language } = useLanguage();
-    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') => getFontFamily(language, weight);
+    const f = (weight: 'regular' | 'medium' | 'semibold' | 'bold') =>
+        getFontFamily(language, weight);
 
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
@@ -49,17 +50,28 @@ export function JourneyProgressRing({
             progress.value,
             [0, 1],
             [circumference, 0],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
         );
         return { strokeDashoffset };
     });
 
     return (
-        <View style={[{ width: size, height: size }, styles.container]}>
+        <View
+            style={[{ width: size, height: size }, styles.container]}
+            accessible={true}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: totalDays, now: currentDay }}
+            accessibilityLabel={`${currentDay} ${t('common.outOf') || 'out of'} ${totalDays}`}
+        >
             {/* Dark background circle */}
             <View style={[StyleSheet.absoluteFillObject, styles.bgCircle]} />
 
-            <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: [{ rotate: '-90deg' }] }}>
+            <Svg
+                width={size}
+                height={size}
+                viewBox={`0 0 ${size} ${size}`}
+                style={{ transform: [{ rotate: '-90deg' }] }}
+            >
                 <Defs>
                     <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
                         <Stop offset="0%" stopColor="#0D9488" />
@@ -90,10 +102,18 @@ export function JourneyProgressRing({
             </Svg>
 
             <View style={styles.textContainer}>
-                <Text style={[{ fontFamily: f('bold') }, styles.dayText]}>
+                <Text
+                    style={[{ fontFamily: f('bold') }, styles.dayText]}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                >
                     {currentDay}
                 </Text>
-                <Text style={[{ fontFamily: f('medium') }, styles.totalText]}>
+                <Text
+                    style={[{ fontFamily: f('medium') }, styles.totalText]}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden={true}
+                >
                     / {totalDays}
                 </Text>
             </View>
