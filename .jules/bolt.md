@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-06-28 - Optimize String Operations in Keystroke Handlers
+**Learning:** In hot paths like keystroke validation (`textValidator.ts`), relying on `[...str]` to spread strings into arrays causes unnecessary O(N) heap allocations and garbage collection on every render cycle. When typing rapidly, this compounds, causing micro-stutters in the UI.
+**Action:** Replace `[...str]` array spreading with native string operations (`startsWith()`, `substring()`) and use explicit `charCodeAt()` checks combined with `while` loops to count Unicode characters correctly without full array allocation. For surrogate pairs (emojis), check `>= 0xD800` and `<= 0xDBFF` to manually step past the lower surrogate.
