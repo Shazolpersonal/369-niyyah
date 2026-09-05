@@ -454,6 +454,7 @@ export default function HistoryScreen() {
                                 disabled={!canGoNext}
                                 activeOpacity={0.6}
                                 accessibilityRole="button"
+                                accessibilityState={{ disabled: !canGoNext }}
                                 accessibilityLabel={t('history.nextMonth')}
                                 accessibilityHint={t('history.nextMonth')}
                             >
@@ -606,7 +607,6 @@ export default function HistoryScreen() {
                         activeOpacity={0.8}
                         style={styles.modalCloseBtn}
                         accessibilityRole="button"
-                        accessibilityLabel={t('history.close')}
                         accessibilityHint="Closes the history detail modal"
                     >
                         <LinearGradient
