@@ -26,6 +26,7 @@ import { initializeAds } from '../utils/adConfig';
 import * as Notifications from 'expo-notifications';
 import { registerBackgroundFetchAsync } from '../utils/backgroundTasks';
 import { recordNotificationInteraction } from '../utils/notificationAnalytics';
+import { logger } from '../utils/logger';
 import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
@@ -47,9 +48,14 @@ function NotificationHandler() {
             const data = response.notification.request.content.data;
             const actionIdentifier = response.actionIdentifier;
 
-            if (data?.slot) {
+            if (
+                data?.slot &&
+                (data.slot === 'morning' || data.slot === 'noon' || data.slot === 'night')
+            ) {
                 // Record the hour to adapt future push times
                 recordNotificationInteraction(data.slot as any);
+            } else if (data?.slot) {
+                logger.warn('Received invalid notification slot:', data.slot);
             }
 
             if (
