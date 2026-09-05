@@ -244,7 +244,6 @@ export default function Dashboard() {
                         activeOpacity={0.8}
                         style={styles.modalCloseBtn}
                         accessibilityRole="button"
-                        accessibilityLabel={t('dashboard.close')}
                         accessibilityHint="Closes the completion modal"
                     >
                         <LinearGradient colors={GRADIENTS.emerald as any} style={[StyleSheet.absoluteFill, { borderRadius: 14 }]} />
