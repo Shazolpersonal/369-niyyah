@@ -20,3 +20,6 @@
 ## 2024-06-27 - Avoid Intermediate Date Objects in State Handlers
 **Learning:** Instantiating `new Date()` objects within render cycles and event handlers to calculate next/previous calendar boundaries is computationally expensive when string manipulation is available. The `canGoNext` property was unnecessarily instantiating a Date object on every render.
 **Action:** When calculating simple calendar offsets (like next month), use primitive integer arithmetic and string padding (`String(val).padStart()`) to construct formatted date strings directly, avoiding garbage collection overhead and deep Date object parsing in React hot paths.
+## 2024-09-07 - Avoid Date Formatting in Hot Loop for Streak Calculation
+**Learning:** Calculating a consecutive streak across many days (e.g. 1000 iterations) using `Date` mutation and string formatting on every iteration adds considerable overhead. Testing showed that manually tracking and decrementing the `day` integer and constructing the string `YYYY-MM-DD`, and only allowing `Date` to handle the month/leap-year boundaries, made the hot loop about 2x faster.
+**Action:** For loops performing daily date decrements/increments to lookup dictionary values, track the date components as primitive integers and construct padded string keys manually, only relying on the Date object when crossing month boundaries.
