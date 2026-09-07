@@ -106,17 +106,31 @@ const calculateTrueStreak = (
 
     let streak = 0;
     let iterations = 0;
+    let year = checkDate.getFullYear();
+    let month = checkDate.getMonth() + 1;
+    let day = checkDate.getDate();
 
     while (iterations < MAX_STREAK_ITERATIONS) {
         // Don't count before start date
         if (checkDate < startDateObj) break;
 
-        const dateKey = getLocalDateKey(checkDate);
+        const monthStr = month < 10 ? `0${month}` : month;
+        const dayStr = day < 10 ? `0${day}` : day;
+        const dateKey = `${year}-${monthStr}-${dayStr}`;
         const progress = dailyProgress[dateKey];
 
         if (progress && progress.morning && progress.noon && progress.night) {
             streak++;
-            checkDate.setDate(checkDate.getDate() - 1);
+            day--;
+            if (day === 0) {
+                // Let Date handle rollover correctly across months/leap years
+                checkDate.setDate(0);
+                year = checkDate.getFullYear();
+                month = checkDate.getMonth() + 1;
+                day = checkDate.getDate();
+            } else {
+                checkDate.setDate(day);
+            }
         } else {
             break;
         }
