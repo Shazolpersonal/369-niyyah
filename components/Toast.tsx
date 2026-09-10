@@ -145,6 +145,9 @@ export function ToastProvider() {
 
     return (
         <Animated.View
+            accessible={true}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
             style={[
                 styles.container,
                 rStyle,
