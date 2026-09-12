@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-05-21 - Adding accessibility attributes to Progress Rings
+**Learning:** Visual progress components like circular progress rings (`JourneyProgressRing.tsx`) in React Native must be wrapped in a container with `accessible={true}`, `accessibilityRole="progressbar"`, and a precise `accessibilityValue={{ min, max, now }}` to be properly announced by screen readers. Furthermore, inner text elements conveying the same value visually must be explicitly hidden.
+**Action:** For progress indicators, always apply `accessibilityRole="progressbar"`, `accessibilityValue`, and a localized `accessibilityLabel` on the parent container. Hide any redundant inner text elements from screen readers using `importantForAccessibility="no"` (Android) and `accessibilityElementsHidden={true}` (iOS).
