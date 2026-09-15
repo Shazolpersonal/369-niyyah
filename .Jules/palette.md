@@ -39,3 +39,7 @@
 ## 2026-05-20 - Adding accessibility attributes to Crash/Error Boundaries
 **Learning:** During critical error states (handled by `ErrorBoundary.tsx`), it's essential that the recovery UI is fully accessible so screen reader users can navigate out of the crash state. The `TouchableOpacity` buttons for "Retry" and "Factory Reset" lacked explicit `accessibilityRole` and `accessibilityLabel` properties, making recovery unintuitive.
 **Action:** When building fallback UIs or error boundaries, explicitly set `accessibilityRole="button"` and `accessibilityLabel` (using translated or clear descriptive strings) on all recovery action components.
+
+## 2026-05-21 - Adding accessibility attributes to Toast Notifications
+**Learning:** Ephemeral notifications like Toasts are injected dynamically and screen readers often ignore them if not explicitly marked. To ensure screen readers announce the message automatically without interrupting the user, the container must have `accessibilityRole="alert"` and `accessibilityLiveRegion="polite"`.
+**Action:** When building custom Toast or notification components, explicitly set `accessible={true}`, `accessibilityRole="alert"`, and `accessibilityLiveRegion="polite"` on the parent container.
